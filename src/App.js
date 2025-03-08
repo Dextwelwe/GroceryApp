@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 function App() {
 
-  const [isConnected, setIsConnected] = useState(true)
+  const [isConnected, setIsConnected] = useState(false)
 
   const  toggleIsConnected = () => {
     setIsConnected(!isConnected);
