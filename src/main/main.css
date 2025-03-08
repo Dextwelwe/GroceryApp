@@ -1,0 +1,175 @@
+.groceryListWrapper{
+    height: 100vh;
+    padding: 15px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    box-sizing: border-box;
+}
+
+.mainWrapper{
+    border-radius: 20px;
+    max-width: 500px;
+    width: 100%;
+    height: 100%;
+    background-color: var(--modalBackGround);
+}
+
+.colorWhite {
+    color: white;
+}
+
+.headerWrapper{
+    display:flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.header {
+    border-radius: 15px;
+    box-sizing: border-box;
+    padding: 5px;
+    display: flex;
+    align-items:center;
+    background-color: #a9bbdb;
+    height: 60px;
+    width: 98%;
+    margin : 0;
+    margin-top: 5px;
+}
+
+.buttonHeader{
+    box-sizing: border-box;
+    border-radius:20px; 
+    border-color : darkslategray;
+    background-color:  #859fcc;
+    height: 40px;
+    font-size: 18px;
+    color : darkslategray;
+    margin: 5px;
+    border : 2px solid;
+}
+
+.buttonHeader:hover,
+  .buttonHeader:focus {
+    color: #122620;
+    background-color:#859fcc;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+.itemsWrapper{
+
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: calc(100% - 75px);
+    margin-top: 5px;
+}
+
+.itemListWrapper {
+display: flex;
+justify-content: flex-start;
+flex-direction: column;
+align-items: start;
+width: 98%;
+border-radius:15px; 
+background-color:  #a9bbdb;
+overflow: auto;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    width: 98%;
+    background-color:#859fcc;
+    border-radius: 15px;
+    margin-top: 5px;
+    height: 60px;
+    align-items: center;
+}
+
+.headerButtonsWrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.checkboxWrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    background-color: #cdd7ea;
+    border-radius: 30px;
+    cursor: pointer;
+  }
+
+.removeWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    background-color: #cdd7ea;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+.addWrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    background-color: #cdd7ea;
+    border-radius: 30px;
+    cursor: pointer;
+    margin-right: 5px;
+    border: 2px solid;
+    border-color: transparent;
+}
+
+
+.itemDesc {
+    margin-left: 15px;
+    font-size: 20px;
+    width: 80%;
+    color: darkslategray;
+    overflow: hidden;
+    overflow: hidden;
+}
+
+.itemAction{
+    display: flex;
+    width: 20%;
+    min-width: max-content;
+    justify-content: center;
+    gap: 5px;
+    margin-right: 5px;
+}
+
+.itemWrapper{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.iconCheck {
+    height: 37px;
+    width: 37px;
+}
+
+.iconAdd{
+    height: 45px;
+    width: 45px;
+}
+
+.iconClose{
+    height: 37px;
+    width: 37px;
+}
