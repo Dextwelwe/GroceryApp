@@ -1,88 +1,53 @@
-
-:root {
-  --modalBackGround :     #cdd7ea;
-  --modalBorderRadius :    10px;
-  --paddingHeader     :    5px;
-  --fontColor         : #0B1F42;
-  --infoBox           : #becce4;
-  --fontFamily        :  'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-
-.LoginPopupRoot{
- height: 100vh;
- width: 100%;
- display: flex;
- justify-content: center;
-}
-
-
-.loginModalContent{
-    padding: 25px;
-    height: auto;
+.loginContentWrapper{
+    position: absolute;
+    height: max-content;
+    padding: 20px;
     width: 300px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color:var(--modalBackGround); 
     border-radius: var(--modalBorderRadius);
-    top: 250px;
-    position: absolute;
-    box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+    box-shadow:var(--shadowLoginContainer);
 }
 
-.header-wrapper{
-  display:                flex;
-  justify-content:        space-between;
-  align-items:            center;
-  line-height:            10px;
-  margin-bottom:          10px;
-  width:                  100%;
-  box-sizing:             border-box;
-  position:               sticky;
-  background-color:      #cdd7ea;;
-}  
-
-.loginInput{
-    box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
-    border : 1px solid rgb(204, 219, 232);
-    border-radius: 20px; 
-    background-color: white !important;
-    height: 40px;
-    text-align: center;
-}
-
-.buttonSubmitLogin{
-    border-radius:20px; 
-    border-color: transparent;
-    background-color:  #93aad2;
-    height: 40px;
-    color: black;
-}
-
-.buttonSubmitLogin:hover,
-  .buttonSubmitLogin:focus {
-    color: #122620;
-    background-color:#859fcc;
-    text-decoration: none;
-    cursor: pointer;
-  }
-
-.loginInputWrapper{
-    padding-top: 0;
+.loginFormWrapper{
     display: flex;
     flex-direction: column;
     width: 100%;
     gap: 15px;
 }
 
+.loginInput{
+    box-shadow: var(--shadowLoginInput);
+    border :    var(--borderLoginInput);
+    border-color:  var(--borderColorLoginInput);
+    border-radius: var(--borderRadius);
+    background-color: white !important;
+    height: var(--loginInputHeight);
+    text-align: center;
+}
+
+.loginButton{
+    color : var(--fontColor);
+    border-radius:var(--borderRadius); 
+    border: var(--borderLoginInput);
+    border-color: var(--borderColorLoginInput);
+    background-color:  var(--buttonColor);
+    height: var(--loginInputHeight);
+}
+
+.loginButton:hover,
+.loginButton:focus {
+    color: var(--fontColor);
+    background-color:var(--buttonFocusColor);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
 .loginMessage{
   text-align: center;
   color: red;
   margin: 0;
   margin-top: 5px;
-}
-
-.info-box{
-  background-color: #becce4;
-}
-
-.font-color{
-  color : #0B1F42;
 }

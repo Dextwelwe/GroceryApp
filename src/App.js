@@ -5,16 +5,17 @@ import { useState } from 'react';
 
 function App() {
 
-  const [isConnected, setIsConnected] = useState(false)
+  const [isConnected, setIsConnected] = useState(false);
 
   const  toggleIsConnected = () => {
     setIsConnected(!isConnected);
   }
 
   return (
-    isConnected === false ? (
-    <Login isConnected={toggleIsConnected}></Login>):(<Main></Main>)
-    
+    isConnected === false ? 
+    (<Login connect={toggleIsConnected}></Login>)
+     :
+    (<Main></Main>)
   );
 }
 

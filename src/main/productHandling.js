@@ -2,9 +2,8 @@ import { collection, getDocs, deleteDoc, addDoc } from "firebase/firestore";
 import { db } from "../login/initFirebase";
 import { doc, updateDoc } from "firebase/firestore";
 
-
 export async function getList(){
-      const querySnapshot = await getDocs(collection(db, "list"));
+      const querySnapshot = await getDocs(collection(db, "list1"));
       const items = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -17,19 +16,19 @@ export async function getList(){
     };
 
     export async function updateStatusById(id, newValue) {
-      const docRef = doc(db, "list", id); 
+      const docRef = doc(db, "list1", id); 
       await updateDoc(docRef, {
         ["status"]: newValue, 
       });
     }
 
     export async function deleteById(id) {
-      const docRef = doc(db, "list", id); 
+      const docRef = doc(db, "list1", id); 
       await deleteDoc(docRef); 
     }
 
     async function addItem(item){
-     await addDoc(collection(db, "list"), item);
+     await addDoc(collection(db, "list1"), item);
     }
 
     export async function addItems(arr){

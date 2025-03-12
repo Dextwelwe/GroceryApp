@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import iconClose from '../../close.png';
-import iconCheck from '../../check.png';
+import iconClose from '../../images/close.png';
+import iconCheck from '../../images/check.png';
 import { updateStatusById, deleteById } from '../productHandling';
 
 export default function Item({data, update}) {
 
   const [item, setItem] = useState({});
-  const [bg, setBg] = useState({})
-  const [hideIcon, setHideIcon] = useState({})
+  const [bg, setBg] = useState({});
+  const [hideIcon, setHideIcon] = useState({});
 
   useEffect(()=>{
     setItem(data)
@@ -32,17 +32,15 @@ export default function Item({data, update}) {
 
   return (
     <div className='item' style={bg}>
-      <div className='itemDesc'>
-      {item.desc}
-      </div>
+      <p className='itemDesc'>{item.desc}</p>
         <div className='itemAction'>
-        <div className='checkboxWrapper' style={hideIcon} >
+        <div className='menuIconWrapper' style={hideIcon} >
           { item.status != "DONE" &&
-          <img src={iconCheck} className='iconCheck' alt='icon check' onClick={handleCheck}></img>
+          <img src={iconCheck} className='menuIcon' alt='icon check' onClick={handleCheck}></img>
         }
         </div>
-        <div className='removeWrapper'>
-          <img src={iconClose} className='iconClose' alt='icon close' onClick={handleRemove}></img>
+        <div className='menuIconWrapper'>
+          <img src={iconClose} className='menuIcon' alt='icon close' onClick={handleRemove}></img>
         </div>
       </div>
       </div>
