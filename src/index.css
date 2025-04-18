@@ -9,3 +9,11 @@ body {
 code {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
+
+
+html, body {
+  -ms-overflow-style: none; 
+  overscroll-behavior: contain;
+  touch-action: pan-y pan-x; 
+  -webkit-overflow-scrolling: touch;
+}

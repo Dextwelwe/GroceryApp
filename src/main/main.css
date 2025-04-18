@@ -6,6 +6,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 0px 5px;
+    box-sizing: border-box;
 }
 
 .headerButtonsWrapper{
@@ -32,19 +34,22 @@
     display: flex;
     align-items:center;
     background-color: var(--secondaryColor);
-    height: 60px;
-    width: 98%;
+    height: 58px;
+    width: 100%;
 }
 
 .mainHeaderButton{
     box-sizing: border-box;
+    position: relative;
     border-radius:20px; 
+    min-width: 80px;
     border-color : darkslategray;
     background-color:  var(--secondaryColor);
     height: 40px;
     font-size: 18px;
     color : darkslategray;
     border : 2px solid;
+    white-space: nowrap;
 }
 
 .mainHeaderButton:hover,
@@ -59,10 +64,9 @@
     display: flex;
     justify-content: center;
     width: 100%;
-    height: calc(100% - 75px);
+    height: calc(100% - 140px);
     box-sizing: border-box;
     margin-top: 5px;
-    padding : 0px 5px;
 }
 
 .itemWrapper{
@@ -92,7 +96,7 @@
     width: 100%;
     background-color:var(--secondaryColor);
     margin-bottom: 5px;
-    height: 60px;
+    height: 55px;
     padding: 5px;
 }
 

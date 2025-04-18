@@ -31,8 +31,8 @@ export default function Login({connect}) {
       }
 
       if (canAuth){
-      let isAuth = await handleConnection(username,password);
-      if (isAuth){
+        let isAuth = await handleConnection(username,password);
+        if (isAuth){
         connect();
       } else { 
         setLoginMessage("Ошибка подключения");
@@ -43,7 +43,7 @@ export default function Login({connect}) {
   return (
       <div className='loginContentWrapper'>
         <form className='loginFormWrapper'>
-        <input ref={usernameEl} className='loginInput' onChange={handleUsername} id='username' placeholder='Имя пользователя'></input>
+        <input ref={usernameEl} className='loginInput' onChange={handleUsername} id='username' placeholder='Имя пользователя' value={username}></input>
         <input ref={passwordEl} className='loginInput' onChange={handlePassword} id='password' placeholder='Пароль' type="password" autoComplete='password'></input>
         <button className='loginButton' onClick={handleSubmit}>Вход</button>
         </form>
