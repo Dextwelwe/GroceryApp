@@ -43,6 +43,7 @@
     position: relative;
     border-radius:20px; 
     min-width: 80px;
+    flex-shrink: 0;
     border-color : darkslategray;
     background-color:  var(--secondaryColor);
     height: 40px;

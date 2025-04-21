@@ -1,18 +1,20 @@
 {
   "files": {
-    "main.css": "/GroceryApp/static/css/main.f4e696a6.css",
-    "main.js": "/GroceryApp/static/js/main.d7efe5c1.js",
+    "main.css": "/GroceryApp/static/css/main.2a5d86c4.css",
+    "main.js": "/GroceryApp/static/js/main.b55f37ee.js",
     "static/js/453.44f0d2f8.chunk.js": "/GroceryApp/static/js/453.44f0d2f8.chunk.js",
     "static/media/add.png": "/GroceryApp/static/media/add.589406e06ccf9be40ee3.png",
     "static/media/check.png": "/GroceryApp/static/media/check.0e163e83492acb677d72.png",
+    "static/media/pencil.png": "/GroceryApp/static/media/pencil.2f3c168e25e0aef93944.png",
     "static/media/close.png": "/GroceryApp/static/media/close.3c662b752278fc52f408.png",
+    "static/media/undo.png": "/GroceryApp/static/media/undo.4649d52b03fe2fdb535b.png",
     "index.html": "/GroceryApp/index.html",
-    "main.f4e696a6.css.map": "/GroceryApp/static/css/main.f4e696a6.css.map",
-    "main.d7efe5c1.js.map": "/GroceryApp/static/js/main.d7efe5c1.js.map",
+    "main.2a5d86c4.css.map": "/GroceryApp/static/css/main.2a5d86c4.css.map",
+    "main.b55f37ee.js.map": "/GroceryApp/static/js/main.b55f37ee.js.map",
     "453.44f0d2f8.chunk.js.map": "/GroceryApp/static/js/453.44f0d2f8.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.f4e696a6.css",
-    "static/js/main.d7efe5c1.js"
+    "static/css/main.2a5d86c4.css",
+    "static/js/main.b55f37ee.js"
   ]
 }
