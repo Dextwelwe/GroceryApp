@@ -5,39 +5,36 @@ import { updateStatusById, deleteById } from '../productHandling';
 
 export default function Item({data, updateState, updateItem, removeItem}) {
 
-  const [item, setItem] = useState({});
-  const [bg, setBg] = useState({});
-  const [hideIcon, setHideIcon] = useState({});
+  const [item, setItem] = useState(data);
 
-  useEffect(()=>{
-    setItem(data)
-    if (data.status === 'DONE'){
-      setBg({backgroundColor : "#79AC78"})
-      setHideIcon({backgroundColor : "transparent"})
-    } 
-  },[data])
+  useEffect(() => {
+    setItem(data);
+  }, [data]);
 
-   const handleCheck = async () => {
-      setItem(prevItem => ({...prevItem, status:"DONE"}));
-      updateItem(data.id);
-      setBg({backgroundColor : "#79AC78"})
-      setHideIcon({backgroundColor : "transparent"})
-      updateStatusById(item.id, "DONE");
-      updateState()
-  }
+  const isDone = item.status === 'DONE';
+
+  const handleCheck = async () => {
+    setItem(prev => ({ ...prev, status: 'DONE' }));
+    updateItem(item.id);
+    await updateStatusById(item.id, 'DONE');
+    updateState();
+  };
 
   const handleRemove = async () => {
-    removeItem(data.id)
-    deleteById(item.id)
-    updateState()
-  }
+    removeItem(item.id);
+    await deleteById(item.id);
+    updateState();
+  };
+
+  const itemStyle = isDone ? { backgroundColor: '#79AC78' } : {};
+  const iconWrapperStyle = isDone ? { backgroundColor: 'transparent' } : {};
 
   return (
-    <div className='item' style={bg}>
+    <div className='item' style={itemStyle}>
       <p className='itemDesc'>{item.desc}</p>
         <div className='itemAction'>
-        <div className='menuIconWrapper' style={hideIcon} >
-          { item.status !== "DONE" &&
+        <div className='menuIconWrapper' style={iconWrapperStyle} >
+          { !isDone  &&
           <img src={iconCheck} className='menuIcon' alt='icon check' onClick={handleCheck}></img>
         }
         </div>

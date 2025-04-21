@@ -1,8 +1,8 @@
 import React, {useRef} from 'react'
 import { addItems } from '../productHandling';
-import './add.css'
+import './addItems.css'
 
-export default function Add({setisEdit, category}) {
+export default function AddItems({setisEdit, category}) {
 
   let inputText = useRef(null);
 

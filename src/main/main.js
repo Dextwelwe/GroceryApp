@@ -2,44 +2,37 @@ import React, { useEffect, useState } from 'react'
 import {getList} from "./productHandling"
 
 import Item from './item/item';
-import Add from './add/add';
+import AddItems from './add/addItems';
+import Category from './categories/category';
 
 import iconClose from '../images/close.png';
 import iconAdd from '../images/add.png';
 
 import './main.css'
-import Category from './categories/category';
 
 export default function Main() {
   const [isEdit, setIsEdit] = useState(false);
-
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
-
   const [selectedCategory, setSelectedCategory] = useState('Все');
-
   const [update, setUpdate] = useState(false)
   const [loading, setLoading] = useState(false)
 
 
   useEffect(()=>{
-   getItemsList();
+   fetchItems();
   },[isEdit])
 
-  useEffect(()=>{
-    setFilteredItems(filterItems(items))
-  },[isEdit,update])
-
-  useEffect(()=>{
-    filterByCategory();
-  },[selectedCategory])
+  useEffect(() => {
+    const filtered = applyFilter(items, selectedCategory);
+    setFilteredItems(filtered);
+  }, [items, selectedCategory]);
 
 
-  async function getItemsList() {
-    const list = await getList();
+  async function fetchItems() {
   setLoading(true)
+  const list = await getList();
   setItems(list)
-  setFilteredItems(filterItems(list))
   setLoading(false)
   }
 
@@ -52,35 +45,16 @@ export default function Main() {
     setUpdate(!update)
   }
 
-  function setCategory(category){
-    setSelectedCategory(category);
-  }
-
-  function filterItems(items){
-    const sortedItems =
-    items.sort((a, b) => {
-      if (a.status === b.status){
-        return a.desc.localeCompare(b.desc);
-      }
+  const applyFilter = (items, category) => {
+    const sortedItems = [...items].sort((a, b) => {
+      if (a.status === b.status) return a.desc.localeCompare(b.desc);
       return a.status === 'NEW' ? -1 : 1;
     });
-    return sortedItems;
-  }
 
-   function filterByCategory() {
-    var category;
-    if (selectedCategory === 'Все'){
-      return setFilteredItems(items)
-    }else {
-      category = selectedCategory;
-      let filteredItems = items.filter(x => x.category.desc === category)
-      setFilteredItems(filteredItems)
-    }
-  }
+    if (category === 'Все') return sortedItems;
 
-  function getItem(id) {
-    return items.find(x => x.id == id);
-  }
+    return sortedItems.filter(item => item.category.desc === category);
+  };
 
   function updateItem(id){
     setItems(prevItems => 
@@ -100,11 +74,7 @@ export default function Main() {
           <div className='headerWrapper'>
             <div className='headerButtonsWrapper'>
               {!isEdit ?
-                (
-                  <>
-                <button type='button' className='mainHeaderButton'>Продукты</button>
-                </>
-              )
+                (<button type='button' className='mainHeaderButton'>Продукты</button>)
                 : 
                 (<h2 className='mainHeaderTitle'> Добавление продуктов </h2>)
               }
@@ -117,11 +87,11 @@ export default function Main() {
               </div>
             </div>
         </div>
-            <Category isEdit={isEdit} setCategory={setCategory} update={update}></Category>
+            <Category isEdit={isEdit} setCategory={setSelectedCategory} update={update}></Category>
         <div className='itemsWrapper'>
           <div className='itemListWrapper'>
             { isEdit ? 
-              (<Add setisEdit={toggleEdit} category={selectedCategory}></Add>)  
+              (<AddItems setisEdit={toggleEdit} category={selectedCategory}></AddItems>)  
               : 
              (!loading && ( filteredItems.map((item) => (
               <div className='itemWrapper' key={item.id}>

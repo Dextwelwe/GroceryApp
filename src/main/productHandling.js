@@ -2,7 +2,7 @@ import { collection, getDocs, deleteDoc, addDoc, query, where } from "firebase/f
 import { db } from "../login/initFirebase";
 import { doc, updateDoc } from "firebase/firestore";
 
-let table = "list"
+let table = "list1"
 
 export async function getList(){
       const querySnapshot = await getDocs(collection(db, table));
@@ -46,7 +46,7 @@ export async function getList(){
     export async function updateStatusById(id, newValue) {
       const docRef = doc(db, table, id); 
       await updateDoc(docRef, {
-        ["status"]: newValue, 
+        status : newValue, 
       });
     }
 
