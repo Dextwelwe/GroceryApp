@@ -2,7 +2,7 @@ import { collection, getDocs, deleteDoc, addDoc, query, where } from "firebase/f
 import { db } from "../login/initFirebase";
 import { doc, updateDoc } from "firebase/firestore";
 
-let table = "list1"
+let table = "list"
 
 export async function getList(){
       const querySnapshot = await getDocs(collection(db, table));
