@@ -100,7 +100,7 @@ export default function Main({disconnect}) {
                  </div>
                 )
                 : 
-                (<div className='menuIconWrapper'><img src={iconClose} className='menuIcon' alt='icon close'></img></div>)
+                (<div className='menuIconWrapper'><img src={iconClose} className='menuIcon' onClick={toggleEdit} alt='icon close'></img></div>)
               }
               </>
             </div>

@@ -1,7 +1,7 @@
 {
   "name": "grocery",
   "version": "0.1.0",
-  "homepage": "https://Dextwelwe.github.io/GroceryApp",
+  "homepage": "https://dextwelwe.github.io/GroceryApp",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
