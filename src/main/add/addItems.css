@@ -1,0 +1,51 @@
+.add-content-wrapper{
+width: 100%;
+height: 100%;
+display: flex;
+justify-content: center;
+margin-top: 5px;
+}
+
+.add-item-input{
+    box-sizing: border-box;
+    border-color: transparent;
+    background-color: var(--modalBackGround);
+    border: 3px solid;
+    border-color : var(--thirdColor);
+    padding: 10px;
+    width: 100%;
+    height: 100%;
+    resize: none;
+    border-radius: 15px; 
+    white-space: pre-wrap;
+}
+
+.add-list-button-wrapper{
+position: relative;
+
+}
+
+.mainHeaderTitle{
+    margin-left: 10px;
+    font-size: 20px;
+    font-weight: 500;
+    color : darkslategray;
+}
+
+.add-list-button{
+    position: absolute;
+    bottom: 40px;
+    right: 20px;
+    border-radius: 100px;
+    border-color: transparent;
+    background-color: #00D100;
+    height: 50px;
+    width: 50px;
+    max-width: 50px;
+    font-size: 40px;
+    cursor: pointer;
+    color : whitesmoke;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

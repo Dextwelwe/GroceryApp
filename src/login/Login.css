@@ -1,0 +1,53 @@
+.loginContentWrapper{
+    position: absolute;
+    height: max-content;
+    padding: 20px;
+    width: 300px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color:var(--modalBackGround); 
+    border-radius: var(--modalBorderRadius);
+    box-shadow:var(--shadowLoginContainer);
+}
+
+.loginFormWrapper{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
+}
+
+.loginInput{
+    box-shadow: var(--shadowLoginInput);
+    border :    var(--borderLoginInput);
+    border-color:  var(--borderColorLoginInput);
+    border-radius: var(--borderRadius);
+    background-color: white !important;
+    height: var(--loginInputHeight);
+    text-align: center;
+}
+
+.loginButton{
+    color : var(--fontColor);
+    border-radius:var(--borderRadius); 
+    border: var(--borderLoginInput);
+    border-color: var(--borderColorLoginInput);
+    background-color:  var(--buttonColor);
+    height: var(--loginInputHeight);
+}
+
+.loginButton:hover,
+.loginButton:focus {
+    color: var(--fontColor);
+    background-color:var(--buttonFocusColor);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+.loginMessage{
+  text-align: center;
+  color: red;
+  margin: 0;
+  margin-top: 5px;
+}

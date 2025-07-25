@@ -1,0 +1,10 @@
+{
+    "CONNECTION_ERROR" : "Ошибка подключения",
+    "LOGIN_NAME" : "Имя пользователя",
+    "lOGIN_PASSWORD" : "Пароль",
+    "SIGN_IN" : "Вход",
+    "CHOOSE_A_CATEGORY" : "Выбери категорию",
+    "ADD_ITEM_DESC" : "Список продуктов. Один продукт на каждую линию.",
+    "ALREADY_EXISTS" : "Уже существует",
+    "ALL" : "Все"
+}

@@ -1,0 +1,10 @@
+{
+    "CONNECTION_ERROR" : "Connection Error",
+    "LOGIN_NAME" : "Username",
+    "lOGIN_PASSWORD" : "Password",
+    "SIGN_IN" : "Sign In",
+    "CHOOSE_A_CATEGORY": "Choose a category",
+    "ADD_ITEM_DESC": "Grocery list. One item per line.",
+    "ALREADY_EXISTS": "Already exists",
+    "ALL" : "ALL"
+}

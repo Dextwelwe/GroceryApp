@@ -1,0 +1,34 @@
+:root {
+  /* COLORS */
+  --modalBackGround   : #cdd7ea;
+  --buttonColor       : #93aad2;
+  --buttonFocusColor   :#859fcc;
+  --primaryColor       : var(--modalBackGround);
+  --secondaryColor     : #859fcc;
+  --thirdColor         : #a9bbdb;
+  --fontColor         : darkslategray;
+  --infoBox           : #becce4;
+  --borderColorLoginInput : rgb(204, 219, 232);
+  
+  /* PADDING/MARGINS */
+  --rootHeight        :    100dvh;
+  --modalBorderRadius :    10px;
+  --paddingHeader     :    5px;
+  --borderLoginInput  : 1px solid;
+  --borderRadius      : 20px;
+  --loginInputHeight  : 40px; 
+  --descriptionFontSize : 18px;
+  --iconSize            : 35px;
+  
+  /* OTHER */
+  --fontFamily                 :  'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  --shadowLoginContainer       :  rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+  --shadowLoginInput           : rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+}
+
+button {
+  font-family: var(--fontFamily);
+  font-size: 15px;
+ 
+}
+
