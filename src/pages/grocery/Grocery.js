@@ -1,19 +1,18 @@
-import React, { useEffect, useState } from 'react'
-import {getList} from "./productHandling"
-import { signOut } from 'firebase/auth';
-import { auth } from '../login/initFirebase';
+import {useEffect, useState } from 'react'
+import {getList} from "../../api/productHandling"
 
-import Item from './item/item';
-import AddItems from './add/addItems';
-import Category from './categories/category';
+import Item from '../../components/item/item';
+import AddItems from '../../components/add/addItems';
+import Category from '../../components/categories/category';
+import HeaderMenu from '../../components/header/header';
 
-import iconClose from '../images/close.png';
-import iconAdd from '../images/add.png';
-import iconExit from '../images/exit.png';
+import iconClose from '../../images/icons/close.png';
+import iconAdd from '../../images/icons/add.svg';
+import iconBack from '../../images/icons/back.svg'
+import Groceries from '../groceries/Groceries';
 
-import './main.css'
 
-export default function Main({disconnect}) {
+export default function Grocery({goBack}) {
   const [isEdit, setIsEdit] = useState(false);
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
@@ -21,6 +20,18 @@ export default function Main({disconnect}) {
   const [update, setUpdate] = useState(false)
   const [loading, setLoading] = useState(false)
 
+   const toggleEdit = () => {
+    setIsEdit(!isEdit);
+    setSelectedCategory('')
+  }
+
+    const headerGroceryTitle = "grocery name ";
+    const headerGroceryIcons =  [{src : iconAdd , alt : "Add", clickaction : toggleEdit}]
+    const headerGroceryNav = [{src : iconBack , alt : "Back", clickaction : goBack}]
+
+    const headerEditTitle = "add products"
+    const headerEditIcons = []
+    const headerEditNav = [{src : iconBack, alt : "Back", clickaction : toggleEdit}]
 
   useEffect(()=>{
    fetchItems();
@@ -38,11 +49,7 @@ export default function Main({disconnect}) {
   setItems(list)
   setLoading(false)
   }
-
-  const toggleEdit = () => {
-    setIsEdit(!isEdit);
-    setSelectedCategory('')
-  }
+ 
 
   const updateState = () => {
     setUpdate(!update)
@@ -71,41 +78,12 @@ export default function Main({disconnect}) {
     setItems(prevItems => prevItems.filter(item => item.id !== id));
   }
 
-  function logOut(){
-    signOut(auth)
-      .then(() => {
-        disconnect();
-      })
-      .catch((error) => {
-        console.error('Error during logout:', error);
-    });
-  }
 
 
   return (
     <div className='mainContentWrapper'>
-          <div className='headerWrapper'>
-            <div className='headerButtonsWrapper'>
-              {!isEdit ?
-                (<button type='button' className='mainHeaderButton'>Продукты</button>)
-                : 
-                (<h2 className='mainHeaderTitle'> Добавление продуктов </h2>)
-              }
-              <>
-              {!isEdit ?
-                (
-                  <div className='iconsTop'>
-                  <div className='menuIconWrapper'><img src={iconAdd} className='menuIcon' onClick={toggleEdit} alt='icon add'></img></div>
-                  <div className='menuIconWrapper'><img src={iconExit} className='menuIcon' onClick={logOut} alt='icon exit'></img></div>
-                 </div>
-                )
-                : 
-                (<div className='menuIconWrapper'><img src={iconClose} className='menuIcon' onClick={toggleEdit} alt='icon close'></img></div>)
-              }
-              </>
-            </div>
-        </div>
-            <Category isEdit={isEdit} setCategory={setSelectedCategory} update={update}></Category>
+       {!isEdit ? (<HeaderMenu title={headerGroceryTitle} headerNav={headerGroceryNav} headerItems={headerGroceryIcons}/>) : (<HeaderMenu title={headerEditTitle} headerItems={null} headerNav={headerEditNav} />)}
+        <Category isEdit={isEdit} setCategory={setSelectedCategory} update={update}></Category>
         <div className='itemsWrapper'>
           <div className='itemListWrapper'>
             { isEdit ? 
@@ -117,8 +95,8 @@ export default function Main({disconnect}) {
               </div>)
               )))
             } 
+            </div>
           </div>
         </div>
-      </div>
   )
 }

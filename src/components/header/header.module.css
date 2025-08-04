@@ -1,0 +1,40 @@
+.headerWrapper {
+    box-sizing: border-box;
+    padding: 5px 10px;
+    display: flex;
+    align-items:center;
+    border-bottom : var(--border);
+    height: 58px;
+    width: 100%;
+    margin-top: 5px;
+    cursor: default;
+}
+
+.headerNavTitleWrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.headerTitle{
+    font-size: 1.2rem;
+    font-weight: 700;
+    color : var(--fontColor);
+}
+
+.itemsWrapper{
+    display: flex;
+}
+
+.headerButtonsWrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.menuIcon{
+    height: var(--iconSize);
+    width:  var(--iconSize);
+    cursor: pointer;
+}

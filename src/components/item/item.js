@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import iconClose from '../../images/close.png';
-import iconCheck from '../../images/check.png';
-import { updateStatusById, deleteById } from '../productHandling';
+import { useEffect, useState } from 'react'
+import { updateStatusById, deleteById } from '../../api/productHandling';
 
 export default function Item({data, updateState, updateItem, removeItem}) {
 
@@ -14,7 +12,7 @@ export default function Item({data, updateState, updateItem, removeItem}) {
   const isDone = item.status === 'DONE';
 
   const handleCheck = async () => {
-    setItem(prev => ({ ...prev, status: 'DONE' }));
+    setItem(prev => ({ ...prev, status: 'DONE'}));
     updateItem(item.id);
     await updateStatusById(item.id, 'DONE');
     updateState();
@@ -33,13 +31,9 @@ export default function Item({data, updateState, updateItem, removeItem}) {
     <div className='item' style={itemStyle}>
       <p className='itemDesc'>{item.desc}</p>
         <div className='itemAction'>
-        <div className='menuIconWrapper' style={iconWrapperStyle} >
-          { !isDone  &&
-          <img src={iconCheck} className='menuIcon' alt='icon check' onClick={handleCheck}></img>
-        }
+        <div className='menuIconWrapper' style={iconWrapperStyle}>
         </div>
         <div className='menuIconWrapper'>
-          <img src={iconClose} className='menuIcon' alt='icon close' onClick={handleRemove}></img>
         </div>
       </div>
       </div>

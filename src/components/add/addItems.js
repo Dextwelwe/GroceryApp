@@ -1,5 +1,5 @@
 import React, {useRef} from 'react'
-import { addItems } from '../productHandling';
+import { addItems } from '../../api/productHandling';
 import './addItems.css'
 
 export default function AddItems({setisEdit, category}) {

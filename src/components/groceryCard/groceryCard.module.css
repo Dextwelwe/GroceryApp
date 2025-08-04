@@ -1,0 +1,79 @@
+.groceryCardWrapper{
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom : var(--border);
+    height: max-content;
+    width: 100%;
+    margin-top: 5px;
+    padding: 10px 10px;
+    cursor: pointer;
+}
+
+.colorShared{
+ background-color: #FFA726;
+}
+
+.colorPersonal{
+    background-color: #42A5F5;
+}
+
+.colorCompleted{
+   color : #388E3C;
+   text-transform: capitalize
+}
+
+.colorPending{
+    color :  #FB8C00;
+    text-transform: capitalize
+}
+
+.name {
+    color: var(--fontColor);
+    font-weight: 500;
+    text-transform: capitalize;
+    font-size: 1rem;
+    margin-top: 1px;
+    margin-left: 2px;
+}
+
+.date{
+    font-size: 0.75rem;
+    margin-top: 4px;
+    margin-left: 2px;
+    color: var(--subTextFontColor);
+}
+
+.status {
+    margin-top: 2px;
+    font-size: 0.8rem;
+    margin-left: 2px;
+}
+
+
+.label{
+    width: max-content;
+    box-sizing: border-box;
+    padding: 2px 8px;
+    border-radius: 10px;
+    color: whitesmoke;
+    font-size: 0.9rem;
+}
+
+.menuIcon{
+    height: var(--iconSize);
+    width:  var(--iconSize);
+    cursor: pointer;
+}
+
+.addGrocery{
+    position: absolute;
+    bottom: 30px;
+    right: 20px;
+    height: 45px;
+    width: 45px;
+    cursor: pointer;
+}
+
+

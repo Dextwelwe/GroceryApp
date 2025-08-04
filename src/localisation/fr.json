@@ -1,10 +1,12 @@
 {
     "CONNECTION_ERROR" : "Erreur de connexion",
     "LOGIN_NAME" : "Nom d'utilisateur",
-    "lOGIN_PASSWORD" : "Mot de passe",
+    "LOGIN_PASSWORD" : "Mot de passe",
     "SIGN_IN" : "Connexion",
     "CHOOSE_A_CATEGORY": "Choisissez une catégorie",
     "ADD_ITEM_DESC": "Liste de courses. Un produit par ligne.",
     "ALREADY_EXISTS": "Existe déjà",
-    "ALL": "Tous"
+    "ALL": "Tous",
+    "LOGIN_AS_GUEST": "Se connecter en tant qu'invité",
+    "HI" : "Bonjour"
 }

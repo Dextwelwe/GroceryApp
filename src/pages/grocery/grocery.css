@@ -4,18 +4,12 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    padding: 0px 5px;
     box-sizing: border-box;
 }
 
-.headerButtonsWrapper{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-}
+
 
 .iconsTop{
     display: flex;
@@ -38,33 +32,35 @@
     padding: 5px;
     display: flex;
     align-items:center;
-    background-color: var(--secondaryColor);
-    height: 58px;
+    height: 55px;
     width: 100%;
 }
 
 .mainHeaderButton{
     box-sizing: border-box;
     position: relative;
-    border-radius:20px; 
+    border-radius: 15px; 
     min-width: 80px;
     flex-shrink: 0;
-    border-color : darkslategray;
-    background-color:  var(--secondaryColor);
+    border-color : grey;
+    background-color: #C8E6C9;
+    border-color: #81C784;
+    color: #1B5E20;
     height: 40px;
     font-size: 18px;
     color : darkslategray;
-    border : 2px solid;
+    border : none;
     white-space: nowrap;
+    transition: all 0.2s ease;
 }
 
 .mainHeaderButton:hover,
   .mainHeaderButton:focus {
-    color: #122620;
-    background-color:var(--secondaryColor);
+    background-color:#A5D6A7;
     text-decoration: none;
     cursor: pointer;
   }
+  
 
 .itemsWrapper{
     display: flex;
@@ -80,6 +76,7 @@
     box-sizing: border-box;
     display: flex;
     justify-content: center;
+    
 }
 
 .itemListWrapper {
@@ -100,10 +97,12 @@
     box-sizing: border-box;
     align-items: center;
     width: 100%;
-    background-color:var(--secondaryColor);
+    border: var(--border);
+    border-radius: var(--borderRadius);
     margin-bottom: 5px;
     height: 55px;
     padding: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.06);
 }
 
 .itemWrapper:last-child{
@@ -131,7 +130,3 @@
     gap: 5px;
 }
 
-.menuIcon{
-    height: var(--iconSize);
-    width:  var(--iconSize);
-}

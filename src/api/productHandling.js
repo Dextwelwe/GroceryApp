@@ -1,5 +1,5 @@
 import { collection, getDocs, deleteDoc, addDoc, query, where } from "firebase/firestore";
-import { db } from "../login/initFirebase";
+import { db } from "./initFirebase";
 import { doc, updateDoc } from "firebase/firestore";
 
 let table = "list"

@@ -1,38 +1,18 @@
-import './App.css';
-import Login from '../src/login/Login'
-import Main from '../src/main/main'
-import { useState, useEffect } from 'react';
-import { auth} from '../src/login/initFirebase'; 
-import { onAuthStateChanged } from 'firebase/auth';
+import Groceries from './pages/groceries/Groceries';
+import { useState } from 'react';
+import Grocery from './pages/grocery/Grocery';
+import Login from './pages/login/Login';
+import { useAuth } from './providers/AuthProvider';
 
 function App() {
+  const {user} = useAuth();
+  const [page, setPage] = useState("grocery");
 
-  const [isConnected, setIsConnected] = useState(true);
-  const [loading, setLoading] = useState(true);
+  if (!user?.email) return <Login />;
 
-  const  toggleIsConnected = () => {
-    setIsConnected(!isConnected);
-  }
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setIsConnected(true); 
-      } else {
-        setIsConnected(false); 
-      }
-      setLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
-
-
-  return (
-    !loading && (
-      isConnected === false 
-        ? <Login connect={toggleIsConnected} /> 
-        : <Main disconnect={toggleIsConnected} />
-    )
+  return page === "grocery" ? 
+  (<Groceries goToGrocery={() => setPage("grocery")} />)
+  :(<Grocery goBack={() => setPage("groceries")} />
   );
 }
 

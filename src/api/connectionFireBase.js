@@ -3,9 +3,9 @@ import {auth} from "./initFirebase"
 
 export default async function handleConnection(email,password){
     try{
-   await signInWithEmailAndPassword(auth, email + "@gmail.com", password)
-      return true;
+   const user = await signInWithEmailAndPassword(auth, email + "@gmail.com", password)
+      return user.user.uid;
     } catch(e){
-        return false;
+        return null;
     }
 }
