@@ -14,5 +14,13 @@
 .list{
     width: 100%;
     overflow-y: auto;
+}
 
+.addGrocery{
+    position: absolute;
+    bottom: 30px;
+    right: 20px;
+    height: 45px;
+    width: 45px;
+    cursor: pointer;
 }

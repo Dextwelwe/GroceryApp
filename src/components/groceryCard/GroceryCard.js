@@ -1,6 +1,5 @@
 import gc from './groceryCard.module.css'
 import remove from '../../images/icons/delete.svg'
-import add from '../../images/icons/addBig.svg'
 
 export default function GroceryCard({data}) {
  if (!data) return null;
@@ -43,7 +42,6 @@ export default function GroceryCard({data}) {
              ))
          }
         </div>
-         <img alt='Add' src={add} className={gc.addGrocery}onClick={""} />
     </div>
   )
 }

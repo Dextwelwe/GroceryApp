@@ -7,11 +7,16 @@ import gr from './Groceries.module.css'
 import iconLogout from '../../images/icons/logout.svg'
 import Select from '../../components/select/Select';
 import GroceryCard from '../../components/groceryCard/GroceryCard';
+import Popup from '../../components/popup/Popup';
+import add from '../../images/icons/addBig.svg'
+
+import { useState } from 'react';
 
 export default function Groceries() {
   const {userData} = useAuth();
   const { t } = useTranslation();
   const { logout } = useAuth();
+  const [isAddNewGroceryVisible, setIsAddNewGroceryVisible] = useState(false);
 
    if (!userData) return null;
 
@@ -22,6 +27,9 @@ export default function Groceries() {
   const headerTitle = t('HI') + ", " + userData.firstName + " !";
   const headerItems =  [{src : iconLogout , alt : "Logout", clickaction : logout}]
 
+  const toggleNewGrocery = () => {
+    setIsAddNewGroceryVisible(!isAddNewGroceryVisible);
+  }
   return (
        <div className='mainContentWrapper'>
         <HeaderMenu title={headerTitle} headerItems={headerItems} headerNav={null}/>
@@ -31,10 +39,27 @@ export default function Groceries() {
           <Select label="Sort By" options={optionsSortBy} />
         </div>
         <div className={gr.list}>
-      {groceries.length > 0 && groceries.map((grocery, index) => (
-        <GroceryCard key={index} data={grocery} />
-      ))}
+          {groceries.length > 0 && groceries.map((grocery, index) => (
+            <GroceryCard key={index} data={grocery} />
+          ))}
         </div>
+         <img alt='Add' src={add} className={gr.addGrocery}onClick={toggleNewGrocery} />
+        { isAddNewGroceryVisible &&
+          <Popup title={"Add new grocery"} close={toggleNewGrocery}>
+          <form style={{display: 'grid', gap: '10px', width : '150px', placeSelf : 'center'}}>
+            <label>Name :</label>
+            <input></input>
+
+             <label>Date :</label>
+            <input></input>
+            <div>
+             <label>Add users : </label>
+            <input></input> <button>+</button>
+            </div>
+          <button>Save</button>
+            </form>  
+          </Popup>
+        }
       </div> 
   )
 }
