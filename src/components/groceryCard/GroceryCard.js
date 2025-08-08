@@ -1,11 +1,14 @@
 import gc from './groceryCard.module.css'
 import remove from '../../images/icons/delete.svg'
-
-export default function GroceryCard({data}) {
- if (!data) return null;
-
+import removeGrocery from '../../api/grocery';
+import { useAuth } from '../../providers/AuthProvider';
+import { fetchUser } from '../../api/user';
+export default function GroceryCard({data,onDelete}) {
+  
+ const {getUserData,setUserData} = useAuth();
+  if (!data) return null;
  const leftItemsIcons = {};
- const rightItemsIcons = [{src : remove, alt : "Remove", clickaction : null}]
+ const rightItemsIcons = [{src : remove, alt : "Remove", clickaction : removeGroceryCall}]
 
  function parseDate(date) {
     try {
@@ -18,6 +21,11 @@ export default function GroceryCard({data}) {
     console.log('user obj time error', e);
     return 'Invalid Date';
   }
+}
+
+async function removeGroceryCall() {
+  await removeGrocery(data.owner,data.id);
+   onDelete && onDelete();
 }
 
   return (

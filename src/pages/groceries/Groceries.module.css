@@ -16,6 +16,14 @@
     overflow-y: auto;
 }
 
+.form{
+    box-sizing: border-box;
+    padding: 25px;
+    display: grid;
+    gap: 5px;
+    
+}
+
 .addGrocery{
     position: absolute;
     bottom: 30px;
@@ -23,4 +31,45 @@
     height: 45px;
     width: 45px;
     cursor: pointer;
+}
+
+.addUserButton{
+    cursor: pointer;
+    width: 50px;
+    border: none;
+    background-color: #64B5F6;  
+    color: white;
+}
+
+.saveButton{
+    cursor: pointer;
+    height: 30px;
+    width: 100%;
+    border: none;
+    color: white;
+    font-family: var(--fontFamily);
+    background-color: #2196F3;
+    margin-top: 50px;
+     font-weight: 500;
+}
+
+.userList::placeholder{
+    padding-left: 5px;
+}
+
+.saveButton:hover {
+  background-color: #1976D2;
+}
+
+.userListWrapper{
+    display: flex;
+    gap: 10px;
+}
+
+input {
+    border: var(--border);
+}
+
+.dateInput{
+  padding: 5px;
 }

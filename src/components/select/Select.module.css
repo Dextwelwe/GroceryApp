@@ -15,7 +15,7 @@
     -moz-appearance: none;
     appearance: none;
     color: var(--fontColor);
-    font-family: 'Roboto', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: var(--fontFamily);
     cursor: pointer;
 }
 

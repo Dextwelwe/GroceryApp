@@ -1,6 +1,5 @@
 export default class User {
   constructor(uid, data) {
-      console.log(data)
     this.uid = uid;
     this.firstName = data.firstName || "";
     this.lastName = data.lastName || "";
@@ -17,6 +16,10 @@ export default class User {
 
     getSharedGroceries(){
       return this.sharedGroceries;
+    }
+    
+    getPersonalGroceries(){
+      return this.groceries;
     }
 
     getCustomItems(){

@@ -18,3 +18,17 @@ export async function fetchUser(uid) {
 
   return user;
 }
+
+export async function fetchUserGroceries(userId, type) {
+  if (!userId) throw new Error("Missing userId");
+
+  const subCollection = type === 'shared' ? "sharedGroceries" : "groceries";
+  const groceriesRef = collection(db, "users", userId, subCollection);
+  const snapshot = await getDocs(groceriesRef);
+
+  return snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+}
+
