@@ -56,7 +56,17 @@
 .empty{
     margin-top: 50px;
     text-align: center;
+}
 
+.formMessage{
+    font-size: 0.8rem;
+    margin-top: 5px;
+    color : green;
+    text-align: start;
+}
+
+.addedUsersTitle{
+    font-size : 0.8rem;
 }
 
 .userList::placeholder{

@@ -1,16 +1,17 @@
-import {useState, useRef} from 'react'
-import handleConnection from "../../api/connectionFireBase"
 import './Login.css'
-import { useTranslation } from 'react-i18next';
 
-export default function Login({connect}) {
+import { useState, useRef } from 'react'
+import { useTranslation } from 'react-i18next';
+import handleConnection from "../../api/connectionFireBase"
+
+export default function Login() {
+    const { t, i18n } = useTranslation();
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
     const [loginMessage, setLoginMessage] = useState('');
     let passwordEl = useRef(null);
     let usernameEl = useRef(null);
     let languageEl = useRef(null);
-    const { t, i18n } = useTranslation();
 
     const changeLanguage = (lng) => i18n.changeLanguage(lng);
 
@@ -38,13 +39,14 @@ export default function Login({connect}) {
     async function handleSubmit(e){
       e.preventDefault();
       let canAuth = true;
+      const border = '1px solid red';
 
       if (password.trim() === ""){
-        passwordEl.current.style.border = '1px solid red'
+        passwordEl.current.style.border = border;
         canAuth = false;
       }
       if (username.trim() === ""){
-        usernameEl.current.style.border = '1px solid red'
+        usernameEl.current.style.border = border;
         canAuth = false;
       }
 
@@ -58,27 +60,25 @@ export default function Login({connect}) {
    
   return (
     <div className='loginRootWrapper'>
-        <div className='loginContentWrapper'>
+      <div className='loginContentWrapper'>
         <form className='loginFormWrapper'>
-       
-        <input ref={usernameEl} className='loginInput' onChange={handleUsername} id='username' placeholder={t('LOGIN_NAME')} value={username}></input>
-        <input ref={passwordEl} className='loginInput' onChange={handlePassword} id='password' placeholder={t('LOGIN_PASSWORD')} type="password" autoComplete='password'></input>
-        <div className='loginButtonWrapper'>
-        <button className='loginButton' onClick={handleSubmit}>{t('SIGN_IN')}</button>
-        <div className='loginSelectWrapper'>
-        <select ref={languageEl} className='loginInput loginSelect' onChange={handleLanguage} defaultValue={"en"} >
-          <option  className='loginInput' value="en">English</option>
-          <option  className='loginInput' value="fr">Francais</option>
-          <option  className='loginInput' value="ru">Русский</option>
-        </select>
-        </div>
-        </div>
+         <input ref={usernameEl} className='loginInput' onChange={handleUsername} id='username' placeholder={t('LOGIN_NAME')} value={username}></input>
+         <input ref={passwordEl} className='loginInput' onChange={handlePassword} id='password' placeholder={t('LOGIN_PASSWORD')} type="password" autoComplete='password'></input>
+         <div className='loginButtonWrapper'>
+           <button className='loginButton' onClick={handleSubmit}>{t('SIGN_IN')}</button>
+           <div className='loginSelectWrapper'>
+             <select ref={languageEl} className='loginInput loginSelect' onChange={handleLanguage} defaultValue={"en"} >
+               <option  className='loginInput' value="en">English</option>
+               <option  className='loginInput' value="fr">Francais</option>
+               <option  className='loginInput' value="ru">Русский</option>
+             </select>
+           </div>
+         </div>
         </form>
-      {
-        loginMessage !== "" && <p className='loginMessage'>{loginMessage}</p>
-      }
+        { loginMessage !== "" && <p className='loginMessage'>{loginMessage}</p> }
       </div>
-      <a className='userTestButton' onClick={guestLogin}>{t('LOGIN_AS_GUEST')}</a>
-      </div>
-  )
+      {/*eslint-disable-next-line jsx-a11y/anchor-is-valid  */}
+      <a href="#" className='userTestButton' onClick={guestLogin}>{t('LOGIN_AS_GUEST')}</a>
+    </div>
+  ) 
 }

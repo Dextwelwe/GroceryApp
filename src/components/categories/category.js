@@ -1,10 +1,10 @@
 import { useRef, useState, useEffect } from 'react';
 import { getAssignedCategories, getAllCategories, addNewCategory, deleteCategoryByDesc } from '../../api/productHandling';
 
-import iconAdd from '../../images/icons/add.png';
-import iconUndo from '../../images/icons/undo.png';
-import iconEdit from '../../images//icons/pencil.png';
-import iconCheck from '../../images//icons/check.png';
+import iconAdd from '../../assets/images/icons/add.png';
+import iconUndo from '../../assets/images/icons/undo.png';
+import iconEdit from '../../assets/images//icons/pencil.png';
+import iconCheck from '../../assets/images//icons/check.png';
 
 import './category.css';
 

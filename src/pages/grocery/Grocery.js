@@ -6,10 +6,8 @@ import AddItems from '../../components/add/addItems';
 import Category from '../../components/categories/category';
 import HeaderMenu from '../../components/header/header';
 
-import iconAdd from '../../images/icons/add.svg';
-import iconBack from '../../images/icons/back.svg'
-
-
+import iconAdd from '../../assets/images/icons/add.svg';
+import iconBack from '../../assets/images/icons/back.svg'
 
 export default function Grocery({goBack}) {
   const [isEdit, setIsEdit] = useState(false);

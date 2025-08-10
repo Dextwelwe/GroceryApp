@@ -1,5 +1,5 @@
 import gc from './groceryCard.module.css'
-import remove from '../../images/icons/delete.svg'
+import remove from '../../assets/images/icons/delete.svg'
 import removeGrocery from '../../api/grocery';
 
 export default function GroceryCard({data,onDelete,onClick}) {
@@ -24,7 +24,7 @@ export default function GroceryCard({data,onDelete,onClick}) {
 async function removeGroceryCall() {
   let res = window.confirm("Delete Grocery ?")
   if (res){
-    await removeGrocery(data.owner,data.id);
+    await removeGrocery(data.owner,data.id,data.sharedWith);
     onDelete && onDelete();
   }
 }

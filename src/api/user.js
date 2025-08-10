@@ -1,4 +1,4 @@
-import { doc, getDoc, getDocs, collection} from "firebase/firestore";
+import { doc, getDoc, getDocs, collection, query, where, limit} from "firebase/firestore";
 import { db } from "../api/initFirebase";
 import User from "../models/User";
 
@@ -17,6 +17,15 @@ export async function fetchUser(uid) {
   user.sharedGroceries = sharedGroceriesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
   return user;
+}
+
+export async function getUserId(email){
+  const normalized = email?.trim().toLowerCase();
+  if (!normalized) return false;
+    const q = query(collection(db, "users"),where("email", "==", normalized),limit(1));
+    const snap = await getDocs(q);
+    if (snap.empty) return null;
+    return snap.docs[0].id;
 }
 
 export async function fetchUserGroceries(userId, type) {

@@ -10,5 +10,6 @@ export default class Grocery {
         this.items = data.items || [];
         this.dateLastUpdated = data.dateLastUpdated || "";
         this.status = data.status;
+        this.sharedWith = data.sharedWith || []
     }
 }

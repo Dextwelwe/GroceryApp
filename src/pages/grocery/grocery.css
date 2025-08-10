@@ -1,15 +1,3 @@
-.mainContentWrapper{
-    height: 100dvh;
-    background-color: var(--modalBackGround);
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    box-sizing: border-box;
-}
-
-
 
 .iconsTop{
     display: flex;
