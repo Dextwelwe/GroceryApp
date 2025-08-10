@@ -11,6 +11,10 @@
     cursor: pointer;
 }
 
+.dataWrapper{
+    flex-grow: 1;
+}
+
 .colorShared{
  background-color: #FFA726;
 }

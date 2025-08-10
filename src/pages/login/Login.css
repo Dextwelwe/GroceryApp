@@ -3,6 +3,7 @@
     width: 100vw;
     display: grid;
     place-content: center;
+
 }
 
 .loginFormWrapper{
@@ -26,7 +27,7 @@
 }
 
 .loginSelect{
-  line-height:  var(--loginInputHeight);
+  line-height:  var(--inputHeight);
   color : var(--fontColor);
   width: 100%;
   align-self: flex-end;
@@ -45,26 +46,22 @@
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
-   color : var(--fontColor);
+  color : var(--fontColor);
 }
 
 .loginContentWrapper{
     height: max-content;
-    padding: 20px;
+    padding: 25px;
     width: 300px;
-    background-color:var(--modalBackGround); 
-    border-radius: var(--modalBorderRadius);
-    box-shadow:var(--shadowLoginContainer);
+    border: var(--border);
+    background-color: var(--modalBackGround);
 }
 
 
 .loginInput{
-    box-shadow: var(--shadowLoginInput);
-    border :    var(--borderLoginInput);
-    border-color:  var(--borderColorLoginInput);
-    border-radius: var(--borderRadius);
+    border :    var(--border);
     background-color: white !important;
-    height: var(--loginInputHeight);
+    height: var(--inputHeight);
     text-align: center;
 }
 
@@ -76,11 +73,10 @@
 .loginButton{
     width: 60%;
     color : var(--fontColor);
-    border-radius:var(--borderRadius); 
     border: var(--borderLoginInput);
     border-color: var(--borderColorLoginInput);
     background-color:  var(--buttonColor);
-    height: var(--loginInputHeight);
+    height: var(--inputHeight);
 }
 
 .loginButton:hover,

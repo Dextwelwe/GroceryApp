@@ -6,14 +6,13 @@ import { useAuth } from './providers/AuthProvider';
 
 function App() {
   const {user} = useAuth();
-  const [page, setPage] = useState("grocery");
+  const [page, setPage] = useState("groceries");
 
   if (!user?.email) return <Login />;
 
-  return page === "grocery" ? 
-  (<Groceries goToGrocery={() => setPage("grocery")} />)
-  :(<Grocery goBack={() => setPage("groceries")} />
-  );
+   return page === "groceries" 
+    ? <Groceries goToGrocery={() => setPage("grocery")} />
+    : <Grocery goBack={() => setPage("groceries")} />;
 }
 
 export default App;

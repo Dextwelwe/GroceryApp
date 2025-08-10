@@ -6,10 +6,9 @@ import AddItems from '../../components/add/addItems';
 import Category from '../../components/categories/category';
 import HeaderMenu from '../../components/header/header';
 
-import iconClose from '../../images/icons/close.png';
 import iconAdd from '../../images/icons/add.svg';
 import iconBack from '../../images/icons/back.svg'
-import Groceries from '../groceries/Groceries';
+
 
 
 export default function Grocery({goBack}) {
@@ -30,7 +29,6 @@ export default function Grocery({goBack}) {
     const headerGroceryNav = [{src : iconBack , alt : "Back", clickaction : goBack}]
 
     const headerEditTitle = "add products"
-    const headerEditIcons = []
     const headerEditNav = [{src : iconBack, alt : "Back", clickaction : toggleEdit}]
 
   useEffect(()=>{
