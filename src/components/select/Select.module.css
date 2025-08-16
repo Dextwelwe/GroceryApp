@@ -17,6 +17,7 @@
     color: var(--fontColor);
     font-family: var(--fontFamily);
     cursor: pointer;
+    text-transform: capitalize;
 }
 
 .label{

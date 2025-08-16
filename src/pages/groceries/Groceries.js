@@ -3,6 +3,7 @@ import gr from './Groceries.module.css'
 import { useAuth } from '../../providers/AuthProvider';
 import { useTranslation} from 'react-i18next';
 import { useState, useRef, useEffect, useMemo } from 'react';
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 // Api
 import {saveNew} from '../../api/grocery';
@@ -27,13 +28,18 @@ export default function Groceries({goToGrocery}) {
   const [usersList, setUsersList] = useState([])
   const [isAddNewGroceryVisible, setIsAddNewGroceryVisible] = useState(false);
 
+  const [defaultLabel,setDefaultLabel] = useLocalStorage('FLabel','all');
+  const [defaultStatus,setDefaultStatus] = useLocalStorage('FStatus','all');
+  const [defaultSortBy,setDefaultSortBy] = useLocalStorage('FSortBy','newest');
+  const [filters, setFilters] = useState({label: defaultLabel, status: defaultStatus, sortBy: defaultSortBy});
+
   let nameRef = useRef(null);
   let dateRef = useRef(null);
   let usersRef = useRef(null);
 
-  const [filters, setFilters] = useState({label: 'all',status: 'all',sortBy: 'newest'});
   const STATUS_MAP = { "pending": "active", completed: "completed"};
   const headerItems =  [{src : iconLogout , alt : "Logout", clickaction : logout}]
+
 
   const optionsLabel = [
    { value: "all", label: "All" },
@@ -153,6 +159,9 @@ const view = useMemo(() => {
  function handleFilterChange(e) {
   const { name, value } = e.target;
   setFilters(prev => ({ ...prev, [name]: value }));
+  if (name === 'label') setDefaultLabel(value);
+  if (name === 'status') setDefaultStatus(value);
+  if (name === 'sortBy') setDefaultSortBy(value);
 }
 
   function validateInput(value) {
@@ -179,8 +188,15 @@ function  getDate(d)  {
   catch { return null; }
 };
 
-const openGrocery = () => {
-  goToGrocery();
+const openGrocery = (id) => {
+  goToGrocery(id);
+}
+
+function resetFilters(){
+  setDefaultLabel("all");
+  setDefaultStatus("all");
+  setDefaultSortBy("all");
+  setFilters({label: 'all', status: 'all', sortBy: 'all'});
 }
 
   return (
@@ -191,11 +207,12 @@ const openGrocery = () => {
        <Select label="Groceries" options={optionsLabel} name="label" value={filters.label} onChange={handleFilterChange} />
        <Select label="Status" options={optionsStatus} name="status"  value={filters.status} onChange={handleFilterChange} />
        <Select label="Sort By" options={optionsSortBy} name="sortBy" value={filters.sortBy} onChange={handleFilterChange}/>
+       <button className={gr.resetFiltersBtn} onClick={resetFilters}>Reset Filters</button>
      </div>
      {/* Grocery Cards */}
      <div className={gr.list}>
        {(view.length ? view : []).map((grocery) => (
-       <GroceryCard key={grocery.id} data={grocery} onClick={openGrocery} onDelete={loadGroceries} />
+       <GroceryCard key={grocery.id} data={grocery} onClick={(e)=>openGrocery(e)} onDelete={loadGroceries} />
        ))}
        {view.length === 0 && groceries.length > 0 && <div className={gr.empty}>No groceries match your filters.</div>}
      </div>

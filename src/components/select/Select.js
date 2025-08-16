@@ -9,7 +9,7 @@ export default function Select({label, options, name, onChange, value}) {
         {
             options.length > 0 &&
             options.map((option, index) => (
-                    <option key={index} value={option.value}>{option.label}</option>
+                    <option className={s.option} key={index} value={option.value}>{option.label}</option>
             ))}
       </select>
     </div>

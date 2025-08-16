@@ -38,7 +38,7 @@ async function removeGroceryCall() {
              ))
          }
          </div>
-        <div className={gc.dataWrapper} onClick={onClick}>
+        <div className={gc.dataWrapper} onClick={()=>onClick(data.id)}>
             <div className={`${gc.label} ${data.type === "shared" ? gc.colorShared : gc.colorPersonal}`}>{data.type} </div>
             <div className={gc.name}>{data.name}</div> 
             <div className={gc.date}>{parseDate(data.date)}</div> 

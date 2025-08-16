@@ -1,5 +1,6 @@
-import { collection, doc, deleteDoc, serverTimestamp, writeBatch,Timestamp } from "firebase/firestore";
+import { collection, doc, deleteDoc, serverTimestamp, writeBatch,Timestamp, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../api/initFirebase";
+import Grocery from "../models/Grocery";
 
 export async function saveNew(grocery) {
   const sharedWith = Array.from(new Set(grocery.sharedWith || [])).filter(uid => uid && uid !== grocery.owner);
@@ -40,7 +41,6 @@ export async function saveNew(grocery) {
 
 export default async function removeGrocery(ownerUid, groceryId, sharedWith = []) {
   const batch = writeBatch(db);
-  debugger
   batch.delete(doc(db, "groceries", groceryId));
   batch.delete(doc(db, "users", ownerUid, "groceries", groceryId));
   sharedWith.forEach(user => {
@@ -55,6 +55,28 @@ export default async function removeGrocery(ownerUid, groceryId, sharedWith = []
     return { success: false, error };
   }
 }
+
+
+export async function getGroceryById(groceryId) {
+  if (!groceryId) throw new Error("groceryId is null");
+  try {
+    const groceryRef = doc(db, "groceries", groceryId);
+    const itemsRef   = collection(db, "groceries", groceryId, "items");
+    const [grocerySnap, itemsSnap] = await Promise.all([
+      getDoc(groceryRef),
+      getDocs(itemsRef)
+    ]);
+    if (!grocerySnap.exists()) return null;
+    const groceryData = grocerySnap.data();
+    const items = itemsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    console.log(new Grocery(grocerySnap.id, { ...groceryData, items }))
+    return new Grocery(grocerySnap.id, { ...groceryData, items });
+  } catch (err) {
+    console.error("Failed to fetch grocery:", err);
+    throw err;
+  }
+}
+
 
 
 

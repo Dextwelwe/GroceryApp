@@ -24,12 +24,21 @@
     
 }
 
+.resetFiltersBtn{
+    align-self: flex-end;
+    height: 30px;
+    font-size: 0.8rem;
+    background-color: white;
+    border: var(--border);
+    cursor: pointer;
+}
+
 .addGrocery{
     position: absolute;
     bottom: 30px;
     right: 20px;
-    height: 45px;
-    width: 45px;
+    height: 50px;
+    width: 50px;
     cursor: pointer;
 }
 

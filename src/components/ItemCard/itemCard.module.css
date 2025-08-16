@@ -1,0 +1,35 @@
+.groceryCardWrapper{
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom : var(--border);
+    height: max-content;
+    width: 100%;
+    margin-top: 5px;
+    padding: 10px 10px;
+
+}
+
+.dataWrapper{
+    flex-grow: 1;
+}
+
+.name {
+    color: var(--fontColor);
+    font-weight: 500;
+    text-transform: capitalize;
+    font-size: 1rem;
+    margin-top: 1px;
+    margin-left: 2px;
+}
+
+.menuIcon{
+    height: var(--iconSize);
+    width:  var(--iconSize);
+    cursor: pointer;
+}
+
+.leftItems {
+    margin-right: 10px;
+}

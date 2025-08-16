@@ -1,7 +1,7 @@
 .rootWrapper {
     z-index: 9999;
     position: absolute;
-    height: 100vh;
+    height: 100dvh;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     display: grid;

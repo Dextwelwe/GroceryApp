@@ -7,12 +7,20 @@ import { useAuth } from './providers/AuthProvider';
 function App() {
   const {user} = useAuth();
   const [page, setPage] = useState("groceries");
+  const [groceryId, setGroceryId] = useState(null);
 
   if (!user?.email) return <Login />;
 
+  const goToGrocery = (id) => {
+    if (id != null){
+      setPage("grocery")
+      setGroceryId(id)
+    }
+  }
+
    return page === "groceries" 
-    ? <Groceries goToGrocery={() => setPage("grocery")} />
-    : <Grocery goBack={() => setPage("groceries")} />;
+    ? <Groceries goToGrocery={goToGrocery} />
+    : <Grocery groceryId={groceryId} goBack={() => setPage("groceries")} />;
 }
 
 export default App;
