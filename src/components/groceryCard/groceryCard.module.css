@@ -6,7 +6,6 @@
     border-bottom : var(--border);
     height: max-content;
     width: 100%;
-    margin-top: 5px;
     padding: 10px 10px;
     cursor: pointer;
 }

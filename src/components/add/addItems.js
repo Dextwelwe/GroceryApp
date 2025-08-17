@@ -1,13 +1,13 @@
-import React, {useRef} from 'react'
-import { addItems } from '../../api/productHandling';
+import {useRef} from 'react'
 import './addItems.css'
 
-export default function AddItems({setisEdit, category}) {
+export default function AddItems({setItemsList}) {
 
   let inputText = useRef(null);
 
   let refactorInput = (event) => {
     let lines = inputText.current.value.split(/\r?\n/);
+    let finalStr = '';
     if (event.key === 'Enter'){
       event.preventDefault();
       // prevent going to next line if current line is empty
@@ -16,10 +16,12 @@ export default function AddItems({setisEdit, category}) {
         if (!lines[lines.length-1].trim().startsWith("- ")){
           let lineLength = lines[lines.length-1].length;
           let tmpText = lines[lines.length-1]
-          inputText.current.value =  inputText.current.value.slice(0,-parseInt(lineLength))
-          inputText.current.value += "- " + tmpText.trim() + "\n- "
+          finalStr = inputText.current.value.slice(0,-parseInt(lineLength))
+          finalStr += "- " + tmpText.trim() + "\n- "
+          inputText.current.value =  finalStr;
         } else {
-        inputText.current.value = inputText.current.value += "\n- "
+          finalStr =  inputText.current.value += "\n- "
+          inputText.current.value = finalStr
         }
       }
     }
@@ -32,42 +34,15 @@ export default function AddItems({setisEdit, category}) {
     }
   }
 
-const handleAdd = async() => {
-  if (category === ''){
-    return alert('Выбери категорию')
-  }
-  let items = inputText.current.value.split(/\r?\n/);
-  let addedItems = [];
-  
-  if (items.length > 0 && items[0].trim() !== "" && items[0].trim() !== "-"){
-    for (let x=0; x < items.length; x++){
-      let obj = {
-        desc : "",
-        status : "NEW",
-        category : {
-          desc : ""
-        }
-      }
-      if (items[x].trim()!== ""){
-        obj.desc = items[x].replace("- ", "")
-        obj.category.desc = category
-        addedItems.push(obj)
-      }
-    }
-    await addItems(addedItems)
-    setisEdit();
-  }
+const handleBlur = () => {
+ let itemsArr = inputText.current.value.split('\n').map(el => el.replace(/^- /, "").trim()).filter(el => el.length > 0);  
+ setItemsList(itemsArr);
 }
 
   return (
-    <div className='add-content-wrapper'>
-      <textarea className='add-item-input' type='text' ref={inputText} onKeyDown={refactorInput} onClick={InitInput}
-placeholder="Список продуктов.
-Один продукт на каждую линию.">      
+      <textarea className='add-item-input' id='items' type='text' ref={inputText} onKeyDown={refactorInput} onBlur={handleBlur} onClick={InitInput}
+        placeholder="Список продуктов.
+        Один продукт на каждую линию.">      
       </textarea>
-      <div className="add-list-button-wrapper">
-      <button className='add-list-button' onClick={handleAdd}>+</button>
-      </div>
-      </div>
   )
 }

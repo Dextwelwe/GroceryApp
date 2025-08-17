@@ -40,7 +40,6 @@ export default function Groceries({goToGrocery}) {
   const STATUS_MAP = { "pending": "active", completed: "completed"};
   const headerItems =  [{src : iconLogout , alt : "Logout", clickaction : logout}]
 
-
   const optionsLabel = [
    { value: "all", label: "All" },
    { value: "personal", label: "Personal" },
@@ -203,12 +202,14 @@ function resetFilters(){
     <div className='mainContentWrapper'>
      <HeaderMenu title={headerTitle} headerItems={headerItems} headerNav={null}/>
      {/* Filters */}
-     <div className={gr.sortBy}>
-       <Select label="Groceries" options={optionsLabel} name="label" value={filters.label} onChange={handleFilterChange} />
-       <Select label="Status" options={optionsStatus} name="status"  value={filters.status} onChange={handleFilterChange} />
-       <Select label="Sort By" options={optionsSortBy} name="sortBy" value={filters.sortBy} onChange={handleFilterChange}/>
-       <button className={gr.resetFiltersBtn} onClick={resetFilters}>Reset Filters</button>
-     </div>
+     <div className={gr.selectWrapper}>
+      <div className={gr.sortBy}>
+        <Select label="Groceries" options={optionsLabel} name="label" value={filters.label} onChange={handleFilterChange} />
+        <Select label="Status" options={optionsStatus} name="status"  value={filters.status} onChange={handleFilterChange} />
+        <Select label="Sort By" options={optionsSortBy} name="sortBy" value={filters.sortBy} onChange={handleFilterChange}/>
+      </div>
+      <button className={gr.resetFiltersBtn} onClick={resetFilters}>Reset Filters</button>
+    </div>
      {/* Grocery Cards */}
      <div className={gr.list}>
        {(view.length ? view : []).map((grocery) => (

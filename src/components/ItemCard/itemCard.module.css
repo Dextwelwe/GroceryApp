@@ -6,9 +6,7 @@
     border-bottom : var(--border);
     height: max-content;
     width: 100%;
-    margin-top: 5px;
     padding: 10px 10px;
-
 }
 
 .dataWrapper{
@@ -19,9 +17,19 @@
     color: var(--fontColor);
     font-weight: 500;
     text-transform: capitalize;
-    font-size: 1rem;
+    font-size: 1.1rem;
     margin-top: 1px;
     margin-left: 2px;
+}
+
+.category{
+    font-size: 0.75rem;
+    margin-left: 2px;
+}
+
+.store {
+    margin-left: 2px;
+    font-size: 0.75rem;
 }
 
 .menuIcon{

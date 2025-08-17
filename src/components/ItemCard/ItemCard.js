@@ -21,7 +21,7 @@ export default function ItemCard({data,actions}) {
     }
     
   return (
-     <div className={ic.groceryCardWrapper}>
+     <div className={ic.groceryCardWrapper} style={{backgroundColor : data.status === "active" ? 'transparent' : '#C8E6C9'}}>
             <div className={ic.leftItems}>
             {leftItemsIcons.length > 0 && 
                 leftItemsIcons.map((item, index) => (
@@ -31,6 +31,8 @@ export default function ItemCard({data,actions}) {
              </div>
             <div className={ic.dataWrapper} onClick={()=>""}>
                 <div className={ic.name}>{data.name}</div> 
+                <div className={ic.category}>Category : {data.category}</div> 
+                <div className={ic.store}> Store : {data.store}</div> 
            </div>
             <div className={ic.rightItems}>
              {rightItemsIcons && 

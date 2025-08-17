@@ -15,6 +15,10 @@ export default class User {
       return [...this.groceries, ...this.sharedGroceries];
     }
 
+    getName(){
+      return this.name;
+    }
+
     getSharedGroceries(){
       return this.sharedGroceries;
     }

@@ -9,8 +9,7 @@ export default function Popup({children, title, close, hideCloseButton}) {
   return (
     <div className={p.rootWrapper}>
         <div className={p.contentWrapper}>
-           <Header title={"New Grocery"} headerItems={!hideCloseButton ? closeButton : ""}></Header>
-            
+           <Header title={title} headerItems={!hideCloseButton ? closeButton : ""}></Header>
             {children}
         </div>
     </div>
