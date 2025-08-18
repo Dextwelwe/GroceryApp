@@ -22,10 +22,19 @@ export default function GroceryCard({data,onDelete,onClick}) {
 }
 
 async function removeGroceryCall() {
-  let res = window.confirm("Delete Grocery ?")
-  if (res){
-    await removeGrocery(data.owner,data.id,data.sharedWith);
-    onDelete && onDelete();
+  let res = window.confirm("Delete Grocery ?");
+  if (res) {
+    console.log(data.sharedWith)
+    let result = await removeGrocery(data.owner, data.id, data.sharedWith);
+    if (result.success) {
+      onDelete && onDelete();
+    } else {
+      if ((result.error.code = "permission-denied")) {
+        alert("Not permitted for Guests");
+      } else {
+        alert("server error");
+      }
+    }
   }
 }
 

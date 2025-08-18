@@ -25,7 +25,8 @@ export default function Groceries({goToGrocery}) {
   const {userData, logout} = useAuth();
 
   const [groceries, setGroceries] = useState([]);
-  const [usersList, setUsersList] = useState([])
+  const [usersList, setUsersList] = useState([]);
+  const [usersEmailList, setUsersEmailList] = useState([]);
   const [isAddNewGroceryVisible, setIsAddNewGroceryVisible] = useState(false);
 
   const [defaultLabel,setDefaultLabel] = useLocalStorage('FLabel','all');
@@ -135,21 +136,26 @@ const view = useMemo(() => {
          toggleNewGrocery();
          setUsersList([])
     } else {
-      alert("Server Error");
+      if (result.error.code = 'permission-denied'){
+        alert('Not permitted for Guests')
+      }else{
+        alert("Server Error");
+      }
     }
     }
   }
   
   const addUser = async() => {
   let userInput = usersRef.current.value;
-
+  if (userData.isTestUser){return alert('Not permitted for Guests')}
   if (!userInput) return;
-  if (usersList.includes(userInput)) return;
+  if (usersEmailList.includes(userInput)) return;
   if (userInput === userData.email) return;
    
   let userId = await getUserId(userInput);
   if (userId){
-      setUsersList(prev => ([...prev, {email : userInput,id :userId}]));
+      setUsersEmailList(prev => ([...prev, userInput]));
+      setUsersList(prev=>([...prev, userId]));
   } else {
     alert ("user '" + userInput + "' doesn't exist");
   }
@@ -220,7 +226,7 @@ function resetFilters(){
      {/* New Grocery Popup */}
      { isAddNewGroceryVisible &&
        <Popup title={"Add new grocery"} close={toggleNewGrocery}>
-         <form className={gr.form}>
+         <form className={gr.form} onSubmit={(e)=>e.preventDefault()}>
            <label htmlFor="groceryName" >Name :</label>
            <input id="groceryName" ref={nameRef} className='input'></input>
            <label htmlFor='groceryDate'>Date :</label>
@@ -228,10 +234,10 @@ function resetFilters(){
            <label for="userList">Add a user : </label>
            <div className={gr.userListWrapper}>
              <input id="userList" ref={usersRef} className={`input ${gr.userList}`} placeholder='ex. user1234'></input> 
-             <button onClick={addUser} className={gr.addUserButton}>+</button>
+             <button type="button" onClick={addUser} className={gr.addUserButton}>+</button>
            </div>
-           {usersList !== '' && <><span className={gr.addedUsersTitle}>Added Users : </span><span className={gr.formMessage}>{usersList.map(e => e.email).join(", ")}</span></>}
-           <button type='button' onClick={(e)=>{ e.preventDefault();saveNewGrocery(e)}} className={gr.saveButton}>Save</button>
+           {usersEmailList !== '' && <><span className={gr.addedUsersTitle}>Added Users : </span><span className={gr.formMessage}>{usersEmailList.map(e => e).join(", ")}</span></>}
+           <button type="button" onClick={(e)=>{ e.preventDefault();saveNewGrocery(e)}} className={gr.saveButton}>Save</button>
          </form>  
        </Popup>
      }

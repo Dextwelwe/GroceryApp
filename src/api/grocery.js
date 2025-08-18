@@ -25,7 +25,7 @@ export async function saveNew(grocery) {
   batch.set(ownerBacklinkRef,root);
 
   sharedWith.forEach(user => {
-    const ref = doc(db, "users", user.id, "sharedGroceries", groceryId);
+    const ref = doc(db, "users", user, "sharedGroceries", groceryId);
     batch.set(ref, root);
   });
 
@@ -44,7 +44,7 @@ export default async function removeGrocery(ownerUid, groceryId, sharedWith = []
   batch.delete(doc(db, "groceries", groceryId));
   batch.delete(doc(db, "users", ownerUid, "groceries", groceryId));
   sharedWith.forEach(user => {
-    batch.delete(doc(db, "users", user.id, "sharedGroceries", groceryId));
+    batch.delete(doc(db, "users", user, "sharedGroceries", groceryId));
   });
 
   try {

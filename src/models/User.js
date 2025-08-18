@@ -9,6 +9,7 @@ export default class User {
     this.sharedGroceries = data.sharedGroceries || [];
     this.customItems = data.customItems || [];
     this.customStores = data.customStores || [];
+    this.isTestUser = data.isTestUser || false;
 }
 
     getGroceries(){

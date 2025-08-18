@@ -31,6 +31,5 @@ export default class Grocery {
     return [{value : "all", label: "All"}, ...stores];
 }
 
-    
 }
 

@@ -3,7 +3,7 @@ import {auth} from "./initFirebase"
 
 export default async function handleConnection(email,password){
     try{
-   const user = await signInWithEmailAndPassword(auth, email + "@gmail.com", password)
+   const user = await signInWithEmailAndPassword(auth, email, password)
       return user.user.uid;
     } catch(e){
         return null;

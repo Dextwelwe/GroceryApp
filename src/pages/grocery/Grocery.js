@@ -21,11 +21,11 @@ export default function Grocery({goBack, groceryId}) {
   const [defaultCategory,setDefaultCategory] = useLocalStorage('gLabel','all');
   const [defaultStore, setDefaulStore] = useLocalStorage('gStore', 'all');
   const [defaultStatus,setDefaultStatus] = useLocalStorage('gStatus','all');
-  const [defaultSortBy,setDefaultSortBy] = useLocalStorage('gSortBy','az');
+  const [defaultSortBy,setDefaultSortBy] = useLocalStorage('gSortBy','status');
   const [isAddItemsPopup, setIsAddItemsPopup] = useState(false);
   const [filters, setFilters] = useState({category: defaultCategory,store: defaultStore,status: defaultStatus, sortBy: defaultSortBy,});
   const optionsStatus = [ { value: "all", label: "All" },{ value: "active", label: "active" },{ value: "completed", label: "completed" }];
-  const optionsSortBy = [ { value: "az", label: "A-Z" }, { value: "za", label: "Z-A" }];
+  const optionsSortBy = [ { value: "az", label: "A-Z" }, { value: "za", label: "Z-A" }, {value :'status', label : "Status"}];
   const itemActions = { remove : removeItemCall, changeStatus : changeItemStatus};
   const [itemsList, setItemsList] = useState([])
   let categoryRef = useRef(null);
@@ -65,7 +65,11 @@ export default function Grocery({goBack, groceryId}) {
       switch (filters.sortBy) {
         case "az":     return an.localeCompare(bn);
         case "za":     return bn.localeCompare(an);
-        default:       return 0;
+        case "status" :       
+        if (a.status === "completed" && b.status !== "completed") return 1;
+        if (a.status !== "completed" && b.status === "completed") return -1;
+        return 0;
+        default : return 0;
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -79,22 +83,37 @@ export default function Grocery({goBack, groceryId}) {
 
    async function removeItemCall(id) {
    const groceryId = grocery.getId();
-   setGrocery(prev => {
-     const nextItems = (prev.items ?? []).filter(it => it.id !== id);
-     return new GroceryObj(groceryId, { ...prev, items: nextItems});
-   });
-    await removeItem(groceryId, id).catch(err => {
-      console.error("Failed to remove item:", err); 
-    });
+   let result = await removeItem(groceryId, id);
+   if (result.success){
+     setGrocery(prev => {
+       const nextItems = (prev.items ?? []).filter(it => it.id !== id);
+       return new GroceryObj(groceryId, { ...prev, items: nextItems});
+     });
+   } else {
+    if ((result.error.code = "permission-denied")) {
+        alert("Not permitted for Guests");
+      } else {
+        alert("server error");
+      }
+    }
   }
 
   async function changeItemStatus(id, status){
+    let result = await setItemStatus(grocery.getId(),id, status);
+    if (result.success){
     setGrocery(prev => {
-    if (!prev) return prev;
-    const nextItems = prev.items.map(it =>  it.id === id ? { ...it, status: status} : it);
-    return new GroceryObj(prev.getId(), { ...prev, items: nextItems });
-  });
-   await setItemStatus(grocery.getId(),id, status);
+      if (!prev) return prev;
+      const nextItems = prev.items.map(it =>  it.id === id ? { ...it, status: status} : it);
+      return new GroceryObj(prev.getId(), { ...prev, items: nextItems });
+    });
+  }
+    else {
+      if ((result.err.code = "permission-denied")) {
+        alert("Not permitted for Guests");
+      } else {
+        alert("server error");
+      }
+    }
   }
 
   function handleFilterChange(e) {
@@ -144,12 +163,20 @@ export default function Grocery({goBack, groceryId}) {
         status : 'active',
         addedBy : userData.firstName
       }))
-      await addItems(itemsListArr,grocery.getId());
-      await getFullGrocery();
-      setItemsList([]);
-      if (categoryRef.current) categoryRef.current.value = '';
-      if (storeRef.current) storeRef.current.value = '';
+      let result = await addItems(itemsListArr,grocery.getId());
+      if (result.success){
+        await getFullGrocery();
+        if (categoryRef.current) categoryRef.current.value = '';
+        if (storeRef.current) storeRef.current.value = '';
+      } else {
+         if ((result.error.code = "permission-denied")) {
+          alert("Not permitted for Guests");
+          } else {
+            alert("server error");
+      } 
+      }
       setIsAddItemsPopup(false);
+      setItemsList([]);
     } else {
       alert(errorMessage);
     }
