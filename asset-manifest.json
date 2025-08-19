@@ -1,21 +1,23 @@
 {
   "files": {
-    "main.css": "/GroceryApp/static/css/main.3645c5eb.css",
-    "main.js": "/GroceryApp/static/js/main.71a1a999.js",
-    "static/js/453.44f0d2f8.chunk.js": "/GroceryApp/static/js/453.44f0d2f8.chunk.js",
-    "static/media/add.png": "/GroceryApp/static/media/add.589406e06ccf9be40ee3.png",
-    "static/media/exit.png": "/GroceryApp/static/media/exit.af3628cf94e9ca2f7e55.png",
-    "static/media/check.png": "/GroceryApp/static/media/check.0e163e83492acb677d72.png",
-    "static/media/pencil.png": "/GroceryApp/static/media/pencil.2f3c168e25e0aef93944.png",
-    "static/media/close.png": "/GroceryApp/static/media/close.3c662b752278fc52f408.png",
-    "static/media/undo.png": "/GroceryApp/static/media/undo.4649d52b03fe2fdb535b.png",
+    "main.css": "/GroceryApp/static/css/main.c02c149d.css",
+    "main.js": "/GroceryApp/static/js/main.ea284bfd.js",
+    "static/media/Roboto-Bold.ttf": "/GroceryApp/static/media/Roboto-Bold.cb02a42f24299e95adb5.ttf",
+    "static/media/Roboto-Medium.ttf": "/GroceryApp/static/media/Roboto-Medium.116fcd4fd987818c5d98.ttf",
+    "static/media/Roboto-Regular.ttf": "/GroceryApp/static/media/Roboto-Regular.5dd918926d41224c8142.ttf",
+    "static/media/redo.svg": "/GroceryApp/static/media/redo.388bcf8d74729ad782d5503148705a85.svg",
+    "static/media/logout.svg": "/GroceryApp/static/media/logout.729b791fbaf8bf6bdf381a21e0c8cf79.svg",
+    "static/media/delete.svg": "/GroceryApp/static/media/delete.ad1d2b0d55aff5aecbfc9afc040cdddd.svg",
+    "static/media/close.svg": "/GroceryApp/static/media/close.cb83076bb08897f8e5e318b5a6f85b60.svg",
+    "static/media/check.svg": "/GroceryApp/static/media/check.c780a346fd743bea56eec9e13a60584d.svg",
+    "static/media/back.svg": "/GroceryApp/static/media/back.1869b1b6ccb03d57a3e1cc0f8ff755d4.svg",
     "index.html": "/GroceryApp/index.html",
-    "main.3645c5eb.css.map": "/GroceryApp/static/css/main.3645c5eb.css.map",
-    "main.71a1a999.js.map": "/GroceryApp/static/js/main.71a1a999.js.map",
-    "453.44f0d2f8.chunk.js.map": "/GroceryApp/static/js/453.44f0d2f8.chunk.js.map"
+    "static/media/addBig.svg": "/GroceryApp/static/media/addBig.9aa85d0278c29f6a8f1be5000d891fe1.svg",
+    "main.c02c149d.css.map": "/GroceryApp/static/css/main.c02c149d.css.map",
+    "main.ea284bfd.js.map": "/GroceryApp/static/js/main.ea284bfd.js.map"
   },
   "entrypoints": [
-    "static/css/main.3645c5eb.css",
-    "static/js/main.71a1a999.js"
+    "static/css/main.c02c149d.css",
+    "static/js/main.ea284bfd.js"
   ]
 }
