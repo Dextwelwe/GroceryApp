@@ -230,7 +230,7 @@ function resetFilters(){
            <label htmlFor="groceryName" >{t('NAME')} :</label>
            <input id="groceryName" ref={nameRef} className='input'></input>
            <label htmlFor='groceryDate'>{t('DATE')} :</label>
-           <input id="groceryDate" className={`${gr.dateInput} input`} type='date' onKeyDown={(e) => e.preventDefault()}  onClick={(e) => e.target.showPicker && e.target.showPicker()} placeholder='' ref={dateRef}></input>
+           <input id="groceryDate" className={`${gr.dateInput} input`} type='date' onKeyDown={(e) => e.preventDefault()}  onClick={(e) => e.target.showPicker && e.target.showPicker()} ref={dateRef}></input>
            <label for="userList">{t('ADD_USERS')}</label>
            <div className={gr.userListWrapper}>
              <input id="userList" ref={usersRef} className={`input ${gr.userList}`} placeholder='user1234@mail.com'></input> 

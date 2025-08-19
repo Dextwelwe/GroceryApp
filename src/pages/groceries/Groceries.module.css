@@ -111,5 +111,8 @@ label{
 }
 
 .dateInput{
-  padding: 5px;
+  box-sizing: border-box !important;
+  background-color: white;
+  height: 40px !important;
+  width: inherit !important;
 }
