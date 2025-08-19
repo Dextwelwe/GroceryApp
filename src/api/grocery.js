@@ -13,7 +13,7 @@ export async function saveNew(grocery) {
     date: Timestamp.fromDate(date),
     owner: grocery.owner,
     type: grocery.type,
-    status: "pending",
+    status: "active",
     createdAt: serverTimestamp(),
     sharedWith: sharedWith,
   };

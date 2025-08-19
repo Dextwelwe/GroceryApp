@@ -1,9 +1,10 @@
 import gc from './groceryCard.module.css'
 import remove from '../../assets/images/icons/delete.svg'
 import removeGrocery from '../../api/grocery';
+import { useTranslation} from 'react-i18next';
 
 export default function GroceryCard({data,onDelete,onClick}) {
-
+  const { t } = useTranslation();
   const leftItemsIcons = {};
   const rightItemsIcons = [{src : remove, alt : "Remove", clickaction : removeGroceryCall}]
   
@@ -22,7 +23,7 @@ export default function GroceryCard({data,onDelete,onClick}) {
 }
 
 async function removeGroceryCall() {
-  let res = window.confirm("Delete Grocery ?");
+  let res = window.confirm(t('DELETE_GROCERY'));
   if (res) {
     console.log(data.sharedWith)
     let result = await removeGrocery(data.owner, data.id, data.sharedWith);
@@ -30,9 +31,9 @@ async function removeGroceryCall() {
       onDelete && onDelete();
     } else {
       if ((result.error.code = "permission-denied")) {
-        alert("Not permitted for Guests");
+        alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'));
       } else {
-        alert("server error");
+        alert(t("WARNINGS.SERVER_ERROR"));
       }
     }
   }
@@ -48,10 +49,10 @@ async function removeGroceryCall() {
          }
          </div>
         <div className={gc.dataWrapper} onClick={()=>onClick(data.id)}>
-            <div className={`${gc.label} ${data.type === "shared" ? gc.colorShared : gc.colorPersonal}`}>{data.type} </div>
+            <div className={`${gc.label} ${data.type === "shared" ? gc.colorShared : gc.colorPersonal}`}>{data.type=== 'shared' ? t('FILTERS.SHARED') : t('FILTERS.PERSONAL')}</div>
             <div className={gc.name}>{data.name}</div> 
             <div className={gc.date}>{parseDate(data.date)}</div> 
-            <div className={`${gc.status}`}><span className={data.status==="completed" ? gc.colorCompleted : gc.colorPending}>{data.status}</span></div> 
+            <div className={`${gc.status}`}><span className={data.status==="completed" ? gc.colorCompleted : gc.colorPending}>{data.status === 'pending' ? t('STATUS.ACTIVE') : t('STATUS.COMPLETED')}</span></div> 
        </div>
         <div className={gc.rightItems}>
          {rightItemsIcons && 

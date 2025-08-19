@@ -5,6 +5,7 @@ import HeaderMenu from '../../components/header/header';
 import add from '../../assets/images/icons/addBig.svg'
 
 import iconBack from '../../assets/images/icons/back.svg'
+import { useTranslation} from 'react-i18next';
 import { getGroceryById } from '../../api/grocery';
 import { addItems, removeItem , setItemStatus} from '../../api/items';
 import ItemCard from '../../components/ItemCard/ItemCard';
@@ -16,6 +17,7 @@ import AddItems from '../../components/add/addItems';
 import { useAuth } from '../../providers/AuthProvider';
 
 export default function Grocery({goBack, groceryId}) {
+  const { t } = useTranslation();
   const {userData} = useAuth();
   const [grocery, setGrocery] = useState(null);
   const [defaultCategory,setDefaultCategory] = useLocalStorage('gLabel','all');
@@ -24,8 +26,8 @@ export default function Grocery({goBack, groceryId}) {
   const [defaultSortBy,setDefaultSortBy] = useLocalStorage('gSortBy','status');
   const [isAddItemsPopup, setIsAddItemsPopup] = useState(false);
   const [filters, setFilters] = useState({category: defaultCategory,store: defaultStore,status: defaultStatus, sortBy: defaultSortBy,});
-  const optionsStatus = [ { value: "all", label: "All" },{ value: "active", label: "active" },{ value: "completed", label: "completed" }];
-  const optionsSortBy = [ { value: "az", label: "A-Z" }, { value: "za", label: "Z-A" }, {value :'status', label : "Status"}];
+  const optionsStatus = [ { value: "all", label: t('ALL') },{ value: "active", label: t('STATUS.ACTIVE') },{ value: "completed", label: t('STATUS.COMPLETED')}];
+  const optionsSortBy = [ { value: "az", label: t("FILTERS.A-Z") }, { value: "za", label: t("FILTERS.Z-A") }, {value :'status', label : t("STATUS_LBL")}];
   const itemActions = { remove : removeItemCall, changeStatus : changeItemStatus};
   const [itemsList, setItemsList] = useState([])
   let categoryRef = useRef(null);
@@ -91,9 +93,11 @@ export default function Grocery({goBack, groceryId}) {
      });
    } else {
     if ((result.error.code = "permission-denied")) {
-        alert("Not permitted for Guests");
+        alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'))
+
       } else {
-        alert("server error");
+          alert(t('WARNINGS.SERVER_ERROR'));
+
       }
     }
   }
@@ -109,9 +113,11 @@ export default function Grocery({goBack, groceryId}) {
   }
     else {
       if ((result.err.code = "permission-denied")) {
-        alert("Not permitted for Guests");
+        alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'))
+
       } else {
-        alert("server error");
+        alert(t('WARNINGS.SERVER_ERROR'));
+
       }
     }
   }
@@ -140,12 +146,12 @@ export default function Grocery({goBack, groceryId}) {
 
     if (itemsList.length === 0){
       isValid = false;
-      errorMessage = "No items to add";
+      errorMessage = t('WARNINGS.NO_ITEMS_TO_ADD');
     }
 
     if (itemsList.length > 15){
       isValid = false;
-      errorMessage = 'Too many items. Max 15';
+      errorMessage = t('WARNINGS.TOO_MANY_ITEMS');
     }
 
     let inputsRef = [categoryRef,storeRef];
@@ -170,9 +176,9 @@ export default function Grocery({goBack, groceryId}) {
         if (storeRef.current) storeRef.current.value = '';
       } else {
          if ((result.error.code = "permission-denied")) {
-          alert("Not permitted for Guests");
+        alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'))
           } else {
-            alert("server error");
+        alert(t('WARNINGS.SERVER_ERROR'));
       } 
       }
       setIsAddItemsPopup(false);
@@ -211,12 +217,12 @@ export default function Grocery({goBack, groceryId}) {
         <HeaderMenu title={headerGroceryTitle} headerNav={headerGroceryNav} />
         <div className={gr.selectWrapper}>
          <div className={gr.sortBy}>
-               <Select label="Category" options={optionsCategories} name="category" value={filters.category} onChange={handleFilterChange} />
-               <Select label="Store" options={optionsStore} name="store"  value={filters.store} onChange={handleFilterChange} />
-               <Select label="Status" options={optionsStatus} name="status" value={filters.status} onChange={handleFilterChange}/>
-               <Select label="Sort By" options={optionsSortBy} name="sortBy" value={filters.sortBy} onChange={handleFilterChange}/>
+               <Select label={t('FILTERS.CATEGORY')} options={optionsCategories} name="category" value={filters.category} onChange={handleFilterChange} />
+               <Select label={t('STORE')} options={optionsStore} name="store"  value={filters.store} onChange={handleFilterChange} />
+               <Select label={t('STATUS_LBL')} options={optionsStatus} name="status" value={filters.status} onChange={handleFilterChange}/>
+               <Select label={t("SORT_BY")} options={optionsSortBy} name="sortBy" value={filters.sortBy} onChange={handleFilterChange}/>
              </div>
-            <button className={gr.resetFiltersBtn} onClick={resetFilters}>Reset Filters</button>
+            <button className={gr.resetFiltersBtn} onClick={resetFilters}>{t('RESET_FILTERS')}</button>
         </div>      
         <div className={gr.list}>
             {(view.length ? view : []).map(item => (
@@ -225,15 +231,15 @@ export default function Grocery({goBack, groceryId}) {
           </div>
           {
             isAddItemsPopup && 
-            <Popup title="Add Items" close={()=>setIsAddItemsPopup(false)} >
+            <Popup title={t('ADD_ITEMS')} close={()=>setIsAddItemsPopup(false)} >
             <form className={gr.form}>
-              <label htmlFor="itemName" >Category :</label>
+              <label htmlFor="itemName" >{t('FILTERS.CATEGORY')}  :</label>
               <input id="itemName" ref={categoryRef} className='input'></input>  
-              <label htmlFor="itemStore" >Store :</label>
+              <label htmlFor="itemStore" >{t("STORE")} :</label>
               <input id="itemStore" ref={storeRef} className='input'></input>  
-              <label htmlFor="items" >Items :</label>
+              <label htmlFor="items" >{t('ITEMS')} :</label>
               <AddItems id="items" setItemsList={(val)=>setItemsList(val)}/>
-              <button type='button' onClick={(e)=>{ e.preventDefault(); saveItems(e)}} className={gr.saveButton}>Save</button>
+              <button type='button' onClick={(e)=>{ e.preventDefault(); saveItems(e)}} className={gr.saveButton}>{t('SAVE')}</button>
             </form>  
             </Popup>
           }

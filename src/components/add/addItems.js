@@ -1,8 +1,9 @@
 import {useRef} from 'react'
 import './addItems.css'
+import { useTranslation} from 'react-i18next';
 
 export default function AddItems({setItemsList}) {
-
+  const { t } = useTranslation();
   let inputText = useRef(null);
 
   let refactorInput = (event) => {
@@ -41,8 +42,7 @@ const handleBlur = () => {
 
   return (
       <textarea className='add-item-input' id='items' type='text' ref={inputText} onKeyDown={refactorInput} onBlur={handleBlur} onClick={InitInput}
-        placeholder="Список продуктов.
-        Один продукт на каждую линию.">      
+        placeholder={t('ADD_ITEM_DESC')}>      
       </textarea>
   )
 }

@@ -1,12 +1,52 @@
 {
-    "CONNECTION_ERROR" : "Connection Error",
-    "LOGIN_NAME" : "Username",
-    "LOGIN_PASSWORD" : "Password",
-    "SIGN_IN" : "Sign In",
-    "CHOOSE_A_CATEGORY": "Choose a category",
-    "ADD_ITEM_DESC": "Grocery list. One item per line.",
-    "ALREADY_EXISTS": "Already exists",
+    "LOGIN" : {
+        "LOGIN_NAME" : "Username",
+        "LOGIN_PASSWORD" : "Password",
+        "SIGN_IN" : "Sign In",
+        "LOGIN_AS_GUEST" : "Login as Guest"
+    },
+    "WARNINGS" : {
+        "CONNECTION_ERROR" : "Connection Error",
+        "ALREADY_EXISTS": "Already exists",
+        "NOT_FOUND" : "Not found",
+        "NOT_PERMITTED_FOR_GUESTS" : "Not permitted for Guests",
+        "SERVER_ERROR" : "Server error",
+        "NO_GROCERIES" : "No groceries match your filters.",
+        "NO_ITEMS_TO_ADD" : "No items to add",
+        "TOO_MANY_ITEMS" : "Too many items. Max 15"
+    },
+    "STATUS" :{
+        "ACTIVE" : "Active",
+        "COMPLETED" : "Completed"
+    },
+    "FILTERS" : {
+        "ALL" : "All",
+        "PERSONAL" : "Personal",
+        "SHARED" : "Shared",
+        "NEWEST_FIRST" : "Newest first",
+        "OLDEST_FIRST"  :"Oldest first",
+        "A-Z" : "A-Z",
+        "Z-A" : "Z-A",
+        "CATEGORY" : "Category"
+    },
     "ALL" : "ALL",
-    "LOGIN_AS_GUEST" : "Login as Guest",
-    "HI" : "Hello"
+    "HI" : "Hello",
+    "USER" : "User",
+    "ADD_ITEM_DESC": "Grocery list. One item per line.",
+    "TYPE" : "Type",
+    "STATUS_LBL" : "Status",
+    "SORT_BY" : "Sort by",
+    "RESET_FILTERS" : "Reset Filters",
+    "NAME" : "Name",
+    "DATE" : "Date",
+    "ADD_USERS" : "Add users",
+    "ADDED_USERS" : "Added users",
+    "SAVE" : "Save",
+    "ADD_NEW_GROCERY" : "Add new grocery",
+    "DELETE_GROCERY" : "Delete grocery ?",
+    "REMOVE_ITEM" : "Remove Item ?",
+    "ADD_ITEMS" : "Add items",
+    "STORE" : "Store",
+    "ITEMS" : "Items"
+
 }

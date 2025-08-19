@@ -1,12 +1,51 @@
 {
-    "CONNECTION_ERROR" : "Ошибка подключения",
-    "LOGIN_NAME" : "Имя пользователя",
-    "LOGIN_PASSWORD" : "Пароль",
-    "SIGN_IN" : "Вход",
-    "CHOOSE_A_CATEGORY" : "Выбери категорию",
-    "ADD_ITEM_DESC" : "Список продуктов. Один продукт на каждую линию.",
-    "ALREADY_EXISTS" : "Уже существует",
+    "LOGIN" : {
+        "LOGIN_NAME" : "Имя пользователя",
+        "LOGIN_PASSWORD" : "Пароль",
+        "SIGN_IN" : "Вход",
+        "LOGIN_AS_GUEST": "Войти как гость"
+    },
+    "WARNINGS" : {
+        "CONNECTION_ERROR" : "Ошибка подключения",
+        "ALREADY_EXISTS" : "Уже существует",
+        "NOT_FOUND" : "Не найден",
+        "NOT_PERMITTED_FOR_GUESTS" : "Недоступно для гостей",
+        "SERVER_ERROR" : "Oшибка сервера",
+        "NO_GROCERIES" : "Нет продуктов, соответствующих вашим фильтрам.",
+        "NO_ITEMS_TO_ADD" : "Нет элементов для добавления",
+        "TOO_MANY_ITEMS" : "Слишком много элементов. Максимум 15"
+    },
+    "STATUS" : {
+        "ACTIVE" : "Активно",
+        "COMPLETED" : "Завершенно"
+    },
+    "FILTERS" : {
+        "ALL" : "Все",
+        "PERSONAL" : "Личные",
+        "SHARED" : "Общие",
+        "NEWEST_FIRST" : "Cначала новые",
+        "OLDEST_FIRST"  :"Сначала старые",
+        "CATEGORY" : "Категория",
+        "A-Z" : "A-Я",
+        "Z-A" : "Я-А"
+    },
     "ALL" : "Все",
-    "LOGIN_AS_GUEST": "Войти как гость",
-    "HI" : "Добрый день"
+    "HI" : "Добрый день",
+    "USER" : "Пользователь",
+    "ADD_ITEM_DESC" : "Список продуктов. Один продукт на каждую линию.",
+    "TYPE" : "Тип",
+    "STATUS_LBL" : "Cтатус",
+    "SORT_BY" : "Сортировка",
+    "RESET_FILTERS" : "Сбросить фильтры",
+    "NAME" : "Название",
+    "DATE" : "Дата",
+    "ADD_USERS" : "Добавить пользователей",
+    "ADDED_USERS" : "Добавленные пользователи",
+    "SAVE" : "Сохранить",
+    "ADD_NEW_GROCERY" : "Новый список продуктов",
+    "DELETE_GROCERY" : "Удалить список ?",
+    "REMOVE_ITEM" : "Удалить продукт ?",
+    "ADD_ITEMS" : "Добавить продукты",
+    "STORE" : "Магазин",
+    "ITEMS" : "Продукты"
 }

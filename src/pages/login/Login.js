@@ -32,7 +32,7 @@ export default function Login() {
        const pass = process.env.REACT_APP_GUEST_PASSWORD;
        let userID = await handleConnection(user,pass);
         if (userID===null){
-          return setLoginMessage(t('CONNECTION_ERROR'));
+          return setLoginMessage(t('WARNINGS.CONNECTION_ERROR'));
         }
     }
 
@@ -53,7 +53,7 @@ export default function Login() {
       if (canAuth){
         let isAuth = await handleConnection(username,password);
         if (!isAuth){
-        setLoginMessage(t('CONNECTION_ERROR'));
+        setLoginMessage(t('WARNINGS.CONNECTION_ERROR'));
       }
     }
     }
@@ -62,10 +62,10 @@ export default function Login() {
     <div className='loginRootWrapper'>
       <div className='loginContentWrapper'>
         <form className='loginFormWrapper'>
-         <input ref={usernameEl} className='loginInput' onChange={handleUsername} id='username' placeholder={t('LOGIN_NAME')} value={username}></input>
-         <input ref={passwordEl} className='loginInput' onChange={handlePassword} id='password' placeholder={t('LOGIN_PASSWORD')} type="password" autoComplete='password'></input>
+         <input ref={usernameEl} className='loginInput' onChange={handleUsername} id='username' placeholder={t('LOGIN.LOGIN_NAME')} value={username}></input>
+         <input ref={passwordEl} className='loginInput' onChange={handlePassword} id='password' placeholder={t('LOGIN.LOGIN_PASSWORD')} type="password" autoComplete='password'></input>
          <div className='loginButtonWrapper'>
-           <button className='loginButton' onClick={handleSubmit}>{t('SIGN_IN')}</button>
+           <button className='loginButton' onClick={handleSubmit}>{t('LOGIN.SIGN_IN')}</button>
            <div className='loginSelectWrapper'>
              <select ref={languageEl} className='loginInput loginSelect' onChange={handleLanguage} defaultValue={"en"} >
                <option  className='loginInput' value="en">English</option>
@@ -78,7 +78,7 @@ export default function Login() {
         { loginMessage !== "" && <p className='loginMessage'>{loginMessage}</p> }
       </div>
       {/*eslint-disable-next-line jsx-a11y/anchor-is-valid  */}
-      <a href="#" className='userTestButton' onClick={guestLogin}>{t('LOGIN_AS_GUEST')}</a>
+      <a href="#" className='userTestButton' onClick={guestLogin}>{t('LOGIN.LOGIN_AS_GUEST')}</a>
     </div>
   ) 
 }

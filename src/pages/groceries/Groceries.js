@@ -38,26 +38,26 @@ export default function Groceries({goToGrocery}) {
   let dateRef = useRef(null);
   let usersRef = useRef(null);
 
-  const STATUS_MAP = { "pending": "active", completed: "completed"};
+  const STATUS_MAP = { active: "active", completed: "completed"};
   const headerItems =  [{src : iconLogout , alt : "Logout", clickaction : logout}]
 
   const optionsLabel = [
-   { value: "all", label: "All" },
-   { value: "personal", label: "Personal" },
-   { value: "shared", label: "Shared"},
+   { value: "all", label: t('FILTERS.ALL') },
+   { value: "personal", label: t('FILTERS.PERSONAL') },
+   { value: "shared", label: t('FILTERS.SHARED')},
   ];
   
   const optionsStatus = [
-   { value: "all", label: "All" },
-   { value: "active", label: "Active" },
-   { value: "completed", label: "Completed" },
+   { value: "all", label : t('FILTERS.ALL') },
+   { value: "active", label: t('STATUS.ACTIVE') },
+   { value: "completed", label: t('STATUS.COMPLETED')},
   ];
   
   const optionsSortBy = [
-   { value: "newest", label: "Newest First" },
-   { value: "oldest", label: "Oldest First" },
-   { value: "az", label: "A-Z" },
-   { value: "za", label: "Z-A" },
+   { value: "newest", label: t('FILTERS.NEWEST_FIRST') },
+   { value: "oldest", label: t('FILTERS.OLDEST_FIRST') },
+   { value: "az", label: t("FILTERS.A-Z")},
+   { value: "za", label: t("FILTERS.Z-A")},
   ];
   
   useEffect(() => {
@@ -136,10 +136,10 @@ const view = useMemo(() => {
          toggleNewGrocery();
          setUsersList([])
     } else {
-      if (result.error.code = 'permission-denied'){
-        alert('Not permitted for Guests')
+      if (result.error.code === 'permission-denied'){
+        alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'))
       }else{
-        alert("Server Error");
+        alert(t('WARNINGS.SERVER_ERROR'));
       }
     }
     }
@@ -147,7 +147,7 @@ const view = useMemo(() => {
   
   const addUser = async() => {
   let userInput = usersRef.current.value;
-  if (userData.isTestUser){return alert('Not permitted for Guests')}
+  if (userData.isTestUser){return alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'))}
   if (!userInput) return;
   if (usersEmailList.includes(userInput)) return;
   if (userInput === userData.email) return;
@@ -157,7 +157,7 @@ const view = useMemo(() => {
       setUsersEmailList(prev => ([...prev, userInput]));
       setUsersList(prev=>([...prev, userId]));
   } else {
-    alert ("user '" + userInput + "' doesn't exist");
+    alert (t('USER') + " : '" + userInput + " ' " + t('WARNINGS.NOT_FOUND'));
   }
   }
 
@@ -210,34 +210,34 @@ function resetFilters(){
      {/* Filters */}
      <div className={gr.selectWrapper}>
       <div className={gr.sortBy}>
-        <Select label="Groceries" options={optionsLabel} name="label" value={filters.label} onChange={handleFilterChange} />
-        <Select label="Status" options={optionsStatus} name="status"  value={filters.status} onChange={handleFilterChange} />
-        <Select label="Sort By" options={optionsSortBy} name="sortBy" value={filters.sortBy} onChange={handleFilterChange}/>
+        <Select label={t('TYPE')} options={optionsLabel} name="label" value={filters.label} onChange={handleFilterChange} />
+        <Select label={t('STATUS_LBL')} options={optionsStatus} name="status"  value={filters.status} onChange={handleFilterChange} />
+        <Select label={t('SORT_BY')} options={optionsSortBy} name="sortBy" value={filters.sortBy} onChange={handleFilterChange}/>
       </div>
-      <button className={gr.resetFiltersBtn} onClick={resetFilters}>Reset Filters</button>
+      <button className={gr.resetFiltersBtn} onClick={resetFilters}>{t("RESET_FILTERS")}</button>
     </div>
      {/* Grocery Cards */}
      <div className={gr.list}>
        {(view.length ? view : []).map((grocery) => (
        <GroceryCard key={grocery.id} data={grocery} onClick={(e)=>openGrocery(e)} onDelete={loadGroceries} />
        ))}
-       {view.length === 0 && groceries.length > 0 && <div className={gr.empty}>No groceries match your filters.</div>}
+       {view.length === 0 && groceries.length > 0 && <div className={gr.empty}>{t('WARNINGS.NO_GROCERIES')}</div>}
      </div>
      {/* New Grocery Popup */}
      { isAddNewGroceryVisible &&
-       <Popup title={"Add new grocery"} close={toggleNewGrocery}>
+       <Popup title={t('ADD_NEW_GROCERY')} close={toggleNewGrocery}>
          <form className={gr.form} onSubmit={(e)=>e.preventDefault()}>
-           <label htmlFor="groceryName" >Name :</label>
+           <label htmlFor="groceryName" >{t('NAME')} :</label>
            <input id="groceryName" ref={nameRef} className='input'></input>
-           <label htmlFor='groceryDate'>Date :</label>
+           <label htmlFor='groceryDate'>{t('DATE')} :</label>
            <input id="groceryDate" className={`${gr.dateInput} input`} type='date' onKeyDown={(e) => e.preventDefault()}  onClick={(e) => e.target.showPicker && e.target.showPicker()} placeholder='' ref={dateRef}></input>
-           <label for="userList">Add a user : </label>
+           <label for="userList">{t('ADD_USERS')}</label>
            <div className={gr.userListWrapper}>
-             <input id="userList" ref={usersRef} className={`input ${gr.userList}`} placeholder='ex. user1234'></input> 
+             <input id="userList" ref={usersRef} className={`input ${gr.userList}`} placeholder='user1234@mail.com'></input> 
              <button type="button" onClick={addUser} className={gr.addUserButton}>+</button>
            </div>
-           {usersEmailList !== '' && <><span className={gr.addedUsersTitle}>Added Users : </span><span className={gr.formMessage}>{usersEmailList.map(e => e).join(", ")}</span></>}
-           <button type="button" onClick={(e)=>{ e.preventDefault();saveNewGrocery(e)}} className={gr.saveButton}>Save</button>
+           {usersEmailList !== '' && <><span className={gr.addedUsersTitle}>{t('ADDED_USERS')}</span><span className={gr.formMessage}>{usersEmailList.map(e => e).join(", ")}</span></>}
+           <button type="button" onClick={(e)=>{ e.preventDefault();saveNewGrocery(e)}} className={gr.saveButton}>{t('SAVE')}</button>
          </form>  
        </Popup>
      }

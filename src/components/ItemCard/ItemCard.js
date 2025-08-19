@@ -3,14 +3,15 @@ import ic from './itemCard.module.css'
 import remove from '../../assets/images/icons/delete.svg'
 import check from '../../assets/images/icons/check.svg'
 import redo from '../../assets/images/icons/redo.svg'
+import { useTranslation} from 'react-i18next';
 
 export default function ItemCard({data,actions}) {
-
+    const { t } = useTranslation();
     const rightItemsIcons = [{src : data.status === "active" ? check : redo, alt : "Check", clickaction : changeStatusCall}];
     const leftItemsIcons = [{src : remove, alt : "Remove", clickaction : removeCall}]
       
      function removeCall(){
-        let res = window.confirm("Remove Item ?")
+        let res = window.confirm(t("REMOVE_ITEM"))
         if (res){
           actions.remove && actions.remove(data.id);
         }

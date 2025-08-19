@@ -1,12 +1,51 @@
 {
-    "CONNECTION_ERROR" : "Erreur de connexion",
-    "LOGIN_NAME" : "Nom d'utilisateur",
-    "LOGIN_PASSWORD" : "Mot de passe",
-    "SIGN_IN" : "Connexion",
-    "CHOOSE_A_CATEGORY": "Choisissez une catégorie",
-    "ADD_ITEM_DESC": "Liste de courses. Un produit par ligne.",
-    "ALREADY_EXISTS": "Existe déjà",
+    "LOGIN" : {
+        "LOGIN_NAME" : "Nom d'utilisateur",
+        "LOGIN_PASSWORD" : "Mot de passe",
+        "SIGN_IN" : "Connexion",
+        "LOGIN_AS_GUEST": "Se connecter en tant qu'invité"
+    },
+    "WARNINGS" : {
+        "CONNECTION_ERROR" : "Erreur de connexion",
+        "ALREADY_EXISTS": "Existe déjà",
+        "NOT_FOUND" : "N'est pas trouvé",
+        "NOT_PERMITTED_FOR_GUESTS" : "Non autorisé pour les invités",
+        "SERVER_ERROR" : "Erreur du serveur",
+        "NO_GROCERIES" : "Aucune épicerie ne correspond à vos filtres.",
+        "NO_ITEMS_TO_ADD" : "Aucun article à ajouter",
+        "TOO_MANY_ITEMS" : "Trop d'articles. Maximum 15"
+    },
+    "STATUS" : {
+       "ACTIVE" : "En Cours",
+        "COMPLETED" : "Terminé"
+    },
+    "FILTERS" : {
+        "ALL" : "Tous",
+        "PERSONAL" : "Personnel",
+        "SHARED" : "Partagé",
+        "NEWEST_FIRST" : "Les plus récents",
+        "OLDEST_FIRST"  :"Les plus anciens",
+        "A-Z" : "A-Z",
+        "Z-A" : "Z-A",
+        "CATEGORY" : "Categorie"
+    },
     "ALL": "Tous",
-    "LOGIN_AS_GUEST": "Se connecter en tant qu'invité",
-    "HI" : "Bonjour"
+    "HI" : "Bonjour",
+    "ADD_ITEM_DESC": "Liste de courses. Un produit par ligne.",
+    "USER" : "Utilisateur",
+    "TYPE" : "Type",
+    "STATUS_LBL" : "Statut",
+    "SORT_BY" : "Trier par",
+    "RESET_FILTERS" : "Réinitialiser les filtres",
+    "NAME" : "Nom",
+    "DATE" : "Date",
+    "ADD_USERS" : "Ajouter des utilisateurs",
+    "ADDED_USERS" : "Utilisateurs ajoutés",
+    "SAVE" : "Sauvegarder",
+    "ADD_NEW_GROCERY" : "Ajouter une nouvelle épicerie",
+    "DELETE_GROCERY" : "Supprimer l'épicerie ?",
+    "REMOVE_ITEM" : "Supprimer l'item ?",
+    "STORE" : "Magasin",
+    "ADD_ITEMS" : "Ajouter des items",
+    "ITEMS" : "Items"
 }
