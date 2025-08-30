@@ -214,7 +214,10 @@ function resetFilters(){
         <Select label={t('STATUS_LBL')} options={optionsStatus} name="status"  value={filters.status} onChange={handleFilterChange} />
         <Select label={t('SORT_BY')} options={optionsSortBy} name="sortBy" value={filters.sortBy} onChange={handleFilterChange}/>
       </div>
+      <div className={gr.myGroceriesLabelWrapper}>
+      <h1 className={gr.myGroceriesLabel}>My groceries</h1>
       <button className={gr.resetFiltersBtn} onClick={resetFilters}>{t("RESET_FILTERS")}</button>
+      </div>
     </div>
      {/* Grocery Cards */}
      <div className={gr.list}>

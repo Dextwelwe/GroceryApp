@@ -24,6 +24,17 @@
     overflow-y: auto;
 }
 
+.myGroceriesLabel{
+    font-size: 1rem;
+    font-weight: 300;
+    padding-left: 10px;
+}
+
+.myGroceriesLabelWrapper{
+    display: flex;
+    justify-content: space-between;
+}
+
 .form{
     box-sizing: border-box;
     padding: 25px;
@@ -34,7 +45,7 @@
 .resetFiltersBtn{
     padding-right: 10px;
     text-align: end;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     background-color: transparent;
     text-decoration: underline;
     border: none;
