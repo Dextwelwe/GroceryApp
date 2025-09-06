@@ -52,7 +52,7 @@ async function removeGroceryCall() {
             <div className={`${gc.label} ${data.type === "shared" ? gc.colorShared : gc.colorPersonal}`}>{data.type=== 'shared' ? t('FILTERS.SHARED') : t('FILTERS.PERSONAL')}</div>
             <div className={gc.name}>{data.name}</div> 
             <div className={gc.date}>{parseDate(data.date)}</div> 
-            <div className={`${gc.status}`}><span className={data.status==="completed" ? gc.colorCompleted : gc.colorPending}>{data.status === 'pending' ? t('STATUS.ACTIVE') : t('STATUS.COMPLETED')}</span></div> 
+            <div className={`${gc.status}`}><span className={data.status==="completed" ? gc.colorCompleted : gc.colorPending}>{data.status === 'active' ? t('STATUS.ACTIVE') : t('STATUS.COMPLETED')}</span></div> 
        </div>
         <div className={gc.rightItems}>
          {rightItemsIcons && 

@@ -57,10 +57,11 @@
 .label{
     width: max-content;
     box-sizing: border-box;
-    padding: 2px 5px;
-    border-radius: 5px;
+    padding: 2px 7px;
     color: whitesmoke;
     font-size: 0.9rem;
+    margin-left: 2px;
+
 }
 
 .menuIcon{

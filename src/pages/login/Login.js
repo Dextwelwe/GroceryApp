@@ -3,11 +3,12 @@ import './Login.css'
 import { useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next';
 import handleConnection from "../../api/connectionFireBase"
+import useLocalStorage from '../../hooks/useLocalStorage';
 
 export default function Login() {
     const { t, i18n } = useTranslation();
     const [password, setPassword] = useState('');
-    const [username, setUsername] = useState('');
+    const [username, setUsername] = useLocalStorage('dexGroceryLoginUsername', '');
     const [loginMessage, setLoginMessage] = useState('');
     let passwordEl = useRef(null);
     let usernameEl = useRef(null);
@@ -54,7 +55,9 @@ export default function Login() {
         let isAuth = await handleConnection(username,password);
         if (!isAuth){
         setLoginMessage(t('WARNINGS.CONNECTION_ERROR'));
-      }
+      } else {
+         changeLanguage(languageEl.current.value);
+      } 
     }
     }
    

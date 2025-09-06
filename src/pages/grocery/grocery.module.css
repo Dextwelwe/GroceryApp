@@ -5,6 +5,8 @@
     justify-content: flex-start;
     align-items: center;
     padding: 10px;
+    padding-bottom: 5px;
+    padding-top: 5px;
     gap: 15px;
     height:max-content;
 
@@ -12,11 +14,27 @@
 
 .selectWrapper{
     width: 100%;
-    border-bottom : var(--border);
-    padding-bottom: 10px;
+    padding-bottom: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
+}
+
+.myGroceriesLabel{
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 300;
+    padding-top: 0px;
+    padding: 5px;
+    margin: 0;
+    margin-top: 5px;
+}
+
+.myGroceriesLabelWrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
 }
 
 .list{
@@ -36,8 +54,9 @@
 .resetFiltersBtn{
     padding-right: 10px;
     text-align: end;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     background-color: transparent;
+    color: black;
     text-decoration: underline;
     border: none;
     box-shadow: none;
@@ -46,7 +65,7 @@
 
 .form{
     box-sizing: border-box;
-    padding: 25px;
+    padding: 10px;
     display: grid;
     gap: 5px;  
 }

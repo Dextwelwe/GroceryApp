@@ -10,6 +10,8 @@ export default class Grocery {
         this.dateLastUpdated = data.dateLastUpdated || "";
         this.status = data.status;
         this.sharedWith = data.sharedWith || []
+        this.customCategories = data.customCategories || [];
+        this.customStores = data.customStores || [];
     }
 
     getTitle(){
@@ -20,17 +22,49 @@ export default class Grocery {
         return this.id;
     }
 
-    getCategories() {
-    const unique = new Set(this.items.map(item => item.category));
-    const categories = Array.from(unique).map(c => ({value: c, label: c}));
-    return [{value : "all", label: i18n.t("ALL")}, ...categories];
-}
+    getCategoriesFromAddedItems() {
+        const unique = new Set(this.items.map(item => item.category));
+        const categories = Array.from(unique).map(c => ({desc: c, label: c, type: 'item'}));
+        return categories;
+    }
+
+    getCustomCategories(){
+        return this.customCategories.map(el => {
+           return {
+             desc : el,
+             type : 'custom'
+            }
+        });
+    }
+
+    getCustomStores(){
+        return this.customStores.map(el =>{
+            return {
+                desc : el,
+                type : 'custom'
+            }
+        })
+    }
+
+    getStoresFromAddedItems(){
+        const unique = new Set(this.items.map(item => item.store));
+        const stores = Array.from(unique).map(c => ({desc : c, label : c, type : 'item'}))
+        return stores;
+    }
+
+    getCategoryOptionAll(){
+        return {value : "all", label: i18n.t("ALL")};
+    }
+
+    getCategoryOptionUnspecified(){
+         return {value : "unspecified", label: i18n.t("UNSPECIFIED")};
+    }
 
     getStores() {
     const unique = new Set(this.items.map(item => item.store));
     const stores = Array.from(unique).map(c => ({value: c, label: c}));
     return [{value : "all", label: i18n.t("ALL")}, ...stores];
-}
+    }
 
 }
 

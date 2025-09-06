@@ -29,7 +29,7 @@
         "Z-A" : "Z-A",
         "CATEGORY" : "Category"
     },
-    "ALL" : "ALL",
+    "ALL" : "All",
     "HI" : "Hello",
     "USER" : "User",
     "ADD_ITEM_DESC": "Grocery list. One item per line.",
@@ -47,6 +47,10 @@
     "REMOVE_ITEM" : "Remove Item ?",
     "ADD_ITEMS" : "Add items",
     "STORE" : "Store",
-    "ITEMS" : "Items"
+    "ITEMS" : "Items",
+    "MY_GROCERIES" : "My groceries",
+    "GROCERY_ITEMS" : "Grocery Items",
+    "NEW_CATEGORY" : "New Category",
+    "EDIT_CATEGORY" : "Edit Category"
 
 }

@@ -47,5 +47,10 @@
     "REMOVE_ITEM" : "Supprimer l'item ?",
     "STORE" : "Magasin",
     "ADD_ITEMS" : "Ajouter des items",
-    "ITEMS" : "Items"
+    "ITEMS" : "Items",
+    "MY_GROCERIES" : "Mes courses",
+    "GROCERY_ITEMS" : "Articles d’épicerie",
+    "NEW_CATEGORY" : "Nouvelle catégorie",
+    "EDIT_CATEGORY" : "Modifier la catégorie"
+
 }

@@ -16,10 +16,10 @@
   --rootHeight        :    100dvh;
   --modalBorderRadius :    10px;
   --paddingHeader     :    5px;
-  --borderRadius      : 15px;
-  --inputHeight  : 40px; 
-  --descriptionFontSize : 18px;
-  --iconSize            : 30px;
+  --borderRadius      :    15px;
+  --inputHeight       :    40px; 
+  --descriptionFontSize  : 18px;
+  --iconSize             : 25px;
   
   /* OTHER */
   --fontFamily                 :  'Roboto','Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;

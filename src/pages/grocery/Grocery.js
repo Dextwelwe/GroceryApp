@@ -6,7 +6,7 @@ import add from '../../assets/images/icons/addBig.svg'
 
 import iconBack from '../../assets/images/icons/back.svg'
 import { useTranslation} from 'react-i18next';
-import { getGroceryById } from '../../api/grocery';
+import { getGroceryById, addOneCustomCategories, removeOneCustomCategories,addOneCustomStore, removeOneCustomStore } from '../../api/grocery';
 import { addItems, removeItem , setItemStatus} from '../../api/items';
 import ItemCard from '../../components/ItemCard/ItemCard';
 import Select from '../../components/select/Select';
@@ -15,6 +15,7 @@ import useLocalStorage from '../../hooks/useLocalStorage';
 import Popup from '../../components/popup/Popup'
 import AddItems from '../../components/add/addItems';
 import { useAuth } from '../../providers/AuthProvider';
+import Category from '../../components/categories/category';
 
 export default function Grocery({goBack, groceryId}) {
   const { t } = useTranslation();
@@ -25,6 +26,8 @@ export default function Grocery({goBack, groceryId}) {
   const [defaultStatus,setDefaultStatus] = useLocalStorage('gStatus','all');
   const [defaultSortBy,setDefaultSortBy] = useLocalStorage('gSortBy','status');
   const [isAddItemsPopup, setIsAddItemsPopup] = useState(false);
+  const [categoriesOptionsList, setCategoriesOptionsList] = useState([])
+  const [storesOptionsList, setStoresOptionsList] = useState([])
   const [filters, setFilters] = useState({category: defaultCategory,store: defaultStore,status: defaultStatus, sortBy: defaultSortBy,});
   const optionsStatus = [ { value: "all", label: t('ALL') },{ value: "active", label: t('STATUS.ACTIVE') },{ value: "completed", label: t('STATUS.COMPLETED')}];
   const optionsSortBy = [ { value: "az", label: t("FILTERS.A-Z") }, { value: "za", label: t("FILTERS.Z-A") }, {value :'status', label : t("STATUS_LBL")}];
@@ -41,9 +44,10 @@ export default function Grocery({goBack, groceryId}) {
   },[groceryId])
 
   const optionsCategories = useMemo(
-    () => (grocery?.getCategories() ?? []),
+    () => [grocery?.getCategoryOptionAll(), ...(grocery?.getCategoriesFromAddedItems() ?? [])],
     [grocery]
   );
+
   const optionsStore = useMemo(
     () => (grocery?.getStores() ?? []),
     [grocery]
@@ -81,6 +85,8 @@ export default function Grocery({goBack, groceryId}) {
     let g = await getGroceryById(groceryId);
     if (!g) return;
       setGrocery(g);
+      setCategoriesOptionsList(getCategoriesList(g))
+      setStoresOptionsList(getStoresList(g))
   }
 
    async function removeItemCall(id) {
@@ -160,7 +166,7 @@ export default function Grocery({goBack, groceryId}) {
           element.current.style.backgroundColor = '#ffcdd2';
           isValid = false;
       }
-    });
+    })
     if (isValid){
       let itemsListArr = itemsList.map((item)=>({
         category : categoryRef.current.value,
@@ -206,8 +212,43 @@ export default function Grocery({goBack, groceryId}) {
   return false;
 }
 
+function getCategoriesList(grocery){
+ let list =  [...grocery.getCustomCategories()];
+ if (list.length > 0){list.sort((a,b) => a.desc.localeCompare(b.desc))};
+ return list;
+}
+
+function getStoresList(grocery){
+ let list =  [...grocery.getCustomStores()];
+ if (list){list.sort((a,b) => a.desc.localeCompare(b.desc))};
+ return list;
+}
+
+async function handleCategoryUpdate(category){
+  const groceryId = grocery.getId();
+  let res = await addOneCustomCategories(groceryId,category);
+  return res;
+}
+
+async function handleCategoryDelete(category){
+  const groceryId = grocery.getId();
+  let res = await removeOneCustomCategories(groceryId,category);
+  return res;
+}
+
+async function handleStoreUpdate(store){
+    const groceryId = grocery.getId();
+     let res = await addOneCustomStore(groceryId,store);
+      return res;
+}
+
+async function handleStoreRemove(store) {
+  const groceryId = grocery.getId();
+  let res = await removeOneCustomStore(groceryId,store);
+  return res;
+}
  
-  if (!grocery) return null; 
+ if (!grocery) return null; 
 
   const headerGroceryTitle = grocery.getTitle();
   const headerGroceryNav = [{src : iconBack , alt : "Back", clickaction : goBack}]
@@ -222,7 +263,10 @@ export default function Grocery({goBack, groceryId}) {
                <Select label={t('STATUS_LBL')} options={optionsStatus} name="status" value={filters.status} onChange={handleFilterChange}/>
                <Select label={t("SORT_BY")} options={optionsSortBy} name="sortBy" value={filters.sortBy} onChange={handleFilterChange}/>
              </div>
-            <button className={gr.resetFiltersBtn} onClick={resetFilters}>{t('RESET_FILTERS')}</button>
+             <div className={gr.myGroceriesLabelWrapper}>
+              <button className={gr.resetFiltersBtn} onClick={resetFilters}>{t('RESET_FILTERS')}</button>
+            </div>
+              <h1 className={gr.myGroceriesLabel}>{t('GROCERY_ITEMS')}</h1>
         </div>      
         <div className={gr.list}>
             {(view.length ? view : []).map(item => (
@@ -234,9 +278,9 @@ export default function Grocery({goBack, groceryId}) {
             <Popup title={t('ADD_ITEMS')} close={()=>setIsAddItemsPopup(false)} >
             <form className={gr.form}>
               <label htmlFor="itemName" >{t('FILTERS.CATEGORY')}  :</label>
-              <input id="itemName" ref={categoryRef} className='input'></input>  
+              <Category list={categoriesOptionsList} ref={categoryRef} isEdit={true} onUpdate={(type,cat)=>handleCategoryUpdate(type,cat)} onDelete={(type,cat)=>handleCategoryDelete(type,cat)} setCategory={()=>{return null}}/>
               <label htmlFor="itemStore" >{t("STORE")} :</label>
-              <input id="itemStore" ref={storeRef} className='input'></input>  
+              <Category list={storesOptionsList} ref={storeRef} isEdit={true} onUpdate={handleStoreUpdate} onDelete={handleStoreRemove} setCategory={()=>{return null}}/>
               <label htmlFor="items" >{t('ITEMS')} :</label>
               <AddItems id="items" setItemsList={(val)=>setItemsList(val)}/>
               <button type='button' onClick={(e)=>{ e.preventDefault(); saveItems(e)}} className={gr.saveButton}>{t('SAVE')}</button>

@@ -215,8 +215,8 @@ function resetFilters(){
         <Select label={t('SORT_BY')} options={optionsSortBy} name="sortBy" value={filters.sortBy} onChange={handleFilterChange}/>
       </div>
       <div className={gr.myGroceriesLabelWrapper}>
-      <h1 className={gr.myGroceriesLabel}>My groceries</h1>
       <button className={gr.resetFiltersBtn} onClick={resetFilters}>{t("RESET_FILTERS")}</button>
+      <h1 className={gr.myGroceriesLabel}>{t('MY_GROCERIES')}</h1>
       </div>
     </div>
      {/* Grocery Cards */}
@@ -233,13 +233,13 @@ function resetFilters(){
            <label htmlFor="groceryName" >{t('NAME')} :</label>
            <input id="groceryName" ref={nameRef} className='input'></input>
            <label htmlFor='groceryDate'>{t('DATE')} :</label>
-           <input id="groceryDate" className={`${gr.dateInput} input`} type='date' onKeyDown={(e) => e.preventDefault()}  onClick={(e) => e.target.showPicker && e.target.showPicker()} ref={dateRef}></input>
+           <input id="groceryDate" className={`${gr.dateInput} input`} type='date' onKeyDown={(e) => e.preventDefault()} onClick={(e) => e.target.showPicker && e.target.showPicker()} ref={dateRef}></input>
            <label for="userList">{t('ADD_USERS')}</label>
            <div className={gr.userListWrapper}>
              <input id="userList" ref={usersRef} className={`input ${gr.userList}`} placeholder='user1234@mail.com'></input> 
              <button type="button" onClick={addUser} className={gr.addUserButton}>+</button>
            </div>
-           {usersEmailList !== '' && <><span className={gr.addedUsersTitle}>{t('ADDED_USERS')}</span><span className={gr.formMessage}>{usersEmailList.map(e => e).join(", ")}</span></>}
+           {usersEmailList.length > 0  && <><span className={gr.addedUsersTitle}>{t('ADDED_USERS')}</span><span className={gr.formMessage}>{usersEmailList.map(e => e).join(", ")}</span></>}
            <button type="button" onClick={(e)=>{ e.preventDefault();saveNewGrocery(e)}} className={gr.saveButton}>{t('SAVE')}</button>
          </form>  
        </Popup>

@@ -1,4 +1,4 @@
-import { collection, doc, deleteDoc, serverTimestamp, writeBatch,Timestamp, getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, deleteDoc, serverTimestamp, writeBatch,Timestamp, getDoc, getDocs, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import { db } from "../api/initFirebase";
 import Grocery from "../models/Grocery";
 
@@ -75,6 +75,54 @@ export async function getGroceryById(groceryId) {
     console.error("Failed to fetch grocery:", err);
     throw err;
   }
+}
+
+export async function addOneCustomCategories(groceryId,category){
+      const groceryRef = doc(db, "groceries", groceryId);
+      try {
+        await updateDoc(groceryRef, {
+        customCategories: arrayUnion(category)
+        });
+        return {success : true}
+      } catch (e){
+        return {success : false, error : e}
+      }
+}
+
+export async function removeOneCustomCategories(groceryId,category) {
+     const groceryRef = doc(db, "groceries", groceryId);
+     try {
+       await updateDoc(groceryRef, {
+         customCategories: arrayRemove(category)
+       });
+       return {success : true}
+     } catch (e){
+       return {success : false, error : e}
+     }
+}
+
+export async function addOneCustomStore(groceryId, store) {
+   const groceryRef = doc(db, "groceries", groceryId);
+      try {
+        await updateDoc(groceryRef, {
+        customStores: arrayUnion(store)
+        });
+        return {success : true}
+      } catch (e){
+        return {success : false, error : e}
+      }
+}
+
+export async function removeOneCustomStore(groceryId, store) {
+  const groceryRef = doc(db, "groceries", groceryId);
+     try {
+       await updateDoc(groceryRef, {
+         customStores: arrayRemove(store)
+       });
+       return {success : true}
+     } catch (e){
+       return {success : false, error : e}
+     }
 }
 
 
