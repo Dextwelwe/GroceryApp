@@ -51,6 +51,7 @@
     "MY_GROCERIES" : "My groceries",
     "GROCERY_ITEMS" : "Grocery Items",
     "NEW_CATEGORY" : "New Category",
-    "EDIT_CATEGORY" : "Edit Category"
+    "EDIT_CATEGORY" : "Edit Category",
+    "NO_DATE" : "No Date"
 
 }

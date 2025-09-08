@@ -126,12 +126,38 @@ label{
     font-size: 0.9rem;
     font-weight: 500;
     color: var(--fontColor);
+    width: max-content;
     
+}
+
+.dateWrapper{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+}
+
+.addDateCheckbox{
+    margin: 0;
+    padding: 0;
+    width: 30px;
+    accent-color: #64B5F6;  
+    border-radius: 0; 
+}
+
+.addDateCheckboxWrapper{
+    display: flex;
+    width: 40%;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
 }
 
 .dateInput{
   box-sizing: border-box !important;
   background-color: white;
   height: 40px !important;
-  width: inherit !important;
+  text-align: center;
+  padding-right: 15px;
+
 }

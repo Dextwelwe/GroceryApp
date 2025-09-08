@@ -28,6 +28,7 @@ export default function Groceries({goToGrocery}) {
   const [usersList, setUsersList] = useState([]);
   const [usersEmailList, setUsersEmailList] = useState([]);
   const [isAddNewGroceryVisible, setIsAddNewGroceryVisible] = useState(false);
+  const [isDateDisabled, setIsDateDisabled] = useState(false);
 
   const [defaultLabel,setDefaultLabel] = useLocalStorage('FLabel','all');
   const [defaultStatus,setDefaultStatus] = useLocalStorage('FStatus','all');
@@ -112,8 +113,9 @@ const view = useMemo(() => {
 
   const saveNewGrocery = async (e) => {
     let isValid = true;
+    let disabledDateVal = null;
     e.preventDefault();
-    let inputsRef = [nameRef,dateRef];
+    let inputsRef = [nameRef, ...(!isDateDisabled ? [dateRef] : [])];
 
     inputsRef.forEach(element => {
       if (!validateInput(element.current.value)){
@@ -126,7 +128,7 @@ const view = useMemo(() => {
         {
           owner : userData.uid ,
           name : nameRef.current.value,
-          date : dateRef.current.value,
+          date : !isDateDisabled ? dateRef.current.value : disabledDateVal,
           sharedWith : usersList,
           type : usersList.length > 0 ? 'shared' : 'personal'
         }
@@ -233,7 +235,13 @@ function resetFilters(){
            <label htmlFor="groceryName" >{t('NAME')} :</label>
            <input id="groceryName" ref={nameRef} className='input'></input>
            <label htmlFor='groceryDate'>{t('DATE')} :</label>
-           <input id="groceryDate" className={`${gr.dateInput} input`} type='date' onKeyDown={(e) => e.preventDefault()} onClick={(e) => e.target.showPicker && e.target.showPicker()} ref={dateRef}></input>
+           <div className={gr.dateWrapper}>
+           <input id="groceryDate" disabled={isDateDisabled === true} className={`${gr.dateInput} input`} type='date' onKeyDown={(e) => e.preventDefault()} onClick={(e) => e.target.showPicker && e.target.showPicker()} ref={dateRef}></input>
+           <div className={gr.addDateCheckboxWrapper}>
+           <label>{t('NO_DATE')} :</label>
+           <input className={gr.addDateCheckbox} type='checkbox' checked={isDateDisabled} onChange={()=>setIsDateDisabled(!isDateDisabled)}></input>
+           </div>
+           </div>
            <label for="userList">{t('ADD_USERS')}</label>
            <div className={gr.userListWrapper}>
              <input id="userList" ref={usersRef} className={`input ${gr.userList}`} placeholder='user1234@mail.com'></input> 

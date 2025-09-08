@@ -51,6 +51,7 @@
     "MY_GROCERIES" : "Мои продукты",
     "GROCERY_ITEMS" : "Продукты",
     "NEW_CATEGORY" : "Новая Категория",
-    "EDIT_CATEGORY" : "Изменить категорию"
+    "EDIT_CATEGORY" : "Изменить категорию",
+    "NO_DATE" : "Без даты"
 
 }

@@ -6,7 +6,7 @@ import add from '../../assets/images/icons/addBig.svg'
 
 import iconBack from '../../assets/images/icons/back.svg'
 import { useTranslation} from 'react-i18next';
-import { getGroceryById, addOneCustomCategories, removeOneCustomCategories,addOneCustomStore, removeOneCustomStore } from '../../api/grocery';
+import { getGroceryById, removeOneCustomCategories, removeOneCustomStore, updateCustomCategories, updateCustomStores } from '../../api/grocery';
 import { addItems, removeItem , setItemStatus} from '../../api/items';
 import ItemCard from '../../components/ItemCard/ItemCard';
 import Select from '../../components/select/Select';
@@ -40,17 +40,16 @@ export default function Grocery({goBack, groceryId}) {
   
   useEffect(()=>{
     getFullGrocery();
+    console.log('get Full Grocery')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[groceryId])
 
   const optionsCategories = useMemo(
-    () => [grocery?.getCategoryOptionAll(), ...(grocery?.getCategoriesFromAddedItems() ?? [])],
-    [grocery]
+    () => [grocery?.getCategoryOptionAll(), ...(grocery?.getCategoriesFromAddedItems() ?? [])], [grocery]
   );
 
   const optionsStore = useMemo(
-    () => (grocery?.getStores() ?? []),
-    [grocery]
+    () => (grocery?.getStores() ?? []), [grocery]
   );
 
   const view = useMemo(() => {
@@ -194,7 +193,49 @@ export default function Grocery({goBack, groceryId}) {
     }
  }
 
-  function validateInput(value) {
+
+
+function getCategoriesList(grocery){
+ let list =  [...grocery.getCustomCategories()];
+ if (list.length > 0){list.sort((a,b) => a.desc.localeCompare(b.desc))};
+ return list;
+}
+
+function getStoresList(grocery){
+ let list =  [...grocery.getCustomStores()];
+ if (list){list.sort((a,b) => a.desc.localeCompare(b.desc))};
+ return list;
+}
+
+async function handleCategoryUpdate(list){
+  const groceryId = grocery.getId();
+  let res = await updateCustomCategories(groceryId,list);
+  setCategoriesOptionsList(list.map(e=>{return {desc : e, type : 'custom'}}));
+  return res;
+}
+
+async function handleCategoryDelete(category){
+  const groceryId = grocery.getId();
+  let res = await removeOneCustomCategories(groceryId,category);
+  setCategoriesOptionsList(categoriesOptionsList.filter(item => item.desc !== category))
+  return res;
+}
+
+async function handleStoreUpdate(list){
+    const groceryId = grocery.getId();
+    let res = await updateCustomStores(groceryId,list);
+    setStoresOptionsList(list.map(e=>{return {desc : e, type : 'custom'}}));
+    return res;
+}
+
+async function handleStoreRemove(store) {
+  const groceryId = grocery.getId();
+  let res = await removeOneCustomStore(groceryId,store);
+  setStoresOptionsList(storesOptionsList.filter(item => item.desc !== store))
+  return res;
+}
+
+function validateInput(value) {
   if (value == null) return false;
 
   if (value instanceof Date) {
@@ -210,42 +251,6 @@ export default function Grocery({goBack, groceryId}) {
     return trimmed.length > 0 && trimmed.length <= 50;
   }
   return false;
-}
-
-function getCategoriesList(grocery){
- let list =  [...grocery.getCustomCategories()];
- if (list.length > 0){list.sort((a,b) => a.desc.localeCompare(b.desc))};
- return list;
-}
-
-function getStoresList(grocery){
- let list =  [...grocery.getCustomStores()];
- if (list){list.sort((a,b) => a.desc.localeCompare(b.desc))};
- return list;
-}
-
-async function handleCategoryUpdate(category){
-  const groceryId = grocery.getId();
-  let res = await addOneCustomCategories(groceryId,category);
-  return res;
-}
-
-async function handleCategoryDelete(category){
-  const groceryId = grocery.getId();
-  let res = await removeOneCustomCategories(groceryId,category);
-  return res;
-}
-
-async function handleStoreUpdate(store){
-    const groceryId = grocery.getId();
-     let res = await addOneCustomStore(groceryId,store);
-      return res;
-}
-
-async function handleStoreRemove(store) {
-  const groceryId = grocery.getId();
-  let res = await removeOneCustomStore(groceryId,store);
-  return res;
 }
  
  if (!grocery) return null; 
@@ -278,9 +283,9 @@ async function handleStoreRemove(store) {
             <Popup title={t('ADD_ITEMS')} close={()=>setIsAddItemsPopup(false)} >
             <form className={gr.form}>
               <label htmlFor="itemName" >{t('FILTERS.CATEGORY')}  :</label>
-              <Category list={categoriesOptionsList} ref={categoryRef} isEdit={true} onUpdate={(type,cat)=>handleCategoryUpdate(type,cat)} onDelete={(type,cat)=>handleCategoryDelete(type,cat)} setCategory={()=>{return null}}/>
+              <Category list={categoriesOptionsList} ref={categoryRef}  onUpdate={(cat)=>handleCategoryUpdate(cat)} onDelete={(cat)=>handleCategoryDelete(cat)} setCategory={()=>{return null}}/>
               <label htmlFor="itemStore" >{t("STORE")} :</label>
-              <Category list={storesOptionsList} ref={storeRef} isEdit={true} onUpdate={handleStoreUpdate} onDelete={handleStoreRemove} setCategory={()=>{return null}}/>
+              <Category list={storesOptionsList} ref={storeRef} onUpdate={(store)=>handleStoreUpdate(store)} onDelete={(store)=>handleStoreRemove(store)} setCategory={()=>{return null}}/>
               <label htmlFor="items" >{t('ITEMS')} :</label>
               <AddItems id="items" setItemsList={(val)=>setItemsList(val)}/>
               <button type='button' onClick={(e)=>{ e.preventDefault(); saveItems(e)}} className={gr.saveButton}>{t('SAVE')}</button>

@@ -51,6 +51,7 @@
     "MY_GROCERIES" : "Mes courses",
     "GROCERY_ITEMS" : "Articles d’épicerie",
     "NEW_CATEGORY" : "Nouvelle catégorie",
-    "EDIT_CATEGORY" : "Modifier la catégorie"
+    "EDIT_CATEGORY" : "Modifier la catégorie",
+    "NO_DATE" : "Aucune date"
 
 }

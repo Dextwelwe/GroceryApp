@@ -1,4 +1,3 @@
-import React from 'react'
 import ic from './itemCard.module.css'
 import remove from '../../assets/images/icons/delete.svg'
 import check from '../../assets/images/icons/check.svg'

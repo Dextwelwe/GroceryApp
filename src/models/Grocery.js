@@ -38,7 +38,7 @@ export default class Grocery {
     }
 
     getCustomStores(){
-        return this.customStores.map(el =>{
+        return this.customStores.map(el => {
             return {
                 desc : el,
                 type : 'custom'

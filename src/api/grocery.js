@@ -1,4 +1,4 @@
-import { collection, doc, deleteDoc, serverTimestamp, writeBatch,Timestamp, getDoc, getDocs, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+import { collection, doc, deleteDoc, serverTimestamp, writeBatch,Timestamp, getDoc, getDocs, updateDoc, arrayRemove } from "firebase/firestore";
 import { db } from "../api/initFirebase";
 import Grocery from "../models/Grocery";
 
@@ -6,11 +6,11 @@ export async function saveNew(grocery) {
   const sharedWith = Array.from(new Set(grocery.sharedWith || [])).filter(uid => uid && uid !== grocery.owner);
   const groceryRef = doc(collection(db, "groceries"));
   const groceryId = groceryRef.id;
-  const date = grocery.date instanceof Date ? grocery.date : new Date(grocery.date);
+  const date = grocery.date instanceof Date ? grocery.date : null;
 
   const root = {
     name: grocery.name,
-    date: Timestamp.fromDate(date),
+    date: date !== null ? Timestamp.fromDate(date) : date,
     owner: grocery.owner,
     type: grocery.type,
     status: "active",
@@ -77,11 +77,11 @@ export async function getGroceryById(groceryId) {
   }
 }
 
-export async function addOneCustomCategories(groceryId,category){
+export async function updateCustomCategories(groceryId,list){
       const groceryRef = doc(db, "groceries", groceryId);
       try {
         await updateDoc(groceryRef, {
-        customCategories: arrayUnion(category)
+        customCategories: list
         });
         return {success : true}
       } catch (e){
@@ -101,11 +101,11 @@ export async function removeOneCustomCategories(groceryId,category) {
      }
 }
 
-export async function addOneCustomStore(groceryId, store) {
+export async function updateCustomStores(groceryId, stores) {
    const groceryRef = doc(db, "groceries", groceryId);
       try {
         await updateDoc(groceryRef, {
-        customStores: arrayUnion(store)
+        customStores: stores
         });
         return {success : true}
       } catch (e){

@@ -7,7 +7,6 @@ export default function GroceryCard({data,onDelete,onClick}) {
   const { t } = useTranslation();
   const leftItemsIcons = {};
   const rightItemsIcons = [{src : remove, alt : "Remove", clickaction : removeGroceryCall}]
-  
   if (!data) return null;
  function parseDate(date) {
     try {
@@ -51,8 +50,8 @@ async function removeGroceryCall() {
         <div className={gc.dataWrapper} onClick={()=>onClick(data.id)}>
             <div className={`${gc.label} ${data.type === "shared" ? gc.colorShared : gc.colorPersonal}`}>{data.type=== 'shared' ? t('FILTERS.SHARED') : t('FILTERS.PERSONAL')}</div>
             <div className={gc.name}>{data.name}</div> 
-            <div className={gc.date}>{parseDate(data.date)}</div> 
-            <div className={`${gc.status}`}><span className={data.status==="completed" ? gc.colorCompleted : gc.colorPending}>{data.status === 'active' ? t('STATUS.ACTIVE') : t('STATUS.COMPLETED')}</span></div> 
+              <div className={gc.date}>{data.date!==null ?parseDate(data.date) : t('NO_DATE')}</div> 
+            <div className={`${gc.status}`}><span className={data.status==="active" ? gc.colorCompleted : gc.colorPending}>{data.status === 'active' ? t('STATUS.ACTIVE') : t('STATUS.COMPLETED')}</span></div> 
        </div>
         <div className={gc.rightItems}>
          {rightItemsIcons && 
