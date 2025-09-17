@@ -1,8 +1,7 @@
 body {
+  overscroll-behavior: none;
   margin: 0;
   font-family: 'Roboto', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 code {
@@ -10,8 +9,8 @@ code {
 }
 
 html, body {
+  overscroll-behavior: none;
   -ms-overflow-style: none; 
-  overscroll-behavior: contain;
+  overscroll-behavior: none;
   touch-action: pan-y pan-x; 
-  -webkit-overflow-scrolling: touch;
 }
