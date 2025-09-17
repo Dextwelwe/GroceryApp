@@ -18,9 +18,10 @@ function App() {
     }
   }
 
-   return page === "groceries" 
-    ? <Groceries goToGrocery={goToGrocery} />
-    : <Grocery groceryId={groceryId} goBack={() => setPage("groceries")} />;
+  return(
+    <Groceries goToGrocery={goToGrocery} />
+  )
+
 }
 
 export default App;

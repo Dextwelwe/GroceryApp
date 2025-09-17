@@ -39,6 +39,7 @@ export default function Groceries({goToGrocery}) {
   let dateRef = useRef(null);
   let usersRef = useRef(null);
 
+
   const STATUS_MAP = { active: "active", completed: "completed"};
   const headerItems =  [{src : iconLogout , alt : "Logout", clickaction : logout}]
 
@@ -98,7 +99,8 @@ const view = useMemo(() => {
 }, [groceries, filters]);
   
 
-  if (!userData) return null;
+
+
 
   const headerTitle = t('HI') + ", " + userData.firstName + " !";
   const toggleNewGrocery = () => {
