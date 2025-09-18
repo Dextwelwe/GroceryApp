@@ -34,6 +34,7 @@ export default function Groceries({goToGrocery}) {
   const [defaultStatus,setDefaultStatus] = useLocalStorage('FStatus','all');
   const [defaultSortBy,setDefaultSortBy] = useLocalStorage('FSortBy','newest');
   const [filters, setFilters] = useState({label: defaultLabel, status: defaultStatus, sortBy: defaultSortBy});
+  const defaultFilterValues = { categories : 'all', sortBy : "newest"}
 
   let nameRef = useRef(null);
   let dateRef = useRef(null);
@@ -97,10 +98,8 @@ const view = useMemo(() => {
   });
    // eslint-disable-next-line react-hooks/exhaustive-deps
 }, [groceries, filters]);
-  
 
-
-
+if (!userData) return null;
 
   const headerTitle = t('HI') + ", " + userData.firstName + " !";
   const toggleNewGrocery = () => {
@@ -204,8 +203,8 @@ const openGrocery = (id) => {
 function resetFilters(){
   setDefaultLabel("all");
   setDefaultStatus("all");
-  setDefaultSortBy("all");
-  setFilters({label: 'all', status: 'all', sortBy: 'all'});
+  setDefaultSortBy("newest");
+  setFilters({label: 'all', status: 'all', sortBy: 'newest'});
 }
 
   return (
@@ -214,9 +213,9 @@ function resetFilters(){
      {/* Filters */}
      <div className={gr.selectWrapper}>
       <div className={gr.sortBy}>
-        <Select label={t('TYPE')} options={optionsLabel} name="label" value={filters.label} onChange={handleFilterChange} />
-        <Select label={t('STATUS_LBL')} options={optionsStatus} name="status"  value={filters.status} onChange={handleFilterChange} />
-        <Select label={t('SORT_BY')} options={optionsSortBy} name="sortBy" value={filters.sortBy} onChange={handleFilterChange}/>
+        <Select label={t('TYPE')} options={optionsLabel} name="label" value={filters.label} onChange={handleFilterChange} doHighLight={filters.label !== defaultFilterValues.categories && true} />
+        <Select label={t('STATUS_LBL')} options={optionsStatus} name="status"  value={filters.status} onChange={handleFilterChange} doHighLight={filters.status !== defaultFilterValues.categories && true} />
+        <Select label={t('SORT_BY')} options={optionsSortBy} name="sortBy" value={filters.sortBy} onChange={handleFilterChange}  doHighLight={filters.sortBy !== defaultFilterValues.sortBy && true}/>
       </div>
       <div className={gr.myGroceriesLabelWrapper}>
       <button className={gr.resetFiltersBtn} onClick={resetFilters}>{t("RESET_FILTERS")}</button>

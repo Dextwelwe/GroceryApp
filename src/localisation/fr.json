@@ -13,7 +13,8 @@
         "SERVER_ERROR" : "Erreur du serveur",
         "NO_GROCERIES" : "Aucune épicerie ne correspond à vos filtres.",
         "NO_ITEMS_TO_ADD" : "Aucun article à ajouter",
-        "TOO_MANY_ITEMS" : "Trop d'articles. Maximum 15"
+        "TOO_MANY_ITEMS" : "Trop d'articles. Maximum 15",
+        "NO_ITEMS" : "Aucun item ne correspond à vos filtres."
     },
     "STATUS" : {
        "ACTIVE" : "En Cours",

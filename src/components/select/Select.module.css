@@ -18,6 +18,7 @@ max-width: 250px;
     font-family: var(--fontFamily);
     cursor: pointer;
     text-transform: capitalize;
+    background-color: white;
 }
 
 .label{

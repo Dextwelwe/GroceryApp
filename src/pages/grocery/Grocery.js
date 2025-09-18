@@ -1,4 +1,4 @@
-import {useEffect, useState, useMemo, useRef } from 'react'
+import {useEffect, useState, useMemo, useRef, memo } from 'react'
 import gr from './grocery.module.css'
 
 import HeaderMenu from '../../components/header/header';
@@ -17,18 +17,19 @@ import AddItems from '../../components/add/addItems';
 import { useAuth } from '../../providers/AuthProvider';
 import Category from '../../components/categories/category';
 
-export default function Grocery({goBack, groceryId}) {
+function Grocery({goBack, groceryId}) {
   const { t } = useTranslation();
   const {userData} = useAuth();
   const [grocery, setGrocery] = useState(null);
   const [defaultCategory,setDefaultCategory] = useLocalStorage('gLabel','all');
   const [defaultStore, setDefaulStore] = useLocalStorage('gStore', 'all');
   const [defaultStatus,setDefaultStatus] = useLocalStorage('gStatus','all');
-  const [defaultSortBy,setDefaultSortBy] = useLocalStorage('gSortBy','status');
+  const [defaultSortBy,setDefaultSortBy] = useLocalStorage('gSortBy','az');
+  const defaultFilterValues = { categories : 'all', sortBy : "az"}
   const [isAddItemsPopup, setIsAddItemsPopup] = useState(false);
   const [categoriesOptionsList, setCategoriesOptionsList] = useState([])
   const [storesOptionsList, setStoresOptionsList] = useState([])
-  const [filters, setFilters] = useState({category: defaultCategory,store: defaultStore,status: defaultStatus, sortBy: defaultSortBy,});
+  const [filters, setFilters] = useState({category: defaultCategory,store: defaultStore,status: defaultStatus, sortBy: defaultSortBy});
   const optionsStatus = [ { value: "all", label: t('ALL') },{ value: "active", label: t('STATUS.ACTIVE') },{ value: "completed", label: t('STATUS.COMPLETED')}];
   const optionsSortBy = [ { value: "az", label: t("FILTERS.A-Z") }, { value: "za", label: t("FILTERS.Z-A") }, {value :'status', label : t("STATUS_LBL")}];
   const itemActions = { remove : removeItemCall, changeStatus : changeItemStatus};
@@ -40,7 +41,6 @@ export default function Grocery({goBack, groceryId}) {
   
   useEffect(()=>{
     getFullGrocery();
-    console.log('get Full Grocery')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[groceryId])
 
@@ -140,8 +140,8 @@ export default function Grocery({goBack, groceryId}) {
     setDefaultCategory("all");
     setDefaultStatus("all");
     setDefaulStore('all');
-    setDefaultSortBy("all");
-    setFilters({category: 'all', store: 'all', status : "all", sortBy: 'all'});
+    setDefaultSortBy("az");
+    setFilters({category: 'all', store: 'all', status : "all", sortBy: 'az'});
  }
 
  async function saveItems(e){
@@ -263,10 +263,10 @@ function validateInput(value) {
         <HeaderMenu title={headerGroceryTitle} headerNav={headerGroceryNav} />
         <div className={gr.selectWrapper}>
          <div className={gr.sortBy}>
-               <Select label={t('FILTERS.CATEGORY')} options={optionsCategories} name="category" value={filters.category} onChange={handleFilterChange} />
-               <Select label={t('STORE')} options={optionsStore} name="store"  value={filters.store} onChange={handleFilterChange} />
-               <Select label={t('STATUS_LBL')} options={optionsStatus} name="status" value={filters.status} onChange={handleFilterChange}/>
-               <Select label={t("SORT_BY")} options={optionsSortBy} name="sortBy" value={filters.sortBy} onChange={handleFilterChange}/>
+               <Select label={t('FILTERS.CATEGORY')} options={optionsCategories} name="category" value={filters.category} onChange={handleFilterChange} doHighLight={filters.category !== defaultFilterValues.categories && true} />
+               <Select label={t('STORE')} options={optionsStore} name="store"  value={filters.store} onChange={handleFilterChange} doHighLight={filters.store !== defaultFilterValues.categories && true} />
+               <Select label={t('STATUS_LBL')} options={optionsStatus} name="status" value={filters.status} onChange={handleFilterChange} doHighLight={filters.status !== defaultFilterValues.categories && true}/>
+               <Select label={t("SORT_BY")} options={optionsSortBy} name="sortBy" value={filters.sortBy} onChange={handleFilterChange} doHighLight={filters.sortBy !== defaultFilterValues.sortBy && true}/>
              </div>
              <div className={gr.myGroceriesLabelWrapper}>
               <button className={gr.resetFiltersBtn} onClick={resetFilters}>{t('RESET_FILTERS')}</button>
@@ -277,6 +277,7 @@ function validateInput(value) {
             {(view.length ? view : []).map(item => (
             <ItemCard key={item.id} data={item} actions={itemActions} />
              ))}
+            {view.length === 0 && grocery?.items.length > 0 && <div className={gr.empty}>{t('WARNINGS.NO_ITEMS')}</div>}
           </div>
           {
             isAddItemsPopup && 
@@ -296,3 +297,5 @@ function validateInput(value) {
         </div>
   )
 }
+
+export default memo(Grocery);

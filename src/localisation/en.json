@@ -13,7 +13,8 @@
         "SERVER_ERROR" : "Server error",
         "NO_GROCERIES" : "No groceries match your filters.",
         "NO_ITEMS_TO_ADD" : "No items to add",
-        "TOO_MANY_ITEMS" : "Too many items. Max 15"
+        "TOO_MANY_ITEMS" : "Too many items. Max 15",
+        "NO_ITEMS" : "No items match your filters."
     },
     "STATUS" :{
         "ACTIVE" : "Active",
