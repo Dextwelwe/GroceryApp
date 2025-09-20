@@ -3,6 +3,7 @@ import { db } from "../api/initFirebase";
 import Grocery from "../models/Grocery";
 
 export async function saveNew(grocery) {
+  
   const sharedWith = Array.from(new Set(grocery.sharedWith || [])).filter(uid => uid && uid !== grocery.owner);
   const groceryRef = doc(collection(db, "groceries"));
   const groceryId = groceryRef.id;
@@ -40,18 +41,29 @@ export async function saveNew(grocery) {
 }
 
 export default async function removeGrocery(ownerUid, groceryId, sharedWith = []) {
-  const batch = writeBatch(db);
-  batch.delete(doc(db, "groceries", groceryId));
-  batch.delete(doc(db, "users", ownerUid, "groceries", groceryId));
-  sharedWith.forEach(user => {
-    batch.delete(doc(db, "users", user, "sharedGroceries", groceryId));
-  });
-
   try {
+    const groceryRef = doc(db, "groceries", groceryId);
+    const itemsCol = collection(groceryRef, "items");
+
+    const batch = writeBatch(db);
+
+    const itemsSnap = await getDocs(itemsCol);
+    itemsSnap.forEach(itemDoc => {
+      batch.delete(itemDoc.ref);
+    });
+
+    batch.delete(groceryRef);
+
+    batch.delete(doc(db, "users", ownerUid, "groceries", groceryId));
+    sharedWith.forEach(u => {
+      batch.delete(doc(db, "users", u, "sharedGroceries", groceryId));
+    });
+
     await batch.commit();
+
     return { success: true };
   } catch (error) {
-    console.error("Error deleting grocery:", error);
+    console.error("Error deleting grocery + items:", error);
     return { success: false, error };
   }
 }

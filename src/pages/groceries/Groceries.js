@@ -18,12 +18,14 @@ import GroceryCard from '../../components/groceryCard/GroceryCard';
 // Icons
 import add from '../../assets/images/icons/addBig.svg'
 import iconLogout from '../../assets/images/icons/logout.svg'
+import animLoading from '../../assets/images/animations/loading.gif'
 
 
 export default function Groceries({goToGrocery}) {
   const { t } = useTranslation();
   const {userData, logout} = useAuth();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [groceries, setGroceries] = useState([]);
   const [usersList, setUsersList] = useState([]);
   const [usersEmailList, setUsersEmailList] = useState([]);
@@ -107,9 +109,22 @@ if (!userData) return null;
   }
 
   async function loadGroceries() {
-  const personal = await fetchUserGroceries(userData.uid);
-  const shared = await fetchUserGroceries(userData.uid, 'shared');
-  setGroceries([...personal, ...shared]);
+  let timer;
+  try {
+    timer = setTimeout(() => setIsLoading(true), 500);
+    
+    const [personal, shared] = await Promise.all([
+      fetchUserGroceries(userData.uid),
+      fetchUserGroceries(userData.uid, "shared"),
+    ]);
+
+    setGroceries([...personal, ...shared]);
+  } catch (err) {
+    console.error("Failed to fetch groceries:", err);
+  } finally {
+    clearTimeout(timer);
+    setIsLoading(false);
+  }
 }
 
   const saveNewGrocery = async (e) => {
@@ -124,12 +139,24 @@ if (!userData) return null;
           isValid = false;
       }
     });
+
+    let dateVal = dateRef.current.value;
+    let parsedDate = null;
+
+    if (dateVal){
+      let dateArr =dateVal.split('-');
+      let year = dateArr[0];
+      let month = parseInt(dateArr[1], 10) - 1;
+      let day =  dateArr[2];
+      parsedDate = new Date(year,month,day);
+    }
+ 
     if (isValid){
       let result = await saveNew(
         {
           owner : userData.uid ,
           name : nameRef.current.value,
-          date : !isDateDisabled ? dateRef.current.value : disabledDateVal,
+          date : !isDateDisabled ? parsedDate : disabledDateVal,
           sharedWith : usersList,
           type : usersList.length > 0 ? 'shared' : 'personal'
         }
@@ -224,10 +251,17 @@ function resetFilters(){
     </div>
      {/* Grocery Cards */}
      <div className={gr.list}>
+      {
+        isLoading && 
+            <img className={gr.loadingAnimation} alt="loading" src={animLoading} />
+      }
+      { !isLoading && <>
        {(view.length ? view : []).map((grocery) => (
        <GroceryCard key={grocery.id} data={grocery} onClick={(e)=>openGrocery(e)} onDelete={loadGroceries} />
        ))}
        {view.length === 0 && groceries.length > 0 && <div className={gr.empty}>{t('WARNINGS.NO_GROCERIES')}</div>}
+       </>
+      }
      </div>
      {/* New Grocery Popup */}
      { isAddNewGroceryVisible &&

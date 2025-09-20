@@ -20,6 +20,14 @@
     flex-direction: column;
 }
 
+.loadingAnimation{
+    height: 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .myGroceriesLabel{
     text-align: center;
     font-size: 1rem;
@@ -86,4 +94,14 @@
     background-color: #2196F3;
     margin-top: 50px;
     font-weight: 500;
+}
+
+@media (min-width: 800px){
+    .resetFiltersBtn{
+        max-width: unset;
+    }
+
+    .sortBy {
+        justify-content: center;
+    }
 }

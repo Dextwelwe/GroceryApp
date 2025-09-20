@@ -77,6 +77,14 @@
     color: white;
 }
 
+.loadingAnimation{
+    height: 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .saveButton{
     cursor: pointer;
     height: var(--inputHeight);
@@ -160,4 +168,15 @@ label{
   text-align: center;
   padding-right: 15px;
 
+}
+
+
+@media (min-width: 800px){
+    .resetFiltersBtn{
+        max-width: unset;
+    }
+
+    .sortBy {
+        justify-content: center;
+    }
 }
