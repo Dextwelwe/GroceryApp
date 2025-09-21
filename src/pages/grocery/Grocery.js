@@ -5,6 +5,7 @@ import HeaderMenu from '../../components/header/header';
 import add from '../../assets/images/icons/addBig.svg'
 
 import iconBack from '../../assets/images/icons/back.svg'
+import iconReload from '../../assets/images/icons/reload.svg'
 import { useTranslation} from 'react-i18next';
 import { getGroceryById, removeOneCustomCategories, removeOneCustomStore, updateCustomCategories, updateCustomStores } from '../../api/grocery';
 import { addItems, removeItem , setItemStatus} from '../../api/items';
@@ -36,13 +37,14 @@ function Grocery({goBack, groceryId}) {
   const [itemsList, setItemsList] = useState([])
   let categoryRef = useRef(null);
   let storeRef = useRef(null);
+  let [isReload, setIsReload] = useState(false);
   
   const norm = s => (s ?? "").toString().trim().toLowerCase();
   
   useEffect(()=>{
     getFullGrocery();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[groceryId])
+  },[groceryId, isReload])
 
   const optionsCategories = useMemo(
     () => [grocery?.getCategoryOptionAll(), ...(grocery?.getCategoriesFromAddedItems() ?? [])], [grocery]
@@ -78,7 +80,7 @@ function Grocery({goBack, groceryId}) {
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [grocery, filters, grocery?.items]);
+  }, [grocery, filters, grocery?.items, isReload]);
 
   async function getFullGrocery() {
     let g = await getGroceryById(groceryId);
@@ -193,8 +195,6 @@ function Grocery({goBack, groceryId}) {
     }
  }
 
-
-
 function getCategoriesList(grocery){
  let list =  [...grocery.getCustomCategories()];
  if (list.length > 0){list.sort((a,b) => a.desc.localeCompare(b.desc))};
@@ -257,10 +257,11 @@ function validateInput(value) {
 
   const headerGroceryTitle = grocery.getTitle();
   const headerGroceryNav = [{src : iconBack , alt : "Back", clickaction : goBack}]
+  const headerItems = [{src : iconReload, alt : "reload", clickaction : ()=>setIsReload(!isReload)}]
 
   return (
     <div className='mainContentWrapper'>
-        <HeaderMenu title={headerGroceryTitle} headerNav={headerGroceryNav} />
+        <HeaderMenu title={headerGroceryTitle} headerNav={headerGroceryNav} headerItems={headerItems} />
         <div className={gr.selectWrapper}>
          <div className={gr.sortBy}>
                <Select label={t('FILTERS.CATEGORY')} options={optionsCategories} name="category" value={filters.category} onChange={handleFilterChange} doHighLight={filters.category !== defaultFilterValues.categories && true} />
