@@ -7,7 +7,7 @@ import add from '../../assets/images/icons/addBig.svg'
 import iconBack from '../../assets/images/icons/back.svg'
 import iconReload from '../../assets/images/icons/reload.svg'
 import { useTranslation} from 'react-i18next';
-import { getGroceryById, removeOneCustomCategories, removeOneCustomStore, updateCustomCategories, updateCustomStores } from '../../api/grocery';
+import { getGroceryById, removeOneCustomCategories, removeOneCustomStore, updateCustomCategories, updateCustomStores, subscribeGroceryItems } from '../../api/grocery';
 import { addItems, removeItem , setItemStatus} from '../../api/items';
 import ItemCard from '../../components/ItemCard/ItemCard';
 import Select from '../../components/select/Select';
@@ -41,10 +41,21 @@ function Grocery({goBack, groceryId}) {
   
   const norm = s => (s ?? "").toString().trim().toLowerCase();
   
-  useEffect(()=>{
-    getFullGrocery();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[groceryId, isReload])
+  useEffect(() => {
+  if (!groceryId) return;
+  const unsub = subscribeGroceryItems(groceryId,
+    (items) => {
+      setGrocery((prev) =>
+        prev
+          ? new GroceryObj(prev.getId(), { ...prev, items })
+          : new GroceryObj(groceryId, { items })
+      );
+    },
+    (err) => console.error('items subcollection subscription error:', err)
+  );
+  return () => unsub();
+}, [groceryId]);
+
 
   const optionsCategories = useMemo(
     () => [grocery?.getCategoryOptionAll(), ...(grocery?.getCategoriesFromAddedItems() ?? [])], [grocery]
@@ -235,6 +246,11 @@ async function handleStoreRemove(store) {
   return res;
 }
 
+const reloadItems = async() =>{
+  await getFullGrocery();
+  setIsReload(!isReload);
+}
+
 function validateInput(value) {
   if (value == null) return false;
 
@@ -257,7 +273,7 @@ function validateInput(value) {
 
   const headerGroceryTitle = grocery.getTitle();
   const headerGroceryNav = [{src : iconBack , alt : "Back", clickaction : goBack}]
-  const headerItems = [{src : iconReload, alt : "reload", clickaction : ()=>setIsReload(!isReload)}]
+  const headerItems = [{src : iconReload, alt : "reload", clickaction : reloadItems}]
 
   return (
     <div className='mainContentWrapper'>

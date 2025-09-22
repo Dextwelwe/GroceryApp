@@ -1,4 +1,4 @@
-import { collection, doc, deleteDoc, serverTimestamp, writeBatch,Timestamp, getDoc, getDocs, updateDoc, arrayRemove } from "firebase/firestore";
+import { collection, doc, deleteDoc, serverTimestamp, writeBatch,Timestamp, getDoc, getDocs, updateDoc, arrayRemove, query, onSnapshot } from "firebase/firestore";
 import { db } from "../api/initFirebase";
 import Grocery from "../models/Grocery";
 
@@ -135,6 +135,15 @@ export async function removeOneCustomStore(groceryId, store) {
      } catch (e){
        return {success : false, error : e}
      }
+}
+
+export function subscribeGroceryItems(groceryId, onNext, onError) {
+  const q = query(collection(db, 'groceries', groceryId, 'items'));
+
+  return onSnapshot(q, (snap) => {
+      const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      onNext(items);
+    }, onError );
 }
 
 
