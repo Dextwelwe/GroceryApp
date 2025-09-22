@@ -74,14 +74,13 @@ export async function getGroceryById(groceryId) {
   try {
     const groceryRef = doc(db, "groceries", groceryId);
     const itemsRef   = collection(db, "groceries", groceryId, "items");
-    const [grocerySnap, itemsSnap] = await Promise.all([
+    const [grocerySnap, itemsSnap ] = await Promise.all([
       getDoc(groceryRef),
       getDocs(itemsRef)
     ]);
     if (!grocerySnap.exists()) return null;
     const groceryData = grocerySnap.data();
     const items = itemsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-    console.log(new Grocery(grocerySnap.id, { ...groceryData, items }))
     return new Grocery(grocerySnap.id, { ...groceryData, items });
   } catch (err) {
     console.error("Failed to fetch grocery:", err);

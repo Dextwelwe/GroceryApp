@@ -41,9 +41,11 @@ function Grocery({goBack, groceryId}) {
   
   const norm = s => (s ?? "").toString().trim().toLowerCase();
   
-  useEffect(() => {
-  if (!groceryId) return;
-  const unsub = subscribeGroceryItems(groceryId,
+ useEffect(() => {
+  (async () => {await getFullGrocery();})();
+
+  const unsub = subscribeGroceryItems(
+    groceryId,
     (items) => {
       setGrocery((prev) =>
         prev
@@ -51,9 +53,10 @@ function Grocery({goBack, groceryId}) {
           : new GroceryObj(groceryId, { items })
       );
     },
-    (err) => console.error('items subcollection subscription error:', err)
+    (err) => console.error("Subscription error:", err)
   );
   return () => unsub();
+  // eslint-disable-next-line
 }, [groceryId]);
 
 
@@ -131,7 +134,7 @@ function Grocery({goBack, groceryId}) {
   }
     else {
       if ((result.err.code = "permission-denied")) {
-        alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'))
+        alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'))  
 
       } else {
         alert(t('WARNINGS.SERVER_ERROR'));
@@ -273,11 +276,10 @@ function validateInput(value) {
 
   const headerGroceryTitle = grocery.getTitle();
   const headerGroceryNav = [{src : iconBack , alt : "Back", clickaction : goBack}]
-  const headerItems = [{src : iconReload, alt : "reload", clickaction : reloadItems}]
 
   return (
     <div className='mainContentWrapper'>
-        <HeaderMenu title={headerGroceryTitle} headerNav={headerGroceryNav} headerItems={headerItems} />
+        <HeaderMenu title={headerGroceryTitle} headerNav={headerGroceryNav} />
         <div className={gr.selectWrapper}>
          <div className={gr.sortBy}>
                <Select label={t('FILTERS.CATEGORY')} options={optionsCategories} name="category" value={filters.category} onChange={handleFilterChange} doHighLight={filters.category !== defaultFilterValues.categories && true} />

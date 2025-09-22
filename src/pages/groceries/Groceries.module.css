@@ -58,6 +58,8 @@
     box-shadow: none;
     color: black;
     cursor: pointer;
+    align-self: end;
+    width: max-content;
 }
 
 .addGrocery{
@@ -173,6 +175,7 @@ label{
 @media (min-width: 800px){
     .resetFiltersBtn{
         max-width: unset;
+        
     }
 
     .sortBy {

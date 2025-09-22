@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/GroceryApp/static/css/main.37ec54bf.css",
-    "main.js": "/GroceryApp/static/js/main.6b433dc3.js",
+    "main.js": "/GroceryApp/static/js/main.41bd618f.js",
     "static/media/Roboto-Bold.ttf": "/GroceryApp/static/media/Roboto-Bold.cb02a42f24299e95adb5.ttf",
     "static/media/Roboto-Medium.ttf": "/GroceryApp/static/media/Roboto-Medium.116fcd4fd987818c5d98.ttf",
     "static/media/Roboto-Regular.ttf": "/GroceryApp/static/media/Roboto-Regular.5dd918926d41224c8142.ttf",
@@ -11,6 +11,7 @@
     "static/media/pencil.png": "/GroceryApp/static/media/pencil.2f3c168e25e0aef93944.png",
     "static/media/close.png": "/GroceryApp/static/media/close.3c662b752278fc52f408.png",
     "static/media/undo.png": "/GroceryApp/static/media/undo.4649d52b03fe2fdb535b.png",
+    "static/media/reload.svg": "/GroceryApp/static/media/reload.075bbe41146377a8323b4a1004af2db4.svg",
     "static/media/redo.svg": "/GroceryApp/static/media/redo.388bcf8d74729ad782d5503148705a85.svg",
     "static/media/logout.svg": "/GroceryApp/static/media/logout.729b791fbaf8bf6bdf381a21e0c8cf79.svg",
     "static/media/delete.svg": "/GroceryApp/static/media/delete.ad1d2b0d55aff5aecbfc9afc040cdddd.svg",
@@ -20,10 +21,10 @@
     "index.html": "/GroceryApp/index.html",
     "static/media/addBig.svg": "/GroceryApp/static/media/addBig.9aa85d0278c29f6a8f1be5000d891fe1.svg",
     "main.37ec54bf.css.map": "/GroceryApp/static/css/main.37ec54bf.css.map",
-    "main.6b433dc3.js.map": "/GroceryApp/static/js/main.6b433dc3.js.map"
+    "main.41bd618f.js.map": "/GroceryApp/static/js/main.41bd618f.js.map"
   },
   "entrypoints": [
     "static/css/main.37ec54bf.css",
-    "static/js/main.6b433dc3.js"
+    "static/js/main.41bd618f.js"
   ]
 }

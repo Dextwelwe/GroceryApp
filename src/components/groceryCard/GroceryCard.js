@@ -24,7 +24,6 @@ export default function GroceryCard({data,onDelete,onClick}) {
 async function removeGroceryCall() {
   let res = window.confirm(t('DELETE_GROCERY'));
   if (res) {
-    console.log(data.sharedWith)
     let result = await removeGrocery(data.owner, data.id, data.sharedWith);
     if (result.success) {
       onDelete && onDelete();
