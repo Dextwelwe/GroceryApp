@@ -8,6 +8,7 @@
   --thirdColor            : #a9bbdb;
   --fontColor             : #2E2E2E ;
   --subTextFontColor      : #757575;
+  --resetFilterBgColor    :   #E0E0E0;
   --infoBox               : transparent;
   --borderColorLoginInput : rgb(204, 219, 232);
   --border                : 2px solid  #E0E0E0;
@@ -46,6 +47,7 @@ button {
     width: 100%;
     box-sizing: border-box;
 }
+
 
 @font-face {
   font-family: 'Roboto';

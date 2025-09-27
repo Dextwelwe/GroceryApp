@@ -1,0 +1,75 @@
+.subHeaderWrapper{
+  width: 100%;
+  padding-bottom: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+}
+
+.filtersWrapper{
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  gap: 15px;
+  height:max-content;
+}
+
+.subFiltersContentWrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 10px;
+  padding-bottom: 5px;
+  gap: 15px;
+}
+
+.contentListLabel{
+    text-align: start;
+    font-size: 1.2rem;
+    font-weight: 300;
+    padding-top: 0px;
+    margin: 0;
+}
+
+.actionButton {
+    text-align: end;
+    font-size: 0.7rem;
+    color: black;
+    box-shadow: none;
+    cursor: pointer;
+    align-self: end;
+    width: max-content;
+    height: 25px;
+    border-color: transparent;
+    align-self: flex-start;
+}
+
+.MenuTitle{
+  display: flex;
+  flex-direction: column;
+}
+
+.completedInfo{
+  margin: 0;
+  display: inline-block;
+  font-size: 0.75rem;
+  padding-right: 10px;
+  text-align: start;
+}
+
+
+.resetFilterBgColor {
+  background-color: var(--resetFilterBgColor);
+}
+
+@media (min-width: 800px){
+  .filtersWrapper {
+        justify-content: center;
+    }
+}

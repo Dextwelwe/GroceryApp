@@ -5,7 +5,7 @@ import HeaderMenu from '../../components/header/header';
 import add from '../../assets/images/icons/addBig.svg'
 
 import iconBack from '../../assets/images/icons/back.svg'
-import iconReload from '../../assets/images/icons/reload.svg'
+import iconMore from '../../assets/images/icons/more.svg'
 import { useTranslation} from 'react-i18next';
 import { getGroceryById, removeOneCustomCategories, removeOneCustomStore, updateCustomCategories, updateCustomStores, subscribeGroceryItems } from '../../api/grocery';
 import { addItems, removeItem , setItemStatus} from '../../api/items';
@@ -32,12 +32,11 @@ function Grocery({goBack, groceryId}) {
   const [storesOptionsList, setStoresOptionsList] = useState([])
   const [filters, setFilters] = useState({category: defaultCategory,store: defaultStore,status: defaultStatus, sortBy: defaultSortBy});
   const optionsStatus = [ { value: "all", label: t('ALL') },{ value: "active", label: t('STATUS.ACTIVE') },{ value: "completed", label: t('STATUS.COMPLETED')}];
-  const optionsSortBy = [ { value: "az", label: t("FILTERS.A-Z") }, { value: "za", label: t("FILTERS.Z-A") }, {value :'status', label : t("STATUS_LBL")}];
+  const optionsSortBy = [ { value: "az", label: t("FILTERS.A-Z") }, { value: "za", label: t("FILTERS.Z-A") }];
   const itemActions = { remove : removeItemCall, changeStatus : changeItemStatus};
   const [itemsList, setItemsList] = useState([])
   let categoryRef = useRef(null);
   let storeRef = useRef(null);
-  let [isReload, setIsReload] = useState(false);
   
   const norm = s => (s ?? "").toString().trim().toLowerCase();
   
@@ -82,19 +81,20 @@ function Grocery({goBack, groceryId}) {
     });
 
     return [...filtered].sort((a, b) => {
-      const an = norm(a.name), bn = norm(b.name);
-      switch (filters.sortBy) {
-        case "az":     return an.localeCompare(bn);
-        case "za":     return bn.localeCompare(an);
-        case "status" :       
-        if (a.status === "completed" && b.status !== "completed") return 1;
-        if (a.status !== "completed" && b.status === "completed") return -1;
-        return 0;
-        default : return 0;
-      }
-    });
+    const an = norm(a.name);
+    const bn = norm(b.name);
+
+    if (a.status === "completed" && b.status !== "completed") return 1;
+    if (a.status !== "completed" && b.status === "completed") return -1;
+
+    switch (filters.sortBy) {
+      case "az": return an.localeCompare(bn);
+      case "za": return bn.localeCompare(an);
+      default:   return 0;
+    }
+});
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [grocery, filters, grocery?.items, isReload]);
+  }, [grocery, filters, grocery?.items]);
 
   async function getFullGrocery() {
     let g = await getGroceryById(groceryId);
@@ -249,11 +249,6 @@ async function handleStoreRemove(store) {
   return res;
 }
 
-const reloadItems = async() =>{
-  await getFullGrocery();
-  setIsReload(!isReload);
-}
-
 function validateInput(value) {
   if (value == null) return false;
 
@@ -276,21 +271,26 @@ function validateInput(value) {
 
   const headerGroceryTitle = grocery.getTitle();
   const headerGroceryNav = [{src : iconBack , alt : "Back", clickaction : goBack}]
+  const headerItems = [{src : iconMore, alt : "More", clickaction : ()=>alert('Nothing there yet')}]
 
   return (
     <div className='mainContentWrapper'>
-        <HeaderMenu title={headerGroceryTitle} headerNav={headerGroceryNav} />
-        <div className={gr.selectWrapper}>
-         <div className={gr.sortBy}>
+        <HeaderMenu title={headerGroceryTitle} headerNav={headerGroceryNav} headerItems={headerItems} />
+        <div className="subHeaderWrapper">
+         <div className="filtersWrapper">
                <Select label={t('FILTERS.CATEGORY')} options={optionsCategories} name="category" value={filters.category} onChange={handleFilterChange} doHighLight={filters.category !== defaultFilterValues.categories && true} />
                <Select label={t('STORE')} options={optionsStore} name="store"  value={filters.store} onChange={handleFilterChange} doHighLight={filters.store !== defaultFilterValues.categories && true} />
                <Select label={t('STATUS_LBL')} options={optionsStatus} name="status" value={filters.status} onChange={handleFilterChange} doHighLight={filters.status !== defaultFilterValues.categories && true}/>
                <Select label={t("SORT_BY")} options={optionsSortBy} name="sortBy" value={filters.sortBy} onChange={handleFilterChange} doHighLight={filters.sortBy !== defaultFilterValues.sortBy && true}/>
              </div>
-             <div className={gr.myGroceriesLabelWrapper}>
-              <button className={gr.resetFiltersBtn} onClick={resetFilters}>{t('RESET_FILTERS')}</button>
+             <div className="subFiltersContentWrapper">
+              <div className='MenuTitle'>
+              <h1 className="contentListLabel">{t('GROCERY_ITEMS')}</h1>
+              <p className='completedInfo'>{t('STATUS.COMPLETED')} : {grocery?.getCompletedItemsCount()}/{grocery?.items.length}</p>
+              </div>
+              <button className={`actionButton resetFilterBgColor`} onClick={resetFilters}>{t('RESET_FILTERS')}</button>
             </div>
-              <h1 className={gr.myGroceriesLabel}>{t('GROCERY_ITEMS')}</h1>
+             {/*<p className='d'>{t('LAST_UPDATED')} : {grocery.getLastUpdated()}</p> */}
         </div>      
         <div className={gr.list}>
             {(view.length ? view : []).map(item => (

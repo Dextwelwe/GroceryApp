@@ -1,4 +1,5 @@
 import gr from './Groceries.module.css'
+import '../../groceryCommon.css'
 
 import { useAuth } from '../../providers/AuthProvider';
 import { useTranslation} from 'react-i18next';
@@ -238,15 +239,15 @@ function resetFilters(){
     <div className='mainContentWrapper'>
      <HeaderMenu title={headerTitle} headerItems={headerItems} headerNav={null}/>
      {/* Filters */}
-     <div className={gr.selectWrapper}>
-      <div className={gr.sortBy}>
+     <div className="subHeaderWrapper">
+      <div className="filtersWrapper">
         <Select label={t('TYPE')} options={optionsLabel} name="label" value={filters.label} onChange={handleFilterChange} doHighLight={filters.label !== defaultFilterValues.categories && true} />
         <Select label={t('STATUS_LBL')} options={optionsStatus} name="status"  value={filters.status} onChange={handleFilterChange} doHighLight={filters.status !== defaultFilterValues.categories && true} />
         <Select label={t('SORT_BY')} options={optionsSortBy} name="sortBy" value={filters.sortBy} onChange={handleFilterChange}  doHighLight={filters.sortBy !== defaultFilterValues.sortBy && true}/>
       </div>
-      <div className={gr.myGroceriesLabelWrapper}>
-      <button className={gr.resetFiltersBtn} onClick={resetFilters}>{t("RESET_FILTERS")}</button>
-      <h1 className={gr.myGroceriesLabel}>{t('MY_GROCERIES')}</h1>
+      <div className="subFiltersContentWrapper">
+      <h1 className="contentListLabel">{t('MY_GROCERIES')}</h1>
+      <button className={`actionButton resetFilterBgColor`} onClick={resetFilters}>{t("RESET_FILTERS")}</button>
       </div>
     </div>
      {/* Grocery Cards */}

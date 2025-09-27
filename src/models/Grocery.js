@@ -7,7 +7,7 @@ export default class Grocery {
         this.dateCreation = data.dateCreation || "";
         this.repeatOn = data.repeatOn || "";
         this.items = data.items || [];
-        this.dateLastUpdated = data.dateLastUpdated || "";
+        this.dateLastUpdated = data.dateLastUpdated ? data.dateLastUpdated : "";
         this.status = data.status;
         this.sharedWith = data.sharedWith || []
         this.customCategories = data.customCategories || [];
@@ -23,7 +23,7 @@ export default class Grocery {
     }
 
     getCategoriesFromAddedItems() {
-        const unique = new Set(this.items.map(item => item.category));
+        const unique = new Set(this.items.map(item => item.category)); 
         const categories = Array.from(unique).map(c => ({desc: c, label: c, type: 'item'}));
         return categories;
     }
@@ -66,5 +66,27 @@ export default class Grocery {
     return [{value : "all", label: i18n.t("ALL")}, ...stores];
     }
 
+    getCompletedItemsCount(){
+        if (this.items.length > 0){
+            let count = 0;
+            this.items.forEach(element => {
+                if (element.status === "completed"){
+                    count++;
+                }
+            });
+            return count;
+        }
+        return -1;
+    }
+
+    getLastUpdated(){
+      return new Date(this.dateLastUpdated.seconds * 1000).toLocaleString("en-CA", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    }
 }
 

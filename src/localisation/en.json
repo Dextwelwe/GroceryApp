@@ -53,6 +53,7 @@
     "GROCERY_ITEMS" : "Grocery Items",
     "NEW_CATEGORY" : "New Category",
     "EDIT_CATEGORY" : "Edit Category",
-    "NO_DATE" : "No Date"
+    "NO_DATE" : "No Date",
+    "LAST_UPDATED" : "Last updated"
 
 }

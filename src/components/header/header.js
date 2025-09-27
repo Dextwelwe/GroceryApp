@@ -1,9 +1,9 @@
 
 import hm from './header.module.css'
 
-export default function Header({title, headerNav, headerItems}) {
+export default function Header({title, headerNav, headerItems, isPopup = false}) {
   return (
-     <div className={hm.headerWrapper}>
+     <div className={hm.headerWrapper} style={isPopup ? {height : '50px'} : {}}>
          <div className={hm.headerButtonsWrapper}>
             <div className={hm.headerNavTitleWrapper}>
                {headerNav && 

@@ -16,6 +16,7 @@ export async function saveNew(grocery) {
     type: grocery.type,
     status: "active",
     createdAt: serverTimestamp(),
+    dateLastUpdated : serverTimestamp(),
     sharedWith: sharedWith,
   };
 
