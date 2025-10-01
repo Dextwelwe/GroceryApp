@@ -6,6 +6,7 @@ import add from '../../assets/images/icons/addBig.svg'
 
 import iconBack from '../../assets/images/icons/back.svg'
 import iconMore from '../../assets/images/icons/more.svg'
+import closeIcon from '../../assets/images/icons/close.svg'
 import { useTranslation} from 'react-i18next';
 import { getGroceryById, removeOneCustomCategories, removeOneCustomStore, updateCustomCategories, updateCustomStores, subscribeGroceryItems } from '../../api/grocery';
 import { addItems, removeItem , setItemStatus} from '../../api/items';
@@ -17,6 +18,7 @@ import Popup from '../../components/popup/Popup'
 import AddItems from '../../components/add/addItems';
 import { useAuth } from '../../providers/AuthProvider';
 import Category from '../../components/categories/category';
+import Header from '../../components/header/header';
 
 function Grocery({goBack, groceryId}) {
   const { t } = useTranslation();
@@ -28,6 +30,7 @@ function Grocery({goBack, groceryId}) {
   const [defaultSortBy,setDefaultSortBy] = useLocalStorage('gSortBy','az');
   const defaultFilterValues = { categories : 'all', sortBy : "az"}
   const [isAddItemsPopup, setIsAddItemsPopup] = useState(false);
+  const [isSettingsPopup, setIsSettingsPopup] = useState(false);
   const [categoriesOptionsList, setCategoriesOptionsList] = useState([])
   const [storesOptionsList, setStoresOptionsList] = useState([])
   const [filters, setFilters] = useState({category: defaultCategory,store: defaultStore,status: defaultStatus, sortBy: defaultSortBy});
@@ -266,12 +269,14 @@ function validateInput(value) {
   }
   return false;
 }
+
  
  if (!grocery) return null; 
 
   const headerGroceryTitle = grocery.getTitle();
   const headerGroceryNav = [{src : iconBack , alt : "Back", clickaction : goBack}]
-  const headerItems = [{src : iconMore, alt : "More", clickaction : ()=>alert('Nothing there yet')}]
+  const headerItems = [{src : iconMore, alt : "More", clickaction : ()=> setIsSettingsPopup(!isSettingsPopup)}]
+  const settingsHeaderItems =  [{src : closeIcon, alt : "close", clickaction : ()=> setIsSettingsPopup(!isSettingsPopup)}]
 
   return (
     <div className='mainContentWrapper'>
@@ -312,6 +317,24 @@ function validateInput(value) {
             </form>  
             </Popup>
           }
+          {
+            isSettingsPopup &&
+            <div className='settingsPopupWrapper'>
+              {/*<h2 className='settingsTitle'>Settings</h2>*/}
+              <Header headerItems={settingsHeaderItems} title={"settings"} isPopup={false} />
+              <button className="settingsButton">Clear the list</button>
+              <button className="settingsButton">Complete Grocery</button>
+              <div className='settingsLanguageWrapper'>
+              <span className="settingsButton">Language</span>
+                <select className='settingsSelect' value="FRENCH">
+                  <option>French</option>
+                  <option>English</option>
+                  <option>Russian</option>
+                </select>
+                </div>
+            </div>
+          }
+          
           <img alt='Add' src={add} className={gr.addGrocery}onClick={()=>setIsAddItemsPopup(true)} />
         </div>
   )

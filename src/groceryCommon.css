@@ -63,6 +63,60 @@
   text-align: start;
 }
 
+.settingsPopupWrapper{
+  position: absolute;
+  z-index: 9999;
+  text-align: center;
+  width: 200px;
+  top: 5px;
+  right: 10px;
+  height: max-content;
+  padding-bottom: 20px;
+  background-color: white;
+  border: var(--border);
+}
+
+.settingsButton{
+  width: 100%;
+  text-align: start;
+  border: none;
+  border-top: var(--border);
+  font-family: var(--fontFamily);
+  height: 40px;
+  cursor: pointer;
+  background-color: var(--primaryColor);
+  padding: 5px;
+  font-weight: 100;
+  font-size: 0.95rem;
+  color: black;
+  box-sizing: border-box;
+  display: grid;
+  align-items: center;
+
+}
+
+.settingsTitle{
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+  padding: 10px 0px;
+}
+
+.settingsLanguageWrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--primaryColor);
+  height: 40px;
+}
+
+.settingsSelect {
+  border-top: 1px solid black;
+  height: 25px;
+  border: none;
+  border-radius: 0;
+}
+
 
 .resetFilterBgColor {
   background-color: var(--resetFilterBgColor);
