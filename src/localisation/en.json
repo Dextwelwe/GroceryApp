@@ -54,6 +54,10 @@
     "NEW_CATEGORY" : "New Category",
     "EDIT_CATEGORY" : "Edit Category",
     "NO_DATE" : "No Date",
-    "LAST_UPDATED" : "Last updated"
+    "LAST_UPDATED" : "Last updated",
+    "ACTIONS" : "Actions",
+    "COMPLETE_GROCERY" : "Complete Grocery",
+    "CLEAR_LIST" : "Clear list",
+    "LANGUAGE" : "Language"
 
 }

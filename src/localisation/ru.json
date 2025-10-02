@@ -49,10 +49,14 @@
     "ADD_ITEMS" : "Добавить продукты",
     "STORE" : "Магазин",
     "ITEMS" : "Продукты",
-    "MY_GROCERIES" : "Мои продукты",
-    "GROCERY_ITEMS" : "Продуктовые листы",
+    "MY_GROCERIES" : "Мои продуктовые листы",
+    "GROCERY_ITEMS" : "Список продуктов",
     "NEW_CATEGORY" : "Новая Категория",
     "EDIT_CATEGORY" : "Изменить категорию",
-    "NO_DATE" : "Без даты"
+    "NO_DATE" : "Без даты",
+    "ACTIONS": "Действия",
+    "COMPLETE_GROCERY": "Завершить покупки",
+    "CLEAR_LIST": "Очистить список",
+    "LANGUAGE": "Язык"
 
 }

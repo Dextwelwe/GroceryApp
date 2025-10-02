@@ -53,6 +53,12 @@
     "GROCERY_ITEMS" : "Articles d’épicerie",
     "NEW_CATEGORY" : "Nouvelle catégorie",
     "EDIT_CATEGORY" : "Modifier la catégorie",
-    "NO_DATE" : "Aucune date"
+    "NO_DATE" : "Aucune date",
+    "ACTIONS": "Actions",
+    "COMPLETE_GROCERY": "Compléter l’épicerie",
+    "CLEAR_LIST" :"Vider la liste",
+    "LANGUAGE": "Langue"
+    
+
 
 }

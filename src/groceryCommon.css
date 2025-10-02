@@ -71,43 +71,39 @@
   top: 5px;
   right: 10px;
   height: max-content;
-  padding-bottom: 20px;
   background-color: white;
   border: var(--border);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
 }
 
-.settingsButton{
+.settingsItem{
   width: 100%;
   text-align: start;
-  border: none;
-  border-top: var(--border);
+  border-color: transparent;
+  border-top: 0;
   font-family: var(--fontFamily);
   height: 40px;
   cursor: pointer;
-  background-color: var(--primaryColor);
+  background-color: white;
   padding: 5px;
   font-weight: 100;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: black;
   box-sizing: border-box;
   display: grid;
   align-items: center;
-
+  border-bottom: var(--border);
 }
 
-.settingsTitle{
-  font-size: 1rem;
-  font-weight: 500;
-  margin: 0;
-  padding: 10px 0px;
+.btborder0{
+  border-bottom: 0;
 }
 
 .settingsLanguageWrapper{
-  display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--primaryColor);
-  height: 40px;
+  display: flex;
 }
 
 .settingsSelect {
@@ -115,6 +111,9 @@
   height: 25px;
   border: none;
   border-radius: 0;
+  background-color: white;
+  border: var(--border);
+
 }
 
 

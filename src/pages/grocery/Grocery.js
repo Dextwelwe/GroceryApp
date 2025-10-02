@@ -21,7 +21,7 @@ import Category from '../../components/categories/category';
 import Header from '../../components/header/header';
 
 function Grocery({goBack, groceryId}) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const {userData} = useAuth();
   const [grocery, setGrocery] = useState(null);
   const [defaultCategory,setDefaultCategory] = useLocalStorage('gLabel','all');
@@ -270,6 +270,8 @@ function validateInput(value) {
   return false;
 }
 
+ const changeLanguage = (e) => i18n.changeLanguage(e.target.value);
+
  
  if (!grocery) return null; 
 
@@ -321,15 +323,15 @@ function validateInput(value) {
             isSettingsPopup &&
             <div className='settingsPopupWrapper'>
               {/*<h2 className='settingsTitle'>Settings</h2>*/}
-              <Header headerItems={settingsHeaderItems} title={"settings"} isPopup={false} />
-              <button className="settingsButton">Clear the list</button>
-              <button className="settingsButton">Complete Grocery</button>
-              <div className='settingsLanguageWrapper'>
-              <span className="settingsButton">Language</span>
-                <select className='settingsSelect' value="FRENCH">
-                  <option>French</option>
-                  <option>English</option>
-                  <option>Russian</option>
+              <Header headerItems={settingsHeaderItems} title={t('ACTIONS')} isPopup={false} />
+              <button className="settingsItem" onClick={()=>alert("Nothing there yet")}>{t('COMPLETE_GROCERY')}</button>
+              <button className="settingsItem" onClick={()=>alert("Nothing there yet")}>{t("CLEAR_LIST")} </button>
+              <div className='settingsLanguageWrapper settingsItem btborder0'>
+              <span>{t('LANGUAGE')}</span>
+                <select className='settingsSelect' defaultValue={i18n.language} onChange={changeLanguage}>
+                  <option value="en">English</option>
+                  <option value="fr">Français</option>
+                  <option value="ru">Русский</option>
                 </select>
                 </div>
             </div>

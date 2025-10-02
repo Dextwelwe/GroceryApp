@@ -72,7 +72,7 @@ export default function Login() {
            <div className='loginSelectWrapper'>
              <select ref={languageEl} className='loginInput loginSelect' onChange={handleLanguage} defaultValue={"en"} >
                <option  className='loginInput' value="en">English</option>
-               <option  className='loginInput' value="fr">Francais</option>
+               <option  className='loginInput' value="fr">Français</option>
                <option  className='loginInput' value="ru">Русский</option>
              </select>
            </div>
