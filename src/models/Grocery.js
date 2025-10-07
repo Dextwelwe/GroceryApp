@@ -76,7 +76,7 @@ export default class Grocery {
             });
             return count;
         }
-        return -1;
+        return 0;
     }
 
     getLastUpdated(){

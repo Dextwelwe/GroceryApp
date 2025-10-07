@@ -35,7 +35,7 @@
 
 .name {
     color: var(--fontColor);
-    font-weight: 500;
+    font-weight: 100;
     text-transform: capitalize;
     font-size: 1rem;
     margin-top: 1px;

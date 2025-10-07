@@ -146,6 +146,43 @@ export function subscribeGroceryItems(groceryId, onNext, onError) {
     }, onError );
 }
 
+export async function clearItemsList(groceryId){
+  try {
+    const itemsCol = collection(db, "groceries", groceryId, "items");
+    const itemsSnap = await getDocs(itemsCol);
+
+    if (itemsSnap.empty) {
+      return;
+    }
+
+    const batch = writeBatch(db);
+
+    itemsSnap.forEach(itemDoc => {
+      batch.delete(itemDoc.ref);
+    });
+
+    await batch.commit();
+
+  } catch (error) {
+    console.error("Error clearing items:", error);
+    return { success: false, error };
+  }
+}
+
+export async function updateGroceryStatus(ownerUid, groceryId, status) {
+  try {
+    const userGroceryRef = doc(db, "users", ownerUid, "groceries", groceryId);
+
+    await updateDoc(userGroceryRef, {
+      status: status
+    });
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating grocery status:", error);
+    return { success: false, error };
+  }
+}
+
 
 
 

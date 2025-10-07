@@ -8,7 +8,7 @@ import iconBack from '../../assets/images/icons/back.svg'
 import iconMore from '../../assets/images/icons/more.svg'
 import closeIcon from '../../assets/images/icons/close.svg'
 import { useTranslation} from 'react-i18next';
-import { getGroceryById, removeOneCustomCategories, removeOneCustomStore, updateCustomCategories, updateCustomStores, subscribeGroceryItems } from '../../api/grocery';
+import { getGroceryById, removeOneCustomCategories, removeOneCustomStore, updateGroceryStatus, clearItemsList, updateCustomCategories, updateCustomStores, subscribeGroceryItems } from '../../api/grocery';
 import { addItems, removeItem , setItemStatus} from '../../api/items';
 import ItemCard from '../../components/ItemCard/ItemCard';
 import Select from '../../components/select/Select';
@@ -40,6 +40,7 @@ function Grocery({goBack, groceryId}) {
   const [itemsList, setItemsList] = useState([])
   let categoryRef = useRef(null);
   let storeRef = useRef(null);
+  let settingsPopupRef = useRef(null);
   
   const norm = s => (s ?? "").toString().trim().toLowerCase();
   
@@ -61,6 +62,19 @@ function Grocery({goBack, groceryId}) {
   // eslint-disable-next-line
 }, [groceryId]);
 
+  useEffect(() => {
+    if (!isSettingsPopup) return; 
+
+    const handleClickOutside = (event) => {
+      if (settingsPopupRef.current && !settingsPopupRef.current.contains(event.target)) {
+        setIsSettingsPopup(!isSettingsPopup);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isSettingsPopup]);
 
   const optionsCategories = useMemo(
     () => [grocery?.getCategoryOptionAll(), ...(grocery?.getCategoriesFromAddedItems() ?? [])], [grocery]
@@ -271,6 +285,22 @@ function validateInput(value) {
 }
 
  const changeLanguage = (e) => i18n.changeLanguage(e.target.value);
+ 
+ const clearList = async() => {
+  let doClear = window.confirm(t('WARNINGS.CLEAR_LIST_WARN'));
+  if (doClear){
+    const groceryId = grocery.getId();
+    await clearItemsList(groceryId);
+  }
+ }
+
+ const completeGrocery = async() => {
+  let doComplete = window.confirm(t('WARNINGS.CLEAR_LIST_WARN'));
+  if (doComplete){
+    const groceryId = grocery.getId();
+    await updateGroceryStatus(userData.uid, groceryId, "completed");
+  }
+ }
 
  
  if (!grocery) return null; 
@@ -321,11 +351,11 @@ function validateInput(value) {
           }
           {
             isSettingsPopup &&
-            <div className='settingsPopupWrapper'>
+            <div className='settingsPopupWrapper' ref={settingsPopupRef}>
               {/*<h2 className='settingsTitle'>Settings</h2>*/}
               <Header headerItems={settingsHeaderItems} title={t('ACTIONS')} isPopup={false} />
-              <button className="settingsItem" onClick={()=>alert("Nothing there yet")}>{t('COMPLETE_GROCERY')}</button>
-              <button className="settingsItem" onClick={()=>alert("Nothing there yet")}>{t("CLEAR_LIST")} </button>
+              <button className="settingsItem" onClick={completeGrocery}>{t('COMPLETE_GROCERY')}</button>
+              <button className="settingsItem" onClick={clearList}>{t("CLEAR_LIST")} </button>
               <div className='settingsLanguageWrapper settingsItem btborder0'>
               <span>{t('LANGUAGE')}</span>
                 <select className='settingsSelect' defaultValue={i18n.language} onChange={changeLanguage}>
