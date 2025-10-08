@@ -8,6 +8,7 @@ function App() {
   const {user} = useAuth();
   const [page, setPage] = useState("groceries");
   const [groceryId, setGroceryId] = useState(null);
+  const [refresh, setRefresh] = useState(false);
 
   const goToGrocery = useCallback((id) => {
     if (id == null) return;
@@ -15,8 +16,10 @@ function App() {
     setPage(prev => (prev === 'grocery' ? prev : 'grocery'));
   }, []);
 
-  const goBack = useCallback(() => {
+  const goBack = useCallback((refreshPage=false) => {
+    refreshPage && setRefresh(!refresh);
     setPage(prev => (prev === 'groceries' ? prev : 'groceries'));
+    // eslint-disable-next-line
   }, []);
   
   if (!user?.email) return <Login />;
@@ -24,12 +27,12 @@ function App() {
   return (
      <>
      <div style={{ display: page === "groceries" ? "block" : "none" }}>
-      <Groceries goToGrocery={goToGrocery} />
+      <Groceries goToGrocery={goToGrocery} refresh={refresh} />
      </div>
      
       <div style={{ display: page === 'grocery' ? 'block' : 'none' }}>
         { groceryId &&
-          <Grocery key={groceryId ?? 'none'} groceryId={groceryId} goBack={goBack} />
+          <Grocery key={groceryId ?? 'none'} groceryId={groceryId} goBack={goBack}  />
         }
       </div>
      </>

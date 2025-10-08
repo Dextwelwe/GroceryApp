@@ -15,7 +15,8 @@
         "NO_ITEMS_TO_ADD" : "Aucun article à ajouter",
         "TOO_MANY_ITEMS" : "Trop d'articles. Maximum 15",
         "NO_ITEMS" : "Aucun item ne correspond à vos filtres.",
-        "CLEAR_LIST_WARN" : "Êtes-vous sûr de vouloir effacer la liste de courses ?"
+        "CLEAR_LIST_WARN" : "Êtes-vous sûr de vouloir effacer la liste de courses ?",
+        "COMPLETE_GROCERY_WARN": "Êtes-vous sûr de vouloir terminer la liste d'épicerie?"
     },
     "STATUS" : {
        "ACTIVE" : "En Cours",

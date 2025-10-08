@@ -179,7 +179,7 @@ export async function updateGroceryStatus(ownerUid, groceryId, status) {
       updateDoc(groceryRef, { status : status })
     ]);
     
-    return { success: true };
+    return { success: true} ;
   } catch (error) {
     console.error("Error updating grocery status:", error);
     return { success: false, error };

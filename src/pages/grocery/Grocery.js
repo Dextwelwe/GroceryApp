@@ -269,14 +269,18 @@ async function handleStoreRemove(store) {
   if (doClear){
     const groceryId = grocery.getId();
     await clearItemsList(groceryId);
+    setIsSettingsPopup(false);
   }
  }
 
  const completeGrocery = async() => {
-  let doComplete = window.confirm(t('WARNINGS.CLEAR_LIST_WARN'));
+  let doComplete = window.confirm(t('WARNINGS.COMPLETE_GROCERY_WARN'));
   if (doComplete){
     const groceryId = grocery.getId();
-    await updateGroceryStatus(userData.uid, groceryId, "completed");
+    let res = await updateGroceryStatus(userData.uid, groceryId, "completed");
+    if (res.success === true){
+      goBack(true);
+    }
   }
  }
 

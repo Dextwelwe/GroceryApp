@@ -16,7 +16,8 @@
         "TOO_MANY_ITEMS" : "Too many items. Max 15",
         "NO_ITEMS" : "No items match your filters.",
         "CLEAR_LIST_WARN" : "Are you sure you want to clear the grocery list?",
-        "COMPLETE_GROCERY_WARN" : "Are you sure you want to "
+        "COMPLETE_GROCERY_WARN": "Are you sure you want to complete the grocery list?"
+
     },
     "STATUS" :{
         "ACTIVE" : "Active",

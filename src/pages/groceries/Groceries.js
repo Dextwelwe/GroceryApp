@@ -22,7 +22,7 @@ import iconLogout from '../../assets/images/icons/logout.svg'
 import animLoading from '../../assets/images/animations/loading.gif'
 
 
-export default function Groceries({goToGrocery}) {
+export default function Groceries({goToGrocery,refresh}) {
   const { t } = useTranslation();
   const {userData, logout} = useAuth();
 
@@ -71,7 +71,7 @@ export default function Groceries({goToGrocery}) {
     loadGroceries();
   }
    // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [userData]);
+}, [userData, refresh]);
 
 const norm = (s) => (s || "").toString().trim().toLowerCase();
 
@@ -104,7 +104,7 @@ const view = useMemo(() => {
 
 if (!userData) return null;
 
-  const headerTitle = t('HI') + ", " + userData.firstName + " !";
+  const headerTitle = t('HI') + ", " + userData.firstName + "!";
   const toggleNewGrocery = () => {
     setIsAddNewGroceryVisible(!isAddNewGroceryVisible);
   }
