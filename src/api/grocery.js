@@ -172,10 +172,13 @@ export async function clearItemsList(groceryId){
 export async function updateGroceryStatus(ownerUid, groceryId, status) {
   try {
     const userGroceryRef = doc(db, "users", ownerUid, "groceries", groceryId);
+    const groceryRef = doc(db, "groceries", groceryId);
 
-    await updateDoc(userGroceryRef, {
-      status: status
-    });
+   await Promise.all([
+      updateDoc(userGroceryRef, { status : status}),
+      updateDoc(groceryRef, { status : status })
+    ]);
+    
     return { success: true };
   } catch (error) {
     console.error("Error updating grocery status:", error);
