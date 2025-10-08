@@ -7,7 +7,7 @@ import add from '../../assets/images/icons/addBig.svg'
 import iconBack from '../../assets/images/icons/back.svg'
 import iconMore from '../../assets/images/icons/more.svg'
 import closeIcon from '../../assets/images/icons/close.svg'
-import { useTranslation} from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import { getGroceryById, removeOneCustomCategories, removeOneCustomStore, updateGroceryStatus, clearItemsList, updateCustomCategories, updateCustomStores, subscribeGroceryItems } from '../../api/grocery';
 import { addItems, removeItem , setItemStatus} from '../../api/items';
 import ItemCard from '../../components/ItemCard/ItemCard';
