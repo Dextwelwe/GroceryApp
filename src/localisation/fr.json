@@ -59,7 +59,9 @@
     "ACTIONS": "Actions",
     "COMPLETE_GROCERY": "Compléter l’épicerie",
     "CLEAR_LIST" :"Vider la liste",
-    "LANGUAGE": "Langue"
+    "LANGUAGE": "Langue",
+    "LOGOUT": "Se déconnecter",
+    "FILTERS_LABEL": "Filtres"
     
 
 

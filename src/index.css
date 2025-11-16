@@ -1,11 +1,7 @@
 body {
   overscroll-behavior: none;
   margin: 0;
-  font-family: 'Roboto', 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-
-code {
-  font-family: 'Roboto','Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: var(--fontFamily);
 }
 
 html, body {

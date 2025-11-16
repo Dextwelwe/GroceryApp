@@ -59,6 +59,8 @@
     "ACTIONS": "Действия",
     "COMPLETE_GROCERY": "Завершить покупки",
     "CLEAR_LIST": "Очистить список",
-    "LANGUAGE": "Язык"
+    "LANGUAGE": "Язык",
+    "LOGOUT": "Выйти",
+    "FILTERS_LABEL": "Фильтры"
 
 }

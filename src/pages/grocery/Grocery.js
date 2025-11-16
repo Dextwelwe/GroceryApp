@@ -18,6 +18,9 @@ import AddItems from '../../components/add/addItems';
 import { useAuth } from '../../providers/AuthProvider';
 import Category from '../../components/categories/category';
 import SettingsMenu from '../../components/settings/settingsMenu';
+import Collapsible from '../../components/collapsible/collapsible';
+import filterIcon from '../../assets/images/icons/filter.svg'
+
 
 function Grocery({goBack, groceryId}) {
   const { t, i18n } = useTranslation();
@@ -33,6 +36,7 @@ function Grocery({goBack, groceryId}) {
   const [categoriesOptionsList, setCategoriesOptionsList] = useState([])
   const [storesOptionsList, setStoresOptionsList] = useState([])
   const [filters, setFilters] = useState({category: defaultCategory,store: defaultStore,status: defaultStatus, sortBy: defaultSortBy});
+  const [nbFilters, setNbFilters] = useState(0);
   const optionsStatus = [ { value: "all", label: t('ALL') },{ value: "active", label: t('STATUS.ACTIVE') },{ value: "completed", label: t('STATUS.COMPLETED')}];
   const optionsSortBy = [ { value: "az", label: t("FILTERS.A-Z") }, { value: "za", label: t("FILTERS.Z-A") }];
   const itemActions = { remove : removeItemCall, changeStatus : changeItemStatus};
@@ -57,9 +61,14 @@ function Grocery({goBack, groceryId}) {
     },
     (err) => console.error("Subscription error:", err)
   );
-  return () => unsub();
+  return () => unsub(); 
   // eslint-disable-next-line
 }, [groceryId]);
+
+  useEffect(() => {
+ setNumberOfFilters();
+ // eslint-disable-next-line
+}, [filters]);
 
   useEffect(() => {
   if (!isSettingsPopup) return;
@@ -174,6 +183,15 @@ function Grocery({goBack, groceryId}) {
     setDefaultSortBy("az");
     setFilters({category: 'all', store: 'all', status : "all", sortBy: 'az'});
  }
+
+ function setNumberOfFilters(){
+  let count = 0;
+  if (filters.category !== defaultFilterValues.categories) count++;
+  if (filters.sortBy !== defaultFilterValues.sortBy) count++;
+  if (filters.store !== defaultFilterValues.categories) count++;
+  if (filters.status !== 'all') count++;
+  setNbFilters(count);
+}
 
  async function saveItems(e){
    let isValid = true;
@@ -314,18 +332,20 @@ function validateInput(value) {
     <div className='mainContentWrapper'>
         <HeaderMenu title={headerGroceryTitle} headerNav={headerGroceryNav} headerItems={headerItems} />
         <div className="subHeaderWrapper">
+          <Collapsible title={`${t('FILTERS_LABEL')}${nbFilters > 0 ? ` (${nbFilters})` : ""}`} icon={filterIcon}>
          <div className="filtersWrapper">
                <Select label={t('FILTERS.CATEGORY')} options={optionsCategories} name="category" value={filters.category} onChange={handleFilterChange} doHighLight={filters.category !== defaultFilterValues.categories && true} />
                <Select label={t('STORE')} options={optionsStore} name="store"  value={filters.store} onChange={handleFilterChange} doHighLight={filters.store !== defaultFilterValues.categories && true} />
                <Select label={t('STATUS_LBL')} options={optionsStatus} name="status" value={filters.status} onChange={handleFilterChange} doHighLight={filters.status !== defaultFilterValues.categories && true}/>
                <Select label={t("SORT_BY")} options={optionsSortBy} name="sortBy" value={filters.sortBy} onChange={handleFilterChange} doHighLight={filters.sortBy !== defaultFilterValues.sortBy && true}/>
              </div>
+              <button className={`actionButton resetFilterBgColor resetFiltersButton`} onClick={resetFilters}>{t('RESET_FILTERS')}</button>
+             </Collapsible>
              <div className="subFiltersContentWrapper">
               <div className='MenuTitle'>
               <h1 className="contentListLabel">{t('GROCERY_ITEMS')}</h1>
               <p className='completedInfo'>{t('STATUS.COMPLETED')} : {grocery?.getCompletedItemsCount()}/{grocery?.items.length}</p>
               </div>
-              <button className={`actionButton resetFilterBgColor`} onClick={resetFilters}>{t('RESET_FILTERS')}</button>
             </div>
              {/*<p className='d'>{t('LAST_UPDATED')} : {grocery.getLastUpdated()}</p> */}
         </div>      
@@ -337,7 +357,7 @@ function validateInput(value) {
           </div>
           {
             isAddItemsPopup && 
-            <Popup title={t('ADD_ITEMS')} close={()=>setIsAddItemsPopup(false)} >
+            <Popup title={t('ADD_ITEMS')} close={()=>setIsAddItemsPopup(false)}>
             <form className={gr.form}>
               <label htmlFor="itemName" >{t('FILTERS.CATEGORY')}  :</label>
               <Category list={categoriesOptionsList} ref={categoryRef}  onUpdate={(cat)=>handleCategoryUpdate(cat)} onDelete={(cat)=>handleCategoryDelete(cat)} setCategory={()=>{return null}}/>

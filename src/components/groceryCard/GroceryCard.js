@@ -47,17 +47,20 @@ async function removeGroceryCall() {
          }
          </div>
         <div className={gc.dataWrapper} onClick={()=>onClick(data.id)}>
-            <div className={`${gc.label} ${data.type === "shared" ? gc.colorShared : gc.colorPersonal}`}>{data.type=== 'shared' ? t('FILTERS.SHARED') : t('FILTERS.PERSONAL')}</div>
             <div className={gc.name}>{data.name}</div> 
-              <div className={gc.date}>{data.date!==null ?parseDate(data.date) : t('NO_DATE')}</div> 
-            <div className={`${gc.status}`}><span className={data.status==="active" ? gc.colorCompleted : gc.colorPending}>{data.status === 'active' ? t('STATUS.ACTIVE') : t('STATUS.COMPLETED')}</span></div> 
+              
+            <div className={gc.date}> {data.date!==null ?parseDate(data.date) : t('NO_DATE')}</div> 
+            <div className={gc.labelsWrapper}>
+              <div className={`${gc.label} ${data.type === "shared" ? gc.colorShared : gc.colorPersonal}`}>{data.type=== 'shared' ? t('FILTERS.SHARED') : t('FILTERS.PERSONAL')}</div>
+              <div className={`${gc.label} ${data.status==="active" ? gc.colorCompleted : gc.colorPending}`}>{data.status === 'active' ? t('STATUS.ACTIVE') : t('STATUS.COMPLETED')}</div> 
+            </div>
        </div>
         <div className={gc.rightItems}>
          {rightItemsIcons && 
             rightItemsIcons.map((item, index) => (
-           <img  key={index} src={item.src} className={gc.menuIcon} onClick={item.clickaction} alt={item.alt} />
-             ))
-         }
+              <img  key={index} src={item.src} className={gc.menuIcon} onClick={item.clickaction} alt={item.alt} />
+            ))
+          }
         </div>
     </div>
   )

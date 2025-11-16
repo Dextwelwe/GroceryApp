@@ -8,9 +8,11 @@ const SettingsMenu = forwardRef(function SettingsMenu({ children, close }, ref) 
     const settingsHeaderItems =  [{src : closeIcon, alt : "close", clickaction : close}]
 
     return (
-        <div className='settingsPopupWrapper' ref={ref}>
-            <Header headerItems={settingsHeaderItems} title={t('ACTIONS')} isPopup={false} />
-            {children}
+        <div className='settingContainer'>
+            <div className='settingsPopupWrapper' ref={ref}>
+                <Header headerItems={settingsHeaderItems} title={t('ACTIONS')} isPopup={true} />
+                {children}
+            </div>
         </div>
     );
 });

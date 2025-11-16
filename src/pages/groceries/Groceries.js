@@ -15,11 +15,15 @@ import Select from '../../components/select/Select';
 import Popup from '../../components/popup/Popup';
 import HeaderMenu from '../../components/header/header';
 import GroceryCard from '../../components/groceryCard/GroceryCard';
+import Collapsible from '../../components/collapsible/collapsible';
 
 // Icons
 import add from '../../assets/images/icons/addBig.svg'
-import iconLogout from '../../assets/images/icons/logout.svg'
+import iconLogout from '../../assets/images/icons/exit.svg'
 import animLoading from '../../assets/images/animations/loading.gif'
+import filterIcon from '../../assets/images/icons/filter.svg'
+import listIcon from '../../assets/images/icons/list.svg'
+
 
 
 export default function Groceries({goToGrocery,refresh}) {
@@ -37,6 +41,7 @@ export default function Groceries({goToGrocery,refresh}) {
   const [defaultStatus,setDefaultStatus] = useLocalStorage('FStatus','all');
   const [defaultSortBy,setDefaultSortBy] = useLocalStorage('FSortBy','newest');
   const [filters, setFilters] = useState({label: defaultLabel, status: defaultStatus, sortBy: defaultSortBy});
+  const [nbFilters, setNbFilters] = useState(0);
   const defaultFilterValues = { categories : 'all', sortBy : "newest"}
 
   let nameRef = useRef(null);
@@ -45,7 +50,7 @@ export default function Groceries({goToGrocery,refresh}) {
 
 
   const STATUS_MAP = { active: "active", completed: "completed"};
-  const headerItems =  [{src : iconLogout , alt : "Logout", clickaction : logout}]
+  const headerItems =  [{src : iconLogout , alt : "Logout", clickaction : logout, buttonLabel :t('LOGOUT')}];
 
   const optionsLabel = [
    { value: "all", label: t('FILTERS.ALL') },
@@ -70,8 +75,9 @@ export default function Groceries({goToGrocery,refresh}) {
   if (userData) {
     loadGroceries();
   }
+ setNumberOfFilters();
    // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [userData, refresh]);
+}, [userData, refresh, filters]);
 
 const norm = (s) => (s || "").toString().trim().toLowerCase();
 
@@ -228,11 +234,20 @@ const openGrocery = (id) => {
   goToGrocery(id);
 }
 
+function setNumberOfFilters(){
+  let count = 0;
+  if (filters.label !== defaultFilterValues.categories) count++;
+  if (filters.status !== defaultFilterValues.categories) count++;
+  if (filters.sortBy !== defaultFilterValues.sortBy) count++;
+  setNbFilters(count);
+}
+
 function resetFilters(){
   setDefaultLabel("all");
   setDefaultStatus("all");
   setDefaultSortBy("newest");
   setFilters({label: 'all', status: 'all', sortBy: 'newest'});
+  setNbFilters(0);
 }
 
   return (
@@ -240,14 +255,17 @@ function resetFilters(){
      <HeaderMenu title={headerTitle} headerItems={headerItems} headerNav={null}/>
      {/* Filters */}
      <div className="subHeaderWrapper">
+      <Collapsible title={`${t('FILTERS_LABEL')}${nbFilters > 0 ? ` (${nbFilters})` : ""}`} icon={filterIcon}>
       <div className="filtersWrapper">
         <Select label={t('TYPE')} options={optionsLabel} name="label" value={filters.label} onChange={handleFilterChange} doHighLight={filters.label !== defaultFilterValues.categories && true} />
         <Select label={t('STATUS_LBL')} options={optionsStatus} name="status"  value={filters.status} onChange={handleFilterChange} doHighLight={filters.status !== defaultFilterValues.categories && true} />
         <Select label={t('SORT_BY')} options={optionsSortBy} name="sortBy" value={filters.sortBy} onChange={handleFilterChange}  doHighLight={filters.sortBy !== defaultFilterValues.sortBy && true}/>
       </div>
+      <button className={`actionButton resetFilterBgColor resetFiltersButton`} onClick={resetFilters}>{t("RESET_FILTERS")}</button>
+        </Collapsible>
       <div className="subFiltersContentWrapper">
+      <img src={listIcon} alt="list icon" className={gr.listIcon}/>
       <h1 className="contentListLabel">{t('MY_GROCERIES')}</h1>
-      <button className={`actionButton resetFilterBgColor`} onClick={resetFilters}>{t("RESET_FILTERS")}</button>
       </div>
     </div>
      {/* Grocery Cards */}

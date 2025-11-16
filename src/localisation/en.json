@@ -52,7 +52,7 @@
     "ADD_ITEMS" : "Add items",
     "STORE" : "Store",
     "ITEMS" : "Items",
-    "MY_GROCERIES" : "My groceries",
+    "MY_GROCERIES" : "My Grocery lists",
     "GROCERY_ITEMS" : "Grocery Items",
     "NEW_CATEGORY" : "New Category",
     "EDIT_CATEGORY" : "Edit Category",
@@ -61,6 +61,8 @@
     "ACTIONS" : "Actions",
     "COMPLETE_GROCERY" : "Complete Grocery",
     "CLEAR_LIST" : "Clear list",
-    "LANGUAGE" : "Language"
+    "LANGUAGE" : "Language",
+    "LOGOUT" : "Logout",
+    "FILTERS_LABEL" : "Filters"
 
 }
