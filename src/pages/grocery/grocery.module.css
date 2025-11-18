@@ -25,6 +25,12 @@
     padding-bottom: 120px;
 }
 
+.lastUpdated{
+  font-size: 0.75rem;
+  margin: 0;
+  margin-left: 45px;
+}
+
 .listIcon{
     height: 25px;
     width: 25px;

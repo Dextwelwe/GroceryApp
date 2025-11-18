@@ -6,8 +6,12 @@
     border-bottom : var(--border);
     height: max-content;
     width: 100%;
-    padding: 10px 10px;
-    padding-right: 20px;
+    padding: 14px 18px;
+    background-color:  #F4F4EF;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    cursor: pointer;
+    margin-bottom: 12px;
+    border-radius: 12px;
 }
 
 .dataWrapper{
@@ -15,22 +19,58 @@
 }
 
 .name {
-    color: var(--fontColor);
-    font-weight: 100;
+    color: #222;
+    font-weight: 500;
     text-transform: capitalize;
-    font-size: 1.1rem;
-    margin-top: 1px;
+    font-size: 1rem;
+}
+
+.nameWrapper{
     margin-left: 2px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom : 8px;
 }
 
 .category{
-    font-size: 0.75rem;
     margin-left: 2px;
+    border-radius:6px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items : center;
+    gap: 5px;
+    width: max-content;
+    height: 26px;
+    margin-bottom: 8px;
+    color :#666;
 }
 
 .store {
     margin-left: 2px;
-    font-size: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items : center;
+    gap: 5px;
+    width: max-content;
+    color : #888;
+
+}
+
+.dataLabel{
+    font-size: 0.82rem;   
+}
+
+.labelsWrapper{
+    display: flex;
+    justify-content: flex-start;
+    gap: 5px;
+}
+
+.icon{
+    height: 25px;
+    width: 25px;
 }
 
 .menuIcon{

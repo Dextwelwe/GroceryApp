@@ -3,6 +3,9 @@ import remove from '../../assets/images/icons/delete.svg'
 import check from '../../assets/images/icons/check.svg'
 import redo from '../../assets/images/icons/redo.svg'
 import { useTranslation} from 'react-i18next';
+import categoryIcon from '../../assets/images/icons/category.svg';
+import storeIcon from '../../assets/images/icons/store.svg';
+import noteIcon from '../../assets/images/icons/name.svg'
 
 export default function ItemCard({data,actions}) {
     const { t } = useTranslation();
@@ -21,7 +24,7 @@ export default function ItemCard({data,actions}) {
     }
     
   return (
-     <div className={ic.groceryCardWrapper} style={{backgroundColor : data.status === "active" ? 'transparent' : '#C8E6C9'}}>
+     <div className={ic.groceryCardWrapper} style={{backgroundColor : data.status === "active" ? '#F4F4EF' : '#C8E6C9'}}>
             <div className={ic.leftItems}>
             {leftItemsIcons.length > 0 && 
                 leftItemsIcons.map((item, index) => (
@@ -30,9 +33,18 @@ export default function ItemCard({data,actions}) {
              }
              </div>
             <div className={ic.dataWrapper} onClick={()=>""}>
-                <div className={ic.name}>{data.name}</div> 
-                <div className={ic.category}>Category : {data.category}</div> 
-                <div className={ic.store}> Store : {data.store}</div> 
+                 <div className={ic.nameWrapper}>
+                  <img alt="Name Icon" src={noteIcon} className={ic.icon} />
+                  <span className={ic.name}>{data.name}</span>
+                 </div>
+                <div className={ic.category}>
+                  <img alt="Category Icon" src={categoryIcon} className={ic.icon} />
+                  <span className={ic.dataLabel}>{data.category}</span>
+                  </div> 
+                <div className={ic.store}>
+                  <img alt="Store Icon" src={storeIcon} className={ic.icon} />
+                  <span className={ic.dataLabel}>{data.store}</span>
+                  </div>
            </div>
             <div className={ic.rightItems}>
              {rightItemsIcons && 

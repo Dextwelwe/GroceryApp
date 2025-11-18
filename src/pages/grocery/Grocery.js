@@ -354,8 +354,8 @@ function validateInput(value) {
                 <div className={gr.completedInfoWrapper}>
                   <p className='completedInfo'>{t('STATUS.COMPLETED')} : {grocery?.getCompletedItemsCount()}/{grocery?.items.length}</p>
                 </div>
+             {<p className={gr.lastUpdated}>{t('LAST_UPDATED')} : {grocery.getLastUpdated()}</p> }
               </div>
-             {/*<p className='d'>{t('LAST_UPDATED')} : {grocery.getLastUpdated()}</p> */}
         </div>      
         <div className={gr.list}>
             {(view.length ? view : []).map(item => (
