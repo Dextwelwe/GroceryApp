@@ -2,7 +2,7 @@ import {useEffect, useState, useMemo, useRef, memo } from 'react'
 import gr from './grocery.module.css'
 
 import HeaderMenu from '../../components/header/header';
-import add from '../../assets/images/icons/addBig.svg'
+import add from '../../assets/images/icons/add.svg'
 
 import iconBack from '../../assets/images/icons/back.svg'
 import iconMore from '../../assets/images/icons/more.svg'
@@ -20,6 +20,11 @@ import Category from '../../components/categories/category';
 import SettingsMenu from '../../components/settings/settingsMenu';
 import Collapsible from '../../components/collapsible/collapsible';
 import filterIcon from '../../assets/images/icons/filter.svg'
+import listIcon from '../../assets/images/icons/listItems.svg'
+import iconLanguage from '../../assets/images/icons/lang.svg'
+import iconErase from '../../assets/images/icons/erase.svg'
+import completeGroceryIcon from '../../assets/images/icons/completeGroceryIcon.svg'
+
 
 
 function Grocery({goBack, groceryId}) {
@@ -326,7 +331,7 @@ function validateInput(value) {
 
   const headerGroceryTitle = grocery.getTitle();
   const headerGroceryNav = [{src : iconBack , alt : "Back", clickaction : goBack}]
-  const headerItems = [{src : iconMore, alt : "More", clickaction : ()=> setIsSettingsPopup(!isSettingsPopup)}]
+  const headerItems = [{src : iconMore, alt : "Options", clickaction : ()=> setIsSettingsPopup(!isSettingsPopup), buttonLabel :t('OPTIONS')} ]
 
   return (
     <div className='mainContentWrapper'>
@@ -341,12 +346,15 @@ function validateInput(value) {
              </div>
               <button className={`actionButton resetFilterBgColor resetFiltersButton`} onClick={resetFilters}>{t('RESET_FILTERS')}</button>
              </Collapsible>
-             <div className="subFiltersContentWrapper">
               <div className='MenuTitle'>
-              <h1 className="contentListLabel">{t('GROCERY_ITEMS')}</h1>
-              <p className='completedInfo'>{t('STATUS.COMPLETED')} : {grocery?.getCompletedItemsCount()}/{grocery?.items.length}</p>
+                <div className={gr.listTitleWrapper}>
+                  <img src={listIcon} alt="list icon" className={gr.listIcon}/>
+                  <h1 className="contentListLabel">{t('GROCERY_ITEMS')}</h1>
+                </div>
+                <div className={gr.completedInfoWrapper}>
+                  <p className='completedInfo'>{t('STATUS.COMPLETED')} : {grocery?.getCompletedItemsCount()}/{grocery?.items.length}</p>
+                </div>
               </div>
-            </div>
              {/*<p className='d'>{t('LAST_UPDATED')} : {grocery.getLastUpdated()}</p> */}
         </div>      
         <div className={gr.list}>
@@ -359,7 +367,7 @@ function validateInput(value) {
             isAddItemsPopup && 
             <Popup title={t('ADD_ITEMS')} close={()=>setIsAddItemsPopup(false)}>
             <form className={gr.form}>
-              <label htmlFor="itemName" >{t('FILTERS.CATEGORY')}  :</label>
+              <label htmlFor="itemName">{t('FILTERS.CATEGORY')}  :</label>
               <Category list={categoriesOptionsList} ref={categoryRef}  onUpdate={(cat)=>handleCategoryUpdate(cat)} onDelete={(cat)=>handleCategoryDelete(cat)} setCategory={()=>{return null}}/>
               <label htmlFor="itemStore" >{t("STORE")} :</label>
               <Category list={storesOptionsList} ref={storeRef} onUpdate={(store)=>handleStoreUpdate(store)} onDelete={(store)=>handleStoreRemove(store)} setCategory={()=>{return null}}/>
@@ -372,10 +380,19 @@ function validateInput(value) {
           {
             isSettingsPopup &&
               <SettingsMenu ref={settingsPopupRef} close={()=>setIsSettingsPopup(false)}>
-                <button className="settingsItem" onClick={completeGrocery}>{t('COMPLETE_GROCERY')}</button>
-                <button className="settingsItem" onClick={clearList}>{t("CLEAR_LIST")} </button>
-                <div className='settingsLanguageWrapper settingsItem btborder0'>
-                  <span>{t('LANGUAGE')}</span>
+                <div className='SettingItemWrapper settingsBtBorder' onClick={completeGrocery}>
+                  <img src={completeGroceryIcon} alt="Erase Icon" className="settingsIcon" />
+                  <div className="settingsItem ">{t('COMPLETE_GROCERY')}</div>
+                </div>
+                <div className='SettingItemWrapper settingsBtBorder' onClick={clearList}>
+                  <img src={iconErase} alt="Erase Icon" className="settingsIcon" />
+                  <div className="settingsItem" >{t("CLEAR_LIST")} </div>
+                </div>
+                <div className='settingsLanguageWrapper'>
+                  <div className='SettingItemWrapper'>
+                    <img src={iconLanguage} alt="Language Icon" className="settingsIcon" />
+                    <span className="settingsItem">{t('LANGUAGE')}</span>
+                  </div>
                   <select className='settingsSelect' defaultValue={i18n.language} onChange={changeLanguage}>
                     <option value="en">English</option>
                     <option value="fr">Français</option>

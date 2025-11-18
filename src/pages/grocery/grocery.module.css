@@ -25,12 +25,34 @@
     padding-bottom: 120px;
 }
 
+.listIcon{
+    height: 25px;
+    width: 25px;
+}
+
+.listTitleWrapper{
+    padding: 10px 10px;
+    margin-top: 6px;
+    padding-bottom: 0px;
+    margin-bottom: -2px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.completedInfoWrapper{
+    padding: 0px 45px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
 .addGrocery{
     position: absolute;
-    bottom: 30px;
+    bottom: 35px;
     right: 20px;
-    height: 50px;
-    width: 50px;
+    height: 65px;
+    width: 65px;
     cursor: pointer;
 }
 

@@ -59,10 +59,11 @@
     "NO_DATE" : "No Date",
     "LAST_UPDATED" : "Last updated",
     "ACTIONS" : "Actions",
-    "COMPLETE_GROCERY" : "Complete Grocery",
-    "CLEAR_LIST" : "Clear list",
+    "COMPLETE_GROCERY" : "End Grocery",
+    "CLEAR_LIST" : "Clear grocery list",
     "LANGUAGE" : "Language",
     "LOGOUT" : "Logout",
-    "FILTERS_LABEL" : "Filters"
+    "FILTERS_LABEL" : "Filters",
+    "OPTIONS" : "Options"
 
 }

@@ -16,18 +16,21 @@ import Popup from '../../components/popup/Popup';
 import HeaderMenu from '../../components/header/header';
 import GroceryCard from '../../components/groceryCard/GroceryCard';
 import Collapsible from '../../components/collapsible/collapsible';
+import SettingsMenu from '../../components/settings/settingsMenu';
+
 
 // Icons
-import add from '../../assets/images/icons/addBig.svg'
+import add from '../../assets/images/icons/add.svg'
 import iconLogout from '../../assets/images/icons/exit.svg'
 import animLoading from '../../assets/images/animations/loading.gif'
 import filterIcon from '../../assets/images/icons/filter.svg'
 import listIcon from '../../assets/images/icons/list.svg'
-
+import iconMore from '../../assets/images/icons/more.svg'
+import iconLanguage from '../../assets/images/icons/lang.svg'
 
 
 export default function Groceries({goToGrocery,refresh}) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const {userData, logout} = useAuth();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -36,6 +39,7 @@ export default function Groceries({goToGrocery,refresh}) {
   const [usersEmailList, setUsersEmailList] = useState([]);
   const [isAddNewGroceryVisible, setIsAddNewGroceryVisible] = useState(false);
   const [isDateDisabled, setIsDateDisabled] = useState(false);
+  const [isSettingsPopup, setIsSettingsPopup] = useState(false);
 
   const [defaultLabel,setDefaultLabel] = useLocalStorage('FLabel','all');
   const [defaultStatus,setDefaultStatus] = useLocalStorage('FStatus','all');
@@ -44,13 +48,14 @@ export default function Groceries({goToGrocery,refresh}) {
   const [nbFilters, setNbFilters] = useState(0);
   const defaultFilterValues = { categories : 'all', sortBy : "newest"}
 
+  let settingsPopupRef = useRef(null);
   let nameRef = useRef(null);
   let dateRef = useRef(null);
   let usersRef = useRef(null);
 
 
   const STATUS_MAP = { active: "active", completed: "completed"};
-  const headerItems =  [{src : iconLogout , alt : "Logout", clickaction : logout, buttonLabel :t('LOGOUT')}];
+  const headerItems =  [{src : iconMore , alt : "Icon More", clickaction : ()=> setIsSettingsPopup(!isSettingsPopup), buttonLabel :t('OPTIONS')}];
 
   const optionsLabel = [
    { value: "all", label: t('FILTERS.ALL') },
@@ -78,6 +83,19 @@ export default function Groceries({goToGrocery,refresh}) {
  setNumberOfFilters();
    // eslint-disable-next-line react-hooks/exhaustive-deps
 }, [userData, refresh, filters]);
+
+  useEffect(() => {
+  if (!isSettingsPopup) return;
+
+  const handleClickOutside = (event) => {
+    if (settingsPopupRef.current && !settingsPopupRef.current.contains(event.target)) {
+      setIsSettingsPopup(false);
+    }
+  };
+
+  document.addEventListener('mousedown', handleClickOutside);
+  return () => document.removeEventListener('mousedown', handleClickOutside);
+}, [isSettingsPopup]);
 
 const norm = (s) => (s || "").toString().trim().toLowerCase();
 
@@ -250,6 +268,9 @@ function resetFilters(){
   setNbFilters(0);
 }
 
+ const changeLanguage = (e) => i18n.changeLanguage(e.target.value);
+
+
   return (
     <div className='mainContentWrapper'>
      <HeaderMenu title={headerTitle} headerItems={headerItems} headerNav={null}/>
@@ -306,6 +327,27 @@ function resetFilters(){
          </form>  
        </Popup>
      }
+     {
+      isSettingsPopup &&
+        <SettingsMenu ref={settingsPopupRef} close={()=>setIsSettingsPopup(false)}>
+          <div className="SettingItemWrapper settingsBtBorder">
+            <img src={iconLogout} alt="Logout Icon" className="settingsIcon" />
+            <button className="settingsItem" onClick={logout}>{t('LOGOUT')}</button>
+          </div>
+          <div className='settingsLanguageWrapper'>
+            <div className="SettingItemWrapper">
+              <img src={iconLanguage} alt="Logout Icon" className="settingsIcon" />
+              <span className="settingsItem">{t('LANGUAGE')}</span>
+            </div>
+            <select name='settingsSelect' className='settingsSelect' defaultValue={i18n.language} onChange={changeLanguage}>
+              <option value="en">English</option>
+              <option value="fr">Français</option>
+              <option value="ru">Русский</option>
+            </select>
+          </div>
+        </SettingsMenu>
+          }
+
     {/* Add Grocery Button */}
      <img alt='Add' src={add} className={gr.addGrocery}onClick={toggleNewGrocery} />
     </div> 

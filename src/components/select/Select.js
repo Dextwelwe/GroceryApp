@@ -3,8 +3,9 @@ import s from './Select.module.css'
 export default function Select({label, options, name, onChange, value, doHighLight=false}) {
   
   const hightlitedStyle = {
-    backgroundColor : '#F5F5F5',
-    border : '1px solid grey',
+    backgroundColor : '#E3F2FD',
+    border : '1px solid  #64B5F6',
+    color : '#0D47A1',
     fontWeight: '500'
   }
 

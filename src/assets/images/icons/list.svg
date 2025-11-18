@@ -1,7 +1,7 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
-<svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg fill="#333" width="800px" height="800px" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg" stroke="#333">
 <g id="SVGRepo_bgCarrier" stroke-width="0"/>
 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
-<g id="SVGRepo_iconCarrier"> <g id="File / Note_Edit"> <path id="Vector" d="M10.0002 4H7.2002C6.08009 4 5.51962 4 5.0918 4.21799C4.71547 4.40973 4.40973 4.71547 4.21799 5.0918C4 5.51962 4 6.08009 4 7.2002V16.8002C4 17.9203 4 18.4801 4.21799 18.9079C4.40973 19.2842 4.71547 19.5905 5.0918 19.7822C5.5192 20 6.07899 20 7.19691 20H16.8031C17.921 20 18.48 20 18.9074 19.7822C19.2837 19.5905 19.5905 19.2839 19.7822 18.9076C20 18.4802 20 17.921 20 16.8031V14M16 5L10 11V14H13L19 8M16 5L19 2L22 5L19 8M16 5L19 8" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/> </g> </g>
+<g id="SVGRepo_iconCarrier"> <path d="M232.48535,55.51465l-32-32a12.00062,12.00062,0,0,0-16.9707,0l-96,96A12.002,12.002,0,0,0,84,128v32a12.00028,12.00028,0,0,0,12,12h32a11.99907,11.99907,0,0,0,8.48535-3.51465l96-96A11.99973,11.99973,0,0,0,232.48535,55.51465ZM192,48.97046,207.0293,64,196,75.0293,180.9707,60ZM123.0293,148H108V132.97046L164,76.9707,179.0293,92ZM228,128.56836V208a20.0226,20.0226,0,0,1-20,20H48a20.0226,20.0226,0,0,1-20-20V48A20.02244,20.02244,0,0,1,48,28h79.43164a12,12,0,0,1,0,24H52V204H204V128.56836a12,12,0,0,1,24,0Z"/> </g>
 </svg>

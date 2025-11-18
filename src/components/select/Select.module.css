@@ -16,7 +16,7 @@ max-width: 250px;
     border-radius: 5px;
     cursor: pointer;
     text-transform: capitalize;
-    background-color: white;
+    background-color: #F0F3ED;
     text-overflow: ellipsis;
 }
 
