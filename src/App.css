@@ -1,6 +1,6 @@
 :root {
   /* COLORS */
-  --modalBackGround       : #F6F8F4;
+  --modalBackGround       : #F8FAF7;
   --buttonColor           : #93aad2;
   --buttonFocusColor      : #859fcc;
   --primaryColor          : #F0F4F8;
@@ -74,13 +74,20 @@ button {
   font-family: 'Lato';
   src: url('assets/fonts/Lato/Lato-Black.ttf') format('truetype');
   font-weight: 700;
-  font-style: normal;
+  font-style: bold;
 }
 
 @font-face {
   font-family: 'Lato';
   src: url('assets/fonts/Lato/Lato-Regular.ttf') format('truetype');
   font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Lato';
+  src: url('assets/fonts/Lato/Lato-Light.ttf') format('truetype');
+  font-weight: 100;
   font-style: normal;
 }
 

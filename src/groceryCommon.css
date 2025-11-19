@@ -39,7 +39,7 @@
 .contentListLabel{
     text-align: start;
     font-size: 1.1rem;
-    font-weight: 300;
+    font-weight: 500;
     padding-top: 0px;
     margin: 0;
 }
@@ -101,7 +101,7 @@
   cursor: pointer;
   background-color: white;
   padding: 5px;
-  font-weight: 100;
+  font-weight: 500;
   font-size: 0.9rem;
   color: black;
   box-sizing: border-box;

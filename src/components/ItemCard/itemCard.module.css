@@ -7,6 +7,7 @@
     height: max-content;
     width: 100%;
     padding: 14px 18px;
+    padding-left: 10px;
     background-color:  #F4F4EF;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     cursor: pointer;
@@ -35,7 +36,7 @@
 
 .category{
     margin-left: 2px;
-    border-radius:6px;
+    border-radius:20px;
     box-sizing: border-box;
     display: flex;
     justify-content: space-between;
@@ -43,8 +44,10 @@
     gap: 5px;
     width: max-content;
     height: 26px;
-    margin-bottom: 8px;
-    color :#666;
+    background: #FFF4D6;
+    color: #8A5A00;
+    padding: 0px 10px;
+  
 }
 
 .store {
@@ -54,21 +57,37 @@
     align-items : center;
     gap: 5px;
     width: max-content;
-    color : #888;
-
+    background: #E6EEF8;
+    color: #2D4F90;
+    border-radius: 20px;
+    padding: 0px 10px;
+    height: 26px;
 }
 
 .dataLabel{
     font-size: 0.82rem;   
 }
 
+.rightItems{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
 .labelsWrapper{
     display: flex;
     justify-content: flex-start;
+    align-items: center;
     gap: 5px;
 }
 
 .icon{
+    height: 20px;
+    width: 20px;
+}
+
+.nameIcon{
     height: 25px;
     width: 25px;
 }
