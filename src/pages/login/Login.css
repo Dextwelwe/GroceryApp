@@ -31,6 +31,7 @@
   padding-right: 5px;
   -webkit-appearance: none; 
   -moz-appearance: none;
+  border-radius: 10px;
 }
 
 .loginSelectWrapper::after {
@@ -49,6 +50,7 @@
     width: 300px;
     border: var(--border);
     background-color: var(--modalBackGround);
+    border-radius: 10px;
 }
 
 
@@ -70,6 +72,7 @@
     border-color: var(--borderColorLoginInput);
     background-color:  var(--buttonColor);
     height: var(--inputHeight);
+    border-radius: 10px;
 }
 
 .loginButton:hover,

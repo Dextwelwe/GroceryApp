@@ -2,7 +2,7 @@
     "LOGIN" : {
         "LOGIN_NAME" : "Username",
         "LOGIN_PASSWORD" : "Password",
-        "SIGN_IN" : "Sign In",
+        "SIGN_IN" : "Sign in",
         "LOGIN_AS_GUEST" : "Login as Guest"
     },
     "WARNINGS" : {
