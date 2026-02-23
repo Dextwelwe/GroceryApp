@@ -42,10 +42,11 @@
 
 .addUserButton{
     cursor: pointer;
-    width: 50px;
+    width: 60px;
     border: none;
-    background-color: #4880ad;  
+    background-color: #2196F3;  
     color: white;
+    border-radius: 15px;
 }
 
 .loadingAnimation{
@@ -54,18 +55,6 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-}
-
-.saveButton{
-    cursor: pointer;
-    height: var(--inputHeight);
-    width: 100%;
-    border: none;
-    color: white;
-    font-family: var(--fontFamily);
-    background-color: #2196F3;
-    margin-top: 50px;
-    font-weight: 500;
 }
 
 .empty{
@@ -100,6 +89,7 @@
 input {
     border: var(--border);
     height: var(--inputHeight) !important;
+    border-radius: 10px;
 }
 label{
     font-size: 0.9rem;
@@ -120,8 +110,8 @@ label{
     margin: 0;
     padding: 0;
     width: 30px;
-    accent-color: #64B5F6;  
-    border-radius: 0px; 
+    accent-color: #2196F3;  
+    border-radius: 10px; 
 }
 
 .addDateCheckboxWrapper{

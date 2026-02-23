@@ -16,6 +16,6 @@
     background-color: var(--modalBackGround);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
     border : var(--border);
-    border-radius: 2px;
+    border-radius: 20px;
     padding:  5px 10px 10px 10px;
 }

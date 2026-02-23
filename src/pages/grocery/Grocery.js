@@ -1,5 +1,6 @@
 import {useEffect, useState, useMemo, useRef, memo } from 'react'
 import gr from './grocery.module.css'
+import '../../groceryCommon.css'
 
 import HeaderMenu from '../../components/header/header';
 import add from '../../assets/images/icons/add.svg'
@@ -373,7 +374,7 @@ function validateInput(value) {
               <Category list={storesOptionsList} ref={storeRef} onUpdate={(store)=>handleStoreUpdate(store)} onDelete={(store)=>handleStoreRemove(store)} setCategory={()=>{return null}}/>
               <label htmlFor="items" >{t('ITEMS')} :</label>
               <AddItems id="items" setItemsList={(val)=>setItemsList(val)}/>
-              <button type='button' onClick={(e)=>{ e.preventDefault(); saveItems(e)}} className={gr.saveButton}>{t('SAVE')}</button>
+              <button type='button' onClick={(e)=>{ e.preventDefault(); saveItems(e)}} className={"saveButton"}>{t('SAVE')}</button>
             </form>  
             </Popup>
           }

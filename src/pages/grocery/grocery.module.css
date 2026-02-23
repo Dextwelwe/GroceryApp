@@ -74,14 +74,3 @@
     gap: 5px;  
 }
 
-.saveButton{
-    cursor: pointer;
-    height: var(--inputHeight);
-    width: 100%;
-    border: none;
-    color: white;
-    font-family: var(--fontFamily);
-    background-color: #2196F3;
-    margin-top: 50px;
-    font-weight: 500;
-}

@@ -1,9 +1,7 @@
 .loginRootWrapper {
     height: 100dvh;
-    width: 100vw;
     display: grid;
     place-content: center;
-
 }
 
 .loginFormWrapper{

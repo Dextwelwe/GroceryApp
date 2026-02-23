@@ -64,6 +64,7 @@
     "LANGUAGE" : "Language",
     "LOGOUT" : "Logout",
     "FILTERS_LABEL" : "Filters",
-    "OPTIONS" : "Options"
+    "OPTIONS" : "Options",
+    "MY_DEFAULT_ITEMS": "My Default Items"
 
 }

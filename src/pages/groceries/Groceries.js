@@ -313,17 +313,17 @@ function resetFilters(){
            <div className={gr.dateWrapper}>
            <input id="groceryDate" disabled={isDateDisabled === true} className={`${gr.dateInput} input`} type='date' onKeyDown={(e) => e.preventDefault()} onClick={(e) => e.target.showPicker && e.target.showPicker()} ref={dateRef}></input>
            <div className={gr.addDateCheckboxWrapper}>
-           <label>{t('NO_DATE')} :</label>
-           <input className={gr.addDateCheckbox} type='checkbox' checked={isDateDisabled} onChange={()=>setIsDateDisabled(!isDateDisabled)}></input>
+           <label htmlFor="noDateCheckbox">{t('NO_DATE')} :</label>
+           <input id="noDateCheckbox" className={gr.addDateCheckbox} type='checkbox' checked={isDateDisabled} onChange={()=>setIsDateDisabled(!isDateDisabled)}></input>
            </div>
            </div>
-           <label for="userList">{t('ADD_USERS')}</label>
+           <label htmlFor="userList">{t('ADD_USERS')}</label>
            <div className={gr.userListWrapper}>
              <input id="userList" ref={usersRef} className={`input ${gr.userList}`} placeholder='user1234@mail.com'></input> 
              <button type="button" onClick={addUser} className={gr.addUserButton}>+</button>
            </div>
            {usersEmailList.length > 0  && <><span className={gr.addedUsersTitle}>{t('ADDED_USERS')}</span><span className={gr.formMessage}>{usersEmailList.map(e => e).join(", ")}</span></>}
-           <button type="button" onClick={(e)=>{ e.preventDefault();saveNewGrocery(e)}} className={gr.saveButton}>{t('SAVE')}</button>
+           <button type="button" onClick={(e)=>{ e.preventDefault();saveNewGrocery(e)}} className={"saveButton"}>{t('SAVE')}</button>
          </form>  
        </Popup>
      }

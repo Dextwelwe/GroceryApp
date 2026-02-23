@@ -35,8 +35,9 @@
     width: 100%;
     background-color: white;
     padding: 10px;
+    margin-right: 5px;
     box-sizing: border-box;
-    border-radius: 0px;
+    border-radius: 15px;
 }
 
 .newCategoryInput{
