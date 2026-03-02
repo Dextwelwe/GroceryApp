@@ -53,6 +53,8 @@
     "STORE" : "Store",
     "ITEMS" : "Items",
     "MY_GROCERIES" : "My Grocery lists",
+    "MY_RECIPES" : "My Recipes",
+    "NO_RECIPES_YET" : "No recipes",
     "GROCERY_ITEMS" : "Grocery Items",
     "NEW_CATEGORY" : "New Category",
     "EDIT_CATEGORY" : "Edit Category",

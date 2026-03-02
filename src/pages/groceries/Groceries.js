@@ -27,12 +27,14 @@ import filterIcon from '../../assets/images/icons/filter.svg'
 import listIcon from '../../assets/images/icons/list.svg'
 import iconMore from '../../assets/images/icons/more.svg'
 import iconLanguage from '../../assets/images/icons/lang.svg'
+import iconRecipe from '../../assets/images/icons/recipe.svg'
 
 
 export default function Groceries({goToGrocery,refresh}) {
   const { t, i18n } = useTranslation();
   const {userData, logout} = useAuth();
 
+  const [activeTab, setActiveTab] = useState('groceries');
   const [isLoading, setIsLoading] = useState(false);
   const [groceries, setGroceries] = useState([]);
   const [usersList, setUsersList] = useState([]);
@@ -275,7 +277,7 @@ function resetFilters(){
     <div className='mainContentWrapper'>
      <HeaderMenu title={headerTitle} headerItems={headerItems} headerNav={null}/>
      {/* Filters */}
-     <div className="subHeaderWrapper">
+     {activeTab === 'groceries' && <div className="subHeaderWrapper">
       <Collapsible title={`${t('FILTERS_LABEL')}${nbFilters > 0 ? ` (${nbFilters})` : ""}`} icon={filterIcon}>
       <div className="filtersWrapper">
         <Select label={t('TYPE')} options={optionsLabel} name="label" value={filters.label} onChange={handleFilterChange} doHighLight={filters.label !== defaultFilterValues.categories && true} />
@@ -285,12 +287,55 @@ function resetFilters(){
       <button className={`actionButton resetFilterBgColor resetFiltersButton`} onClick={resetFilters}>{t("RESET_FILTERS")}</button>
         </Collapsible>
       <div className="subFiltersContentWrapper">
-      <img src={listIcon} alt="list icon" className={gr.listIcon}/>
-      <h1 className="contentListLabel">{t('MY_GROCERIES')}</h1>
+      <div className={gr.tabMenu}>
+       <button 
+         className={`${gr.tabButton} ${activeTab === 'groceries' ? gr.tabButtonActive : ''}`}
+         onClick={() => setActiveTab('groceries')}
+       >
+         <img src={listIcon} alt="list icon" className={gr.tabButtonIcon}/>
+         {t('MY_GROCERIES')}
+       </button>
+       <button 
+         className={`${gr.tabButton} ${activeTab === 'recipes' ? gr.tabButtonActive : ''}`}
+         onClick={() => setActiveTab('recipes')}
+       >
+         <img src={iconRecipe} alt="list icon" className={gr.tabButtonIcon}/>
+         {t('MY_RECIPES')}
+       </button>
+     </div>
       </div>
-    </div>
+    </div>}
+
+     {activeTab === 'recipes' && <div className="subHeaderWrapper">
+      <Collapsible title={`${t('FILTERS_LABEL')}${nbFilters > 0 ? ` (${nbFilters})` : ""}`} icon={filterIcon}>
+      <div className="filtersWrapper">
+        <Select label={t('TYPE')} options={optionsLabel} name="label" value={filters.label} onChange={handleFilterChange} doHighLight={filters.label !== defaultFilterValues.categories && true} />
+        <Select label={t('STATUS_LBL')} options={optionsStatus} name="status"  value={filters.status} onChange={handleFilterChange} doHighLight={filters.status !== defaultFilterValues.categories && true} />
+        <Select label={t('SORT_BY')} options={optionsSortBy} name="sortBy" value={filters.sortBy} onChange={handleFilterChange}  doHighLight={filters.sortBy !== defaultFilterValues.sortBy && true}/>
+      </div>
+      <button className={`actionButton resetFilterBgColor resetFiltersButton`} onClick={resetFilters}>{t("RESET_FILTERS")}</button>
+        </Collapsible>
+      <div className="subFiltersContentWrapper">
+      <div className={gr.tabMenu}>
+       <button 
+         className={`${gr.tabButton} ${activeTab === 'groceries' ? gr.tabButtonActive : ''}`}
+         onClick={() => setActiveTab('groceries')}
+       >
+         <img src={listIcon} alt="list icon" className={gr.tabButtonIcon}/>
+         {t('MY_GROCERIES')}
+       </button>
+       <button 
+         className={`${gr.tabButton} ${activeTab === 'recipes' ? gr.tabButtonActive : ''}`}
+         onClick={() => setActiveTab('recipes')}
+       >
+         <img src={iconRecipe} alt="recipe icon" className={gr.tabButtonIcon}/>
+         {t('MY_RECIPES')}
+       </button>
+     </div>
+      </div>
+    </div>}
      {/* Grocery Cards */}
-     <div className={gr.list}>
+     {activeTab === 'groceries' && <div className={gr.list}>
       {
         isLoading && 
             <img className={gr.loadingAnimation} alt="loading" src={animLoading} />
@@ -302,7 +347,11 @@ function resetFilters(){
        {view.length === 0 && groceries.length > 0 && <div className={gr.empty}>{t('WARNINGS.NO_GROCERIES')}</div>}
        </>
       }
-     </div>
+     </div>}
+     {/* Recipes View */}
+     {activeTab === 'recipes' && <div className={gr.list}>
+       <div className={gr.empty}>{t('NO_RECIPES_YET')}</div>
+     </div>}
      {/* New Grocery Popup */}
      { isAddNewGroceryVisible &&
        <Popup title={t('ADD_NEW_GROCERY')} close={toggleNewGrocery}>
@@ -348,8 +397,8 @@ function resetFilters(){
         </SettingsMenu>
           }
 
-    {/* Add Grocery Button */}
-     <img alt='Add' src={add} className={gr.addGrocery}onClick={toggleNewGrocery} />
+    {/* Add Button */}
+     <img alt='Add' src={add} className={gr.addGrocery} onClick={activeTab === 'groceries' ? toggleNewGrocery : () => {/* TODO: Add recipe function */}} />
     </div> 
   )
 }

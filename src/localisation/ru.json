@@ -52,6 +52,8 @@
     "STORE" : "Магазин",
     "ITEMS" : "Продукты",
     "MY_GROCERIES" : "Мои продуктовые листы",
+    "MY_RECIPES" : "Мои Рецепты",
+    "NO_RECIPES_YET" : "Рецептов пока нет",
     "GROCERY_ITEMS" : "Список продуктов",
     "NEW_CATEGORY" : "Новая Категория",
     "EDIT_CATEGORY" : "Изменить категорию",
