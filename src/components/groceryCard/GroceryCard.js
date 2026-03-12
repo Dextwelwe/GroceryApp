@@ -34,7 +34,7 @@ async function removeGroceryCall() {
     if (result.success) {
       onDelete && onDelete();
     } else {
-      if ((result.error.code = "permission-denied")) {
+      if ((result.error.code === "permission-denied")) {
         alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'));
       } else {
         alert(t("WARNINGS.SERVER_ERROR"));

@@ -34,7 +34,7 @@
     },
     "ALL": "Tous",
     "HI" : "Bonjour",
-    "ADD_ITEM_DESC": "Liste de courses. Un produit par ligne.",
+    "ADD_ITEM_DESC": "-Pommes\n-Bananes\n-Pain",
     "USER" : "Utilisateur",
     "TYPE" : "Type",
     "STATUS_LBL" : "Statut",
@@ -64,8 +64,7 @@
     "LANGUAGE": "Langue",
     "LOGOUT": "Se déconnecter",
     "FILTERS_LABEL": "Filtres",
-    "OPTIONS": "Options"
-    
-
-
+    "OPTIONS": "Options",
+    "ADD_NEW_RECIPE" : "Ajouter une nouvelle recette",
+    "RECIPE_NAME" : "Nom de la recette"
 }

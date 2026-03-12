@@ -36,7 +36,7 @@
     "ALL" : "All",
     "HI" : "Hello",
     "USER" : "User",
-    "ADD_ITEM_DESC": "Grocery list. One item per line.",
+    "ADD_ITEM_DESC": "- Apples\n- Bananas\n- Bread",
     "TYPE" : "Type",
     "STATUS_LBL" : "Status",
     "SORT_BY" : "Sort by",
@@ -67,6 +67,7 @@
     "LOGOUT" : "Logout",
     "FILTERS_LABEL" : "Filters",
     "OPTIONS" : "Options",
-    "MY_DEFAULT_ITEMS": "My Default Items"
-
+    "MY_DEFAULT_ITEMS": "My Default Items",
+    "ADD_NEW_RECIPE" : "Add new recipe",
+    "RECIPE_NAME" : "Recipe name"
 }

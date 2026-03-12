@@ -1,10 +1,18 @@
-import {useRef} from 'react'
+import { useRef, forwardRef } from 'react'
 import './addItems.css'
 import { useTranslation} from 'react-i18next';
 
-export default function AddItems({setItemsList}) {
+const AddItems = forwardRef(function AddItems({setItemsList}, ref) {
   const { t } = useTranslation();
   let inputText = useRef(null);
+
+  const combinedRef = (node) => {
+    inputText.current = node;
+    if (ref) {
+      if (typeof ref === 'function') ref(node);
+      else ref.current = node;
+    }
+  };
 
   let refactorInput = (event) => {
     let lines = inputText.current.value.split(/\r?\n/);
@@ -41,8 +49,10 @@ const handleBlur = () => {
 }
 
   return (
-      <textarea className='add-item-input' id='items' type='text' ref={inputText} onKeyDown={refactorInput} onBlur={handleBlur} onClick={InitInput}
+      <textarea className='add-item-input' id='items' type='text' ref={combinedRef} onKeyDown={refactorInput} onBlur={handleBlur} onClick={InitInput}
         placeholder={t('ADD_ITEM_DESC')}>      
       </textarea>
   )
-}
+})
+
+export default AddItems;

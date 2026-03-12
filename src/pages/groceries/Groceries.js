@@ -17,6 +17,7 @@ import HeaderMenu from '../../components/header/header';
 import GroceryCard from '../../components/groceryCard/GroceryCard';
 import Collapsible from '../../components/collapsible/collapsible';
 import SettingsMenu from '../../components/settings/settingsMenu';
+import AddItems from '../../components/add/addItems';
 
 
 // Icons
@@ -38,8 +39,11 @@ export default function Groceries({goToGrocery,refresh}) {
   const [isLoading, setIsLoading] = useState(false);
   const [groceries, setGroceries] = useState([]);
   const [usersList, setUsersList] = useState([]);
+  const [recipes, setRecipes] = useState([]);
+  const [recipeItems, setRecipeItems] = useState([]);
   const [usersEmailList, setUsersEmailList] = useState([]);
   const [isAddNewGroceryVisible, setIsAddNewGroceryVisible] = useState(false);
+  const [isAddNewRecipeVisible, setIsAddNewRecipeVisible] = useState(false);
   const [isDateDisabled, setIsDateDisabled] = useState(false);
   const [isSettingsPopup, setIsSettingsPopup] = useState(false);
 
@@ -54,6 +58,7 @@ export default function Groceries({goToGrocery,refresh}) {
   let nameRef = useRef(null);
   let dateRef = useRef(null);
   let usersRef = useRef(null);
+  let refRecipeItemsInput = useRef(null);
 
 
   const STATUS_MAP = { active: "active", completed: "completed"};
@@ -135,6 +140,10 @@ if (!userData) return null;
     setIsAddNewGroceryVisible(!isAddNewGroceryVisible);
   }
 
+  const toggleNewRecipe = () => {
+    setIsAddNewRecipeVisible(!isAddNewRecipeVisible);
+  }
+
   async function loadGroceries() {
   let timer;
   try {
@@ -201,6 +210,25 @@ if (!userData) return null;
     }
     }
   }
+
+  const saveNewRecipe = async (e) => {
+    let isValid = true;
+    e.preventDefault();
+    if (!validateInput(nameRef.current.value)){
+      nameRef.current.style.borderColor = 'red';
+      isValid = false;
+    } else {
+      nameRef.current.style.borderColor = '';
+    }
+
+    if (recipeItems.length === 0){
+      isValid = false;
+      refRecipeItemsInput.current.style.borderColor = 'red';
+    } else {
+      refRecipeItemsInput.current.style.borderColor = '';
+    }
+  }
+
   
   const addUser = async() => {
   let userInput = usersRef.current.value;
@@ -333,7 +361,9 @@ function resetFilters(){
        </button>
      </div>
       </div>
-    </div>}
+    </div>
+    }
+
      {/* Grocery Cards */}
      {activeTab === 'groceries' && <div className={gr.list}>
       {
@@ -376,6 +406,19 @@ function resetFilters(){
          </form>  
        </Popup>
      }
+     {/* New Recipe Popup */}
+     { isAddNewRecipeVisible &&
+       <Popup title={t('ADD_NEW_RECIPE')} close={toggleNewRecipe}>
+         <form className={gr.form} onSubmit={(e)=>e.preventDefault()}>
+           <label htmlFor="recipeName" >{t('RECIPE_NAME')} :</label>
+           <input id="recipeName" ref={nameRef} className='input'></input>
+           <label htmlFor="items" >{t('ITEMS')} :</label>
+           <AddItems id="items" ref={refRecipeItemsInput} setItemsList={(val)=>setRecipeItems(val)}/>
+           {usersEmailList.length > 0  && <><span className={gr.addedUsersTitle}>{t('ADDED_USERS')}</span><span className={gr.formMessage}>{usersEmailList.map(e => e).join(", ")}</span></>}
+           <button type="button" onClick={(e)=>{ e.preventDefault();saveNewRecipe(e)}} className={"saveButton"}>{t('SAVE')}</button>
+         </form>  
+       </Popup>
+     }
      {
       isSettingsPopup &&
         <SettingsMenu ref={settingsPopupRef} close={()=>setIsSettingsPopup(false)}>
@@ -395,10 +438,10 @@ function resetFilters(){
             </select>
           </div>
         </SettingsMenu>
-          }
+      }
 
     {/* Add Button */}
-     <img alt='Add' src={add} className={gr.addGrocery} onClick={activeTab === 'groceries' ? toggleNewGrocery : () => {/* TODO: Add recipe function */}} />
+     <img alt='Add' src={add} className={gr.addGrocery} onClick={activeTab === 'groceries' ? toggleNewGrocery : toggleNewRecipe} />
     </div> 
   )
 }

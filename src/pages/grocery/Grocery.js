@@ -143,7 +143,7 @@ function Grocery({goBack, groceryId}) {
        return new GroceryObj(groceryId, { ...prev, items: nextItems});
      });
    } else {
-    if ((result.error.code = "permission-denied")) {
+    if ((result.error.code === "permission-denied")) {
         alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'))
 
       } else {
@@ -235,7 +235,7 @@ function Grocery({goBack, groceryId}) {
         if (categoryRef.current) categoryRef.current.value = '';
         if (storeRef.current) storeRef.current.value = '';
       } else {
-         if ((result.error.code = "permission-denied")) {
+         if ((result.error.code === "permission-denied")) {
         alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'))
           } else {
         alert(t('WARNINGS.SERVER_ERROR'));
