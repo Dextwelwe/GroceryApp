@@ -167,5 +167,18 @@
     border-radius: 25px;
 }
 
+.backButton {
+    cursor: pointer;
+    height: var(--inputHeight);
+    width: 100%;
+    border: none;
+    color: white;
+    font-family: var(--fontFamily);
+    background-color: #616161;
+    margin-top: 50px;
+    font-weight: 500;
+    border-radius: 25px;
+}
+
 
 

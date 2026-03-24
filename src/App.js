@@ -3,12 +3,20 @@ import { useState, useCallback} from 'react';
 import Grocery from './pages/grocery/Grocery';
 import Login from './pages/login/Login';
 import { useAuth } from './providers/AuthProvider';
+import { usePreloadImages } from './hooks/usePreloadImages';
+
+import iconLogout from './assets/images/icons/exit.svg';
+import iconLanguage from './assets/images/icons/lang.svg';
+import eraseIcon from './assets/images/icons/erase.svg';
+import clearIcon from './assets/images/icons/completeGroceryIcon.svg';
 
 function App() {
   const {user} = useAuth();
   const [page, setPage] = useState("groceries");
   const [groceryId, setGroceryId] = useState(null);
   const [refresh, setRefresh] = useState(false);
+  usePreloadImages([iconLogout, iconLanguage, eraseIcon,clearIcon]);
+  
 
   const goToGrocery = useCallback((id) => {
     if (id == null) return;

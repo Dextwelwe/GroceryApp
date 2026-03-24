@@ -10,12 +10,3 @@ html, body {
   overscroll-behavior: none;
   touch-action: pan-y pan-x; 
 }
-
-@media (width > 1000px) {
-  body{
-    width: 600px;
-    margin: 0 auto;
-    background-color: white;
-    box-sizing: border-box;
-  }
-}

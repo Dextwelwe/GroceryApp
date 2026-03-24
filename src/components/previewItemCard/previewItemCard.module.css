@@ -1,0 +1,16 @@
+.categorySelect {
+    width : max-content;
+    background-color: transparent;
+    border: none;
+    height: 25px;
+    font-family: var(--fontFamily);
+    border-color: transparent;
+    text-align: start;
+    padding-left: 0;
+    max-width: 150px;
+    text-overflow: ellipsis;
+}
+
+.categorySelect:focus-visible {
+    outline: none;
+}

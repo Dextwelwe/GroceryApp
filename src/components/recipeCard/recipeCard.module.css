@@ -1,0 +1,55 @@
+.recipeCardWrapper {
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+	padding: 14px 18px 14px 10px;
+	background-color: #F4F4EF;
+	cursor: pointer;
+	margin-bottom: 20px;
+	border-radius: 12px;
+}
+
+.dataWrapper {
+	flex-grow: 1;
+}
+
+.title {
+	color: #222;
+	font-weight: 500;
+	text-transform: capitalize;
+	font-size: 1.1rem;
+	margin-bottom: 6px;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.titleIcon {
+	height: 25px;
+	width: 25px;
+}
+
+.countText {
+	font-size: 0.9rem;
+	opacity: 0.75;
+    margin-left: 5px;
+	color: var(--subTextFontColor);
+}
+
+.deleteButton {
+	border: none;
+	background: transparent;
+	padding: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}
+
+.deleteIcon {
+	height: var(--iconSize);
+	width: var(--iconSize);
+}

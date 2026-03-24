@@ -1,0 +1,145 @@
+[
+  {
+    "id": "produce",
+    "names": {
+      "en": "Produce",
+      "ru": "Овощи и фрукты",
+      "fr": "Fruits et légumes"
+    },
+    "keywords": {
+      "en": [],
+      "ru": [],
+      "fr": []
+    }
+  },
+  {
+    "id": "meat",
+    "names": {
+      "en": "Meat",
+      "ru": "Мясо",
+      "fr": "Viande"
+    },
+    "keywords": {
+      "en": [],
+      "ru": [],
+      "fr": []
+    }
+  },
+  {
+    "id": "dairy",
+    "names": {
+      "en": "Dairy",
+      "ru": "Молочные продукты",
+      "fr": "Produits laitiers"
+    },
+    "keywords": {
+      "en": [],
+      "ru": [],
+      "fr": []
+    }
+  },
+  {
+    "id": "bakery",
+    "names": {
+      "en": "Bakery",
+      "ru": "Выпечка",
+      "fr": "Boulangerie"
+    },
+    "keywords": {
+      "en": [],
+      "ru": [],
+      "fr": []
+    }
+  },
+  {
+    "id": "pantry",
+    "names": {
+      "en": "Pantry",
+      "ru": "Кладовая",
+      "fr": "Garde-manger"
+    },
+    "keywords": {
+      "en": [],
+      "ru": [],
+      "fr": []
+    }
+  },
+  {
+    "id": "frozen",
+    "names": {
+      "en": "Frozen",
+      "ru": "Замороженные продукты",
+      "fr": "Surgelés"
+    },
+    "keywords": {
+      "en": [],
+      "ru": [],
+      "fr": []
+    }
+  },
+  {
+    "id": "snacks_drinks",
+    "names": {
+      "en": "Snacks & Drinks",
+      "ru": "Закуски и напитки",
+      "fr": "Snacks et boissons"
+    },
+    "keywords": {
+      "en": [],
+      "ru": [],
+      "fr": []
+    }
+  },
+  {
+    "id": "household",
+    "names": {
+      "en": "Household",
+      "ru": "Хозяйственные товары",
+      "fr": "Ménage"
+    },
+    "keywords": {
+      "en": [],
+      "ru": [],
+      "fr": []
+    }
+  },
+  {
+    "id": "personal_care",
+    "names": {
+      "en": "Personal Care",
+      "ru": "Личная гигиена",
+      "fr": "Soins personnels"
+    },
+    "keywords": {
+      "en": [],
+      "ru": [],
+      "fr": []
+    }
+  },
+  {
+    "id": "pets",
+    "names": {
+      "en": "Pets",
+      "ru": "Для питомцев",
+      "fr": "Animaux de compagnie"
+    },
+    "keywords": {
+      "en": [],
+      "ru": [],
+      "fr": []
+    }
+  },
+  {
+    "id": "seafood",
+    "names": {
+      "en": "Seafood",
+      "ru": "Морепродукты",
+      "fr": "Fruits de mer"
+    },
+    "keywords": {
+      "en": [],
+      "ru": [],
+      "fr": []
+    }
+  }
+]
