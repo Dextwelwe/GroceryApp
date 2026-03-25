@@ -68,6 +68,7 @@ export default function Groceries({ goToGrocery, refresh }) {
   let usersRef = useRef(null);
   let refRecipeItemsInput = useRef(null);
   let refEditRecipeItemsInput = useRef(null);
+  const touchStartRef = useRef({ x: 0, y: 0 });
   const { getBestMatch, getAllCategoriesList } = useCategorySearch();
 
   const STATUS_MAP = { active: 'active', completed: 'completed' };
@@ -529,8 +530,43 @@ export default function Groceries({ goToGrocery, refresh }) {
 
   const changeLanguage = (e) => i18n.changeLanguage(e.target.value);
 
+  function handleTabTouchStart(e) {
+    const touch = e.touches?.[0];
+    if (!touch) return;
+    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+  }
+
+  function handleTabTouchEnd(e) {
+    const isMobileViewport = window.matchMedia('(max-width: 800px)').matches;
+    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+    if (!isMobileViewport && !isTouchDevice) return;
+
+    if (isAddNewGroceryVisible || isAddNewRecipeVisible || isPreviewListPopup || isEditRecipePopup || isAddItemsToRecipePopup) {
+      return;
+    }
+
+    const touch = e.changedTouches?.[0];
+    if (!touch) return;
+
+    const deltaX = touch.clientX - touchStartRef.current.x;
+    const deltaY = touch.clientY - touchStartRef.current.y;
+    const minSwipeDistance = 40;
+
+    if (Math.abs(deltaX) < minSwipeDistance || Math.abs(deltaY) > Math.abs(deltaX)) {
+      return;
+    }
+
+    if (deltaX < 0 && activeTab === 'groceries') {
+      setActiveTab('recipes');
+    }
+
+    if (deltaX > 0 && activeTab === 'recipes') {
+      setActiveTab('groceries');
+    }
+  }
+
   return (
-    <div className='mainContentWrapper'>
+    <div className='mainContentWrapper' onTouchStart={handleTabTouchStart} onTouchEnd={handleTabTouchEnd}>
       <HeaderMenu title={headerTitle} headerItems={headerItems} headerNav={null} />
 
       {activeTab === 'groceries' && <div className='subHeaderWrapper'>
@@ -713,7 +749,7 @@ export default function Groceries({ goToGrocery, refresh }) {
             <select name='settingsSelect' className='settingsSelect' defaultValue={i18n.language} onChange={changeLanguage}>
               <option value='en'>English</option>
               <option value='fr'>Français</option>
-              <option value='ru'>Руѝѝкий</option>
+              <option value='ru'>Русский</option>
             </select>
           </div>
         </SettingsMenu>

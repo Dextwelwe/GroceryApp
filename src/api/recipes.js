@@ -1,4 +1,4 @@
-import { doc, getDoc, updateDoc, writeBatch, deleteDoc, collection, serverTimestamp, arrayUnion, arrayRemove } from "firebase/firestore";
+import { doc, getDoc, updateDoc, writeBatch, collection, serverTimestamp, arrayUnion, arrayRemove } from "firebase/firestore";
 import { db } from "../api/initFirebase";
 
 export async function deleteRecipe(userId, recipeId) {

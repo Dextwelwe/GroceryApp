@@ -90,5 +90,6 @@
     "PREVIEW_LIST" : "Preview list",
     "CONFIRM" : "Confirm",
     "BACK" : "Back",
-    "ADD_RECIPE" : "Add recipe"
+    "ADD_RECIPE" : "Add recipe",
+    "RECIPE_ITEMS" : "items"
 }

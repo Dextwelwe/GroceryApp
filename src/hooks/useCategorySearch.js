@@ -5,6 +5,60 @@ import i18n from '../i18n';
 
 export const useCategorySearch = () => {
 
+  const normalizeTerm = useCallback((value) => {
+    return (value || '')
+      .toString()
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim();
+  }, []);
+
+  const singularizeWord = useCallback((word) => {
+    if (word.length <= 3) return word;
+    if (word.endsWith('ies') && word.length > 4) return `${word.slice(0, -3)}y`;
+    if (/(xes|zes|ches|shes|ses|oes)$/i.test(word) && word.length > 4) return word.slice(0, -2);
+    if (word.endsWith('s') && !word.endsWith('ss')) return word.slice(0, -1);
+    return word;
+  }, []);
+
+  const getQueryVariants = useCallback((query) => {
+    const normalized = normalizeTerm(query);
+    if (!normalized) return [];
+
+    const variants = new Set([normalized]);
+    variants.add(singularizeWord(normalized));
+
+    const words = normalized.split(/\s+/).filter(Boolean);
+    if (words.length > 1) {
+      variants.add(words.map((w) => singularizeWord(w)).join(' '));
+    }
+
+    return [...variants].filter(Boolean);
+  }, [normalizeTerm, singularizeWord]);
+
+  const exactCategoryIndex = useMemo(() => {
+    const index = new Map();
+
+    categoriesData.forEach((category) => {
+      const id = category.id;
+      const names = Object.values(category.names || {});
+      const keywords = Object.values(category.keywords || {}).flat();
+      const terms = [...names, ...keywords];
+
+      terms.forEach((term) => {
+        const variants = getQueryVariants(term);
+        variants.forEach((variant) => {
+          if (!index.has(variant)) {
+            index.set(variant, id);
+          }
+        });
+      });
+    });
+
+    return index;
+  }, [getQueryVariants]);
+
   const fuse = useMemo(() => {
     return new Fuse(categoriesData, {
       keys: [
@@ -25,10 +79,16 @@ export const useCategorySearch = () => {
   const getBestMatch = useCallback((query) => {
     const trimmed = query?.trim();
     if (!trimmed) return null;
+
+    const queryVariants = getQueryVariants(trimmed);
+    for (const variant of queryVariants) {
+      const exactMatch = exactCategoryIndex.get(variant);
+      if (exactMatch) return exactMatch;
+    }
     
     const results = fuse.search(trimmed);
     return results.length > 0 ? results[0].item.id : null;
-  }, [fuse]);
+  }, [exactCategoryIndex, fuse, getQueryVariants]);
 
   const getAllCategoriesList = useCallback(() => {
     return categoriesData.map(item => ({

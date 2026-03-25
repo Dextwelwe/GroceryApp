@@ -4,7 +4,6 @@ import '../../groceryCommon.css'
 
 import HeaderMenu from '../../components/header/header';
 import add from '../../assets/images/icons/add.svg'
-import check from '../../assets/images/icons/check.svg'
 import noteIcon from '../../assets/images/icons/name.svg'
 
 import iconBack from '../../assets/images/icons/back.svg'

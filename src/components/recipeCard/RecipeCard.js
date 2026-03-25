@@ -27,7 +27,7 @@ export default function RecipeCard({ data, onDelete, onClick }) {
           {data.name || t('RECIPE_NAME')}
         </div>
         <div className={rc.countText}>
-          {ingredientsCount} {t('ITEMS')}
+          {ingredientsCount} {t('RECIPE_ITEMS')}
         </div>
       </div>
 

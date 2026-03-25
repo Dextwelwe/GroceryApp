@@ -8,7 +8,7 @@
 }
 
 .empty{
-    margin-top: 50px;
+    margin: 50px 0px;
     text-align: center;
 }
 
@@ -58,7 +58,6 @@
     cursor: pointer;
     padding: 5px 10px;
     color: black;
-    color: #424242;
 }
 
 .completedInfoWrapper{
@@ -94,11 +93,10 @@
 
 .recipeSelectIcon {
     font-size: 20px;
-    font-weight: 600;
-    color: black;
+    font-size: 25px;
+    color: #388E3C;
     line-height: 1;
     width: 30px;
-    
     text-align: center;
     user-select: none;
     display: block;

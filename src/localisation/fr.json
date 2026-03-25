@@ -87,5 +87,6 @@
     "PREVIEW_LIST" : "Aperçu de la liste",
     "CONFIRM" : "Confirmer",
     "BACK" : "Retour",
-    "ADD_RECIPE" : "Ajouter une recette"
+    "ADD_RECIPE" : "Ajouter une recette",
+    "RECIPE_ITEMS" : "articles"
 }
