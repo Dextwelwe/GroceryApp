@@ -17,7 +17,8 @@
         "NO_ITEMS" : "No items match your filters.",
         "CLEAR_LIST_WARN" : "Are you sure you want to clear the grocery list?",
         "COMPLETE_GROCERY_WARN": "Are you sure you want to complete the grocery list?",
-        "FILL_ALL_CATEGORIES" : "Some items are missing categories."
+        "FILL_ALL_CATEGORIES" : "Some items are missing categories.",
+        "REMOVE_RECIPE" : "Are you sure you want to remove the recipe?"
 
     },
     "STATUS" :{
@@ -88,5 +89,6 @@
     "NO_STORE" : "No store",
     "PREVIEW_LIST" : "Preview list",
     "CONFIRM" : "Confirm",
-    "BACK" : "Back"
+    "BACK" : "Back",
+    "ADD_RECIPE" : "Add recipe"
 }

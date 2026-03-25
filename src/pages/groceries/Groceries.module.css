@@ -193,6 +193,7 @@ label{
     display: flex;
     align-items: center;
     gap: 10px;
+    width: 100%;
     margin-top: 10px;
 }
 
@@ -201,8 +202,26 @@ label{
 }
 
 .recipeAddItemsButton{
-    margin: 5px 0px; 
+    margin: 20px 0px; 
+    margin-bottom: 0;
+    width: max-content;
     background-color: #4CAF50 !important;
+    border-radius: 50%;
+    border-color: transparent;
+    float : right;
+    height: 50px;
+    width: 50px;
+    color: white;
+    font-size: 35px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center; 
+    cursor: pointer;
+}
+
+.recipeAddItemsButton span {
+    transform: translateY(-1.8px); 
 }
 
 .popupActions {

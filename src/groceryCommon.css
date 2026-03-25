@@ -29,11 +29,11 @@
 }
 
 .resetFiltersButton{
-    margin-right: 10px;
+    margin-left: 10px;
     margin-top: 10px;
     width: max-content;
     text-align: center;
-    float: right;
+    float: left;
 }
 
 .contentListLabel{

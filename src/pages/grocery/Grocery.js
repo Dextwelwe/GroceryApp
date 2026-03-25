@@ -4,12 +4,15 @@ import '../../groceryCommon.css'
 
 import HeaderMenu from '../../components/header/header';
 import add from '../../assets/images/icons/add.svg'
+import check from '../../assets/images/icons/check.svg'
+import noteIcon from '../../assets/images/icons/name.svg'
 
 import iconBack from '../../assets/images/icons/back.svg'
 import iconMore from '../../assets/images/icons/more.svg'
 import {useTranslation} from 'react-i18next';
 import { getGroceryById, removeOneCustomStore, updateGroceryStatus, clearItemsList, updateCustomStores, subscribeGroceryItems } from '../../api/grocery';
 import { addItems, removeItem , setItemStatus} from '../../api/items';
+import { fetchUserRecipes } from '../../api/recipes';
 import ItemCard from '../../components/ItemCard/ItemCard';
 import Select from '../../components/select/Select';
 import GroceryObj from '../../models/Grocery';
@@ -26,6 +29,7 @@ import iconLanguage from '../../assets/images/icons/lang.svg'
 import iconErase from '../../assets/images/icons/erase.svg'
 import completeGroceryIcon from '../../assets/images/icons/completeGroceryIcon.svg'
 import PreviewItemCard from '../../components/previewItemCard/PreviewItemCard';
+import rc from '../../components/recipeCard/recipeCard.module.css';
 import { useCategorySearch } from '../../hooks/useCategorySearch';
 
 
@@ -42,6 +46,9 @@ function Grocery({goBack, groceryId}) {
   const [isAddItemsPopup, setIsAddItemsPopup] = useState(false);
   const [isSettingsPopup, setIsSettingsPopup] = useState(false);
   const [isPreviewListPopup, setIsPreviewListPopup] = useState(false);
+  const [isAddRecipePopup, setIsAddRecipePopup] = useState(false);
+  const [userRecipes, setUserRecipes] = useState([]);
+  const [selectedRecipeIds, setSelectedRecipeIds] = useState(new Set());
   const [storesOptionsList, setStoresOptionsList] = useState([])
   const [filters, setFilters] = useState({category: defaultCategory,store: defaultStore,status: defaultStatus, sortBy: defaultSortBy});
   const [nbFilters, setNbFilters] = useState(0);
@@ -52,13 +59,20 @@ function Grocery({goBack, groceryId}) {
   const [previewItemsList, setPreviewItemsList] = useState([]);
   let categoryRef = useRef(null);
   let storeRef = useRef(null);
+  let recipeStoreRef = useRef(null);
   let settingsPopupRef = useRef(null);
   const { getBestMatch, getAllCategoriesList } = useCategorySearch();
   
   const norm = s => (s ?? "").toString().trim().toLowerCase();
   
  useEffect(() => {
-  (async () => {await getFullGrocery();})();
+  (async () => {
+    await getFullGrocery();
+    if (userData) {
+      const res = await fetchUserRecipes(userData.uid);
+      if (res.success) setUserRecipes(res.data);
+    }
+  })();
 
   const unsub = subscribeGroceryItems(
     groceryId,
@@ -343,6 +357,58 @@ function removePreviewItem(itemName){
   setPreviewItemsList(prev => prev.filter(item => item.name !== itemName));
 }
 
+function toggleRecipeSelection(recipeId) {
+  setSelectedRecipeIds(prev => {
+    const next = new Set(prev);
+    if (next.has(recipeId)) next.delete(recipeId);
+    else next.add(recipeId);
+    return next;
+  });
+}
+
+async function addRecipeItems() {
+  if (selectedRecipeIds.size === 0) return;
+  const existingNames = new Set((grocery?.items ?? []).map(i => norm(i.name)));
+  const itemsToAdd = [];
+  const seen = new Set();
+
+  for (const recipeId of selectedRecipeIds) {
+    const recipe = userRecipes.find(r => r.id === recipeId);
+    if (!recipe) continue;
+    for (const item of (recipe.items || [])) {
+      const key = norm(item.name);
+      if (existingNames.has(key) || seen.has(key)) continue;
+      seen.add(key);
+      itemsToAdd.push({
+        name: item.name,
+        category: resolveCategoryId(item.category),
+        store: recipeStoreRef.current?.value || '',
+        status: 'active',
+        addedBy: userData.firstName
+      });
+    }
+  }
+
+  if (itemsToAdd.length === 0) {
+    setIsAddRecipePopup(false);
+    setSelectedRecipeIds(new Set());
+    return;
+  }
+
+  const result = await addItems(itemsToAdd, grocery.getId());
+  if (result.success) {
+    await getFullGrocery();
+  } else {
+    if (result.error?.code === 'permission-denied') {
+      alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'));
+    } else {
+      alert(t('WARNINGS.SERVER_ERROR'));
+    }
+  }
+  setIsAddRecipePopup(false);
+  setSelectedRecipeIds(new Set());
+}
+
 function editPreviewItemCategory(itemName, newCategoryId){
   setPreviewItemsList(prev => prev.map(item => {
     if (item.name === itemName){
@@ -382,7 +448,7 @@ function editPreviewItemCategory(itemName, newCategoryId){
                   <img src={listIcon} alt="list icon" className={gr.listIcon}/>
                   <h1 className="contentListLabel">{t('GROCERY_ITEMS')}</h1>
                   </div>
-                <button className={gr.addRecipeButton}>Add Recipe</button>
+                <button className={gr.addRecipeButton} onClick={() => { setSelectedRecipeIds(new Set()); setIsAddRecipePopup(true); }}>{t("ADD_RECIPE")}</button>
                 </div>
                 <div className={gr.completedInfoWrapper}>
                   <p className='completedInfo'>{t('STATUS.COMPLETED')} : {grocery?.getCompletedItemsCount()}/{grocery?.items.length}</p>
@@ -396,6 +462,53 @@ function editPreviewItemCategory(itemName, newCategoryId){
              ))}
             {view.length === 0 && grocery?.items.length > 0 && <div className={gr.empty}>{t('WARNINGS.NO_ITEMS')}</div>}
           </div>
+
+          {isAddRecipePopup &&
+            <Popup title={t('ADD_RECIPE')} close={() => { setIsAddRecipePopup(false); setSelectedRecipeIds(new Set()); }}>
+              <div className={gr.form}>
+                <label>{t('STORE')} :</label>
+                <Category list={storesOptionsList} ref={recipeStoreRef} onUpdate={(store) => handleStoreUpdate(store)} onDelete={(store) => handleStoreRemove(store)} />
+                <div className={gr.previewList} style={{ marginTop: 14 }}>
+                  {userRecipes.length === 0 && <div className={gr.empty}>{t('NO_RECIPES_YET')}</div>}
+                  {userRecipes.map((recipe) => {
+                    const isSelected = selectedRecipeIds.has(recipe.id);
+                    return (
+                      <div
+                        key={recipe.id}
+                        className={`${rc.recipeCardWrapper} ${isSelected ? gr.recipeSelected : ''}`}
+                        onClick={() => toggleRecipeSelection(recipe.id)}
+                      >
+                        <div className={rc.dataWrapper}>
+                          <div className={rc.title}>
+                            <img src={noteIcon} alt="Recipe" className={rc.titleIcon} />
+                            {recipe.name}
+                          </div>
+                          <div className={rc.countText}>
+                            {(recipe.items || []).length} {t('ITEMS')}
+                          </div>
+                        </div>
+                        <button type="button" className={rc.deleteButton} onClick={(e) => { e.stopPropagation(); toggleRecipeSelection(recipe.id); }}>
+                          <span className={isSelected ? gr.recipeSelectIconSelected : gr.recipeSelectIcon}>
+                            {isSelected ? '' : '+'}
+                          </span>
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+                {userRecipes.length > 0 && (
+                  <button
+                    type="button"
+                    className="saveButton"
+                    onClick={addRecipeItems}
+                    disabled={selectedRecipeIds.size === 0}
+                  >
+                    {t('CONFIRM')}
+                  </button>
+                )}
+              </div>
+            </Popup>
+          }
 
           { isAddItemsPopup && 
             <Popup title={t('ADD_ITEMS')} close={()=>{if (!isPreviewListPopup) setIsAddItemsPopup(false)}}>
@@ -456,7 +569,7 @@ function editPreviewItemCategory(itemName, newCategoryId){
                   <select className='settingsSelect' defaultValue={i18n.language} onChange={changeLanguage}>
                     <option value="en">English</option>
                     <option value="fr">Français</option>
-                    <option value="ru">Русский</option>
+                    <option value="ru">Руccкий</option>
                   </select>
                 </div>
               </SettingsMenu>

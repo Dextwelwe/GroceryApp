@@ -36,7 +36,7 @@ export default function PreviewItemCard({data,actions, categoriesList}) {
                         <img alt="Category Icon" src={categoryIcon} className={ic.icon} />
                         <select name='category' onChange={categoryChangeCall} value={data.category || ''} className={`${ic.dataLabel} ${ic.category} ${pic.categorySelect}`}>
                         <option  value={data.category || ''}>{categoryLabel}</option>
-                        {categoriesList && categoriesList.map((category, index) => (
+                        {categoriesList && categoriesList.filter(category => category.id !== data.category).map((category, index) => (
                           <option key={index} value={category.id}>{getOneCategory(category.id)}</option>
                         ))}
                         </select>

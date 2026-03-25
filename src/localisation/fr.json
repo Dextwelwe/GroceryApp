@@ -17,7 +17,8 @@
         "NO_ITEMS" : "Aucun item ne correspond à vos filtres.",
         "CLEAR_LIST_WARN" : "Êtes-vous sûr de vouloir effacer la liste de courses ?",
         "COMPLETE_GROCERY_WARN": "Êtes-vous sûr de vouloir terminer la liste d'épicerie?",
-        "FILL_ALL_CATEGORIES" : "Certains articles n'ont pas de catégorie."
+        "FILL_ALL_CATEGORIES" : "Certains articles n'ont pas de catégorie.",
+        "REMOVE_RECIPE" : "Êtes-vous sûr de vouloir supprimer la recette?"
     },
     "STATUS" : {
        "ACTIVE" : "En Cours",
@@ -85,5 +86,6 @@
     "NO_STORE" : "Sans magasin",
     "PREVIEW_LIST" : "Aperçu de la liste",
     "CONFIRM" : "Confirmer",
-    "BACK" : "Retour"
+    "BACK" : "Retour",
+    "ADD_RECIPE" : "Ajouter une recette"
 }

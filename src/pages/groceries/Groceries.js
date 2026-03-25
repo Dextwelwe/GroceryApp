@@ -10,7 +10,7 @@ import { useCategorySearch } from '../../hooks/useCategorySearch';
 // Api
 import { saveNew } from '../../api/grocery';
 import { fetchUserGroceries, getUserId } from '../../api/user';
-import { fetchUserRecipes, saveNewRecipe as saveNewRecipeApi, updateRecipe as updateRecipeApi } from '../../api/recipes';
+import { fetchUserRecipes, saveNewRecipe as saveNewRecipeApi, updateRecipe as updateRecipeApi, deleteRecipe as deleteRecipeApi } from '../../api/recipes';
 
 // Components
 import Select from '../../components/select/Select';
@@ -95,9 +95,6 @@ export default function Groceries({ goToGrocery, refresh }) {
   useEffect(() => {
     if (userData) {
       loadGroceries();
-    }
-
-    if (activeTab === 'recipes') {
       loadRecipes();
     }
 
@@ -146,6 +143,23 @@ export default function Groceries({ goToGrocery, refresh }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [groceries, filters]);
 
+  const recipeView = useMemo(() => {
+    return [...recipes].sort((a, b) => {
+      const an = norm(a.name), bn = norm(b.name);
+      const ta = getDate(a.createdAt)?.getTime() ?? 0;
+      const tb = getDate(b.createdAt)?.getTime() ?? 0;
+
+      switch (filters.sortBy) {
+        case 'oldest': return ta - tb;
+        case 'newest': return tb - ta;
+        case 'az': return an.localeCompare(bn);
+        case 'za': return bn.localeCompare(an);
+        default: return 0;
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [recipes, filters.sortBy]);
+
   if (!userData) return null;
 
   const headerTitle = t('HI') + ', ' + userData.firstName + '!';
@@ -182,6 +196,20 @@ export default function Groceries({ goToGrocery, refresh }) {
       setRecipes(res.data);
     } else {
       console.error('Failed to fetch recipes:', res.error);
+    }
+  }
+
+  async function deleteRecipe(recipeId) {
+    if (!window.confirm(t('WARNINGS.REMOVE_RECIPE'))) return;
+    const res = await deleteRecipeApi(userData.uid, recipeId);
+    if (res.success) {
+      setRecipes(prev => prev.filter(r => r.id !== recipeId));
+    } else {
+      if (res.error?.code === 'permission-denied') {
+        alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'));
+      } else {
+        alert(t('WARNINGS.SERVER_ERROR'));
+      }
     }
   }
 
@@ -483,8 +511,10 @@ export default function Groceries({ goToGrocery, refresh }) {
 
   function setNumberOfFilters() {
     let count = 0;
-    if (filters.label !== defaultFilterValues.categories) count++;
-    if (filters.status !== defaultFilterValues.categories) count++;
+    if (activeTab === 'groceries') {
+      if (filters.label !== defaultFilterValues.categories) count++;
+      if (filters.status !== defaultFilterValues.categories) count++;
+    }
     if (filters.sortBy !== defaultFilterValues.sortBy) count++;
     setNbFilters(count);
   }
@@ -535,8 +565,6 @@ export default function Groceries({ goToGrocery, refresh }) {
       {activeTab === 'recipes' && <div className='subHeaderWrapper'>
         <Collapsible title={`${t('FILTERS_LABEL')}${nbFilters > 0 ? ` (${nbFilters})` : ''}`} icon={filterIcon}>
           <div className='filtersWrapper'>
-            <Select label={t('TYPE')} options={optionsLabel} name='label' value={filters.label} onChange={handleFilterChange} doHighLight={filters.label !== defaultFilterValues.categories && true} />
-            <Select label={t('STATUS_LBL')} options={optionsStatus} name='status' value={filters.status} onChange={handleFilterChange} doHighLight={filters.status !== defaultFilterValues.categories && true} />
             <Select label={t('SORT_BY')} options={optionsSortBy} name='sortBy' value={filters.sortBy} onChange={handleFilterChange} doHighLight={filters.sortBy !== defaultFilterValues.sortBy && true} />
           </div>
           <button className='actionButton resetFilterBgColor resetFiltersButton' onClick={resetFilters}>{t('RESET_FILTERS')}</button>
@@ -576,9 +604,9 @@ export default function Groceries({ goToGrocery, refresh }) {
       </div>}
 
       {activeTab === 'recipes' && <div className={gr.list}>
-        {recipes.length > 0 ? (
-          recipes.map((recipe) => (
-            <RecipeCard key={recipe.id} data={recipe} onClick={openRecipeEditor} />
+        {recipeView.length > 0 ? (
+          recipeView.map((recipe) => (
+            <RecipeCard key={recipe.id} data={recipe} onClick={openRecipeEditor} onDelete={deleteRecipe} />
           ))
         ) : (
           <div className={gr.empty}>{t('NO_RECIPES_YET')}</div>
@@ -650,10 +678,10 @@ export default function Groceries({ goToGrocery, refresh }) {
                 </div>
               ))}
             </div>
+            <button type='button' onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.preventDefault(); setIsAddItemsToRecipePopup(true) }} className={`${gr.recipeAddItemsButton}`}><span>+</span></button>
             {previewRecipeList.length === 0 && <div className={gr.empty}></div>}
             <div className={gr.recipeBottomActions}>
-              <button style={{width : '35%'}} type='button' onMouseDown={(e) => e.stopPropagation()} onClick={(e) => { e.preventDefault(); setIsAddItemsToRecipePopup(true) }} className={`saveButton ${gr.recipeAddItemsButton}`}>{t('ADD_ITEMS')}</button>
-              <button style={{width : '65%'}} type='button' onClick={(e) => { e.preventDefault(); saveEditedRecipe() }} className={`saveButton ${gr.recipeSaveButton}`}>{t('SAVE')}</button>
+              <button style={{marginTop : '15px'}} type='button' onClick={(e) => { e.preventDefault(); saveEditedRecipe() }} className={`saveButton ${gr.recipeSaveButton}`}>{t('SAVE')}</button>
             </div>
         </Popup>
       }
@@ -685,7 +713,7 @@ export default function Groceries({ goToGrocery, refresh }) {
             <select name='settingsSelect' className='settingsSelect' defaultValue={i18n.language} onChange={changeLanguage}>
               <option value='en'>English</option>
               <option value='fr'>Français</option>
-              <option value='ru'>Русский</option>
+              <option value='ru'>Руѝѝкий</option>
             </select>
           </div>
         </SettingsMenu>

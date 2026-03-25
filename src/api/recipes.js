@@ -1,5 +1,18 @@
-import { doc, getDoc, updateDoc, writeBatch, collection, serverTimestamp, arrayUnion } from "firebase/firestore";
+import { doc, getDoc, updateDoc, writeBatch, deleteDoc, collection, serverTimestamp, arrayUnion, arrayRemove } from "firebase/firestore";
 import { db } from "../api/initFirebase";
+
+export async function deleteRecipe(userId, recipeId) {
+  if (!userId || !recipeId) throw new Error("Missing userId or recipeId");
+  try {
+    const batch = writeBatch(db);
+    batch.delete(doc(db, "recipes", recipeId));
+    batch.update(doc(db, "users", userId), { recipes: arrayRemove(recipeId) });
+    await batch.commit();
+    return { success: true };
+  } catch (error) {
+    return { success: false, error };
+  }
+}
 
 
 export async function fetchUserRecipes(userId) {
