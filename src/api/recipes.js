@@ -1,4 +1,4 @@
-import { doc, getDoc, getDocs, deleteDoc, updateDoc, writeBatch, collection, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc, updateDoc, writeBatch, collection, serverTimestamp, arrayUnion } from "firebase/firestore";
 import { db } from "../api/initFirebase";
 
 
@@ -52,7 +52,7 @@ export async function saveNewRecipe(recipe) {
 
     const userRef = doc(db, "users", recipe.owner);
     batch.update(userRef, {
-      recipes: [...(recipe.existingRecipeIds || []), recipeId],
+      recipes: arrayUnion(recipeId),
     });
 
     await batch.commit();

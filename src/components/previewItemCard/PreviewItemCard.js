@@ -5,12 +5,15 @@ import storeIcon from '../../assets/images/icons/store.svg';
 import ic from '../ItemCard/itemCard.module.css'
 import pic from './previewItemCard.module.css'
 import noteIcon from '../../assets/images/icons/name.svg'
+import { useCategorySearch } from '../../hooks/useCategorySearch';
 
 
 export default function PreviewItemCard({data,actions, categoriesList}) {
 
-    const { i18n } = useTranslation();
-    const rightItemsIcons = [{src : remove, alt : "Remove", clickaction : removeCall}];
+  const { t } = useTranslation();
+  const { getOneCategory } = useCategorySearch();
+  const rightItemsIcons = [{src : remove, alt : "Remove", clickaction : removeCall}];
+  const categoryLabel = data.category ? getOneCategory(data.category) : t('NO_CATEGORY');
 
     function removeCall(){
           actions.remove && actions.remove(data.name);
@@ -31,10 +34,10 @@ export default function PreviewItemCard({data,actions, categoriesList}) {
                        <div className={ic.labelsWrapper}>
                       <div style={{border : data.category === "" ? "1px solid red" : ""}} className={ic.category}>
                         <img alt="Category Icon" src={categoryIcon} className={ic.icon} />
-                        <select name='category' onChange={categoryChangeCall} className={`${ic.dataLabel} ${ic.category} ${pic.categorySelect}`}>
-                        <option  value={data.category}>{data.category}</option>
+                        <select name='category' onChange={categoryChangeCall} value={data.category || ''} className={`${ic.dataLabel} ${ic.category} ${pic.categorySelect}`}>
+                        <option  value={data.category || ''}>{categoryLabel}</option>
                         {categoriesList && categoriesList.map((category, index) => (
-                          <option key={index} value={category.id}>{category.names[i18n.language.toLowerCase()]}</option>
+                          <option key={index} value={category.id}>{getOneCategory(category.id)}</option>
                         ))}
                         </select>
                         </div> 

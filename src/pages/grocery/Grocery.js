@@ -8,7 +8,7 @@ import add from '../../assets/images/icons/add.svg'
 import iconBack from '../../assets/images/icons/back.svg'
 import iconMore from '../../assets/images/icons/more.svg'
 import {useTranslation} from 'react-i18next';
-import { getGroceryById, removeOneCustomCategories, removeOneCustomStore, updateGroceryStatus, clearItemsList, updateCustomCategories, updateCustomStores, subscribeGroceryItems } from '../../api/grocery';
+import { getGroceryById, removeOneCustomStore, updateGroceryStatus, clearItemsList, updateCustomStores, subscribeGroceryItems } from '../../api/grocery';
 import { addItems, removeItem , setItemStatus} from '../../api/items';
 import ItemCard from '../../components/ItemCard/ItemCard';
 import Select from '../../components/select/Select';
@@ -42,7 +42,6 @@ function Grocery({goBack, groceryId}) {
   const [isAddItemsPopup, setIsAddItemsPopup] = useState(false);
   const [isSettingsPopup, setIsSettingsPopup] = useState(false);
   const [isPreviewListPopup, setIsPreviewListPopup] = useState(false);
-  const [categoriesOptionsList, setCategoriesOptionsList] = useState([])
   const [storesOptionsList, setStoresOptionsList] = useState([])
   const [filters, setFilters] = useState({category: defaultCategory,store: defaultStore,status: defaultStatus, sortBy: defaultSortBy});
   const [nbFilters, setNbFilters] = useState(0);
@@ -135,7 +134,6 @@ function Grocery({goBack, groceryId}) {
     let g = await getGroceryById(groceryId);
     if (!g) return;
       setGrocery(g);
-      setCategoriesOptionsList(getCategoriesList(g))
       setStoresOptionsList(getStoresList(g))
   }
 
@@ -230,7 +228,7 @@ if (isValid) {
 
     return {
       name: item,
-      category: matchedCategory ? matchedCategory.names[i18n.language.toLowerCase()] : "",
+      category: matchedCategory || "",
       store: storeRef.current.value,
       status: "active",
       addedBy: userData.firstName
@@ -245,9 +243,13 @@ if (isValid) {
  }
 
  async function saveItems(){
-      
-      let finalArr = []
-      let result = await addItems(finalArr,grocery.getId());
+      const result = await addItems(
+        previewItemsList.map((item) => ({
+          ...item,
+          category: resolveCategoryId(item.category)
+        })),
+        grocery.getId()
+      );
       if (result.success){
         await getFullGrocery();
         if (categoryRef.current) categoryRef.current.value = '';
@@ -265,30 +267,10 @@ if (isValid) {
       setIsPreviewListPopup(false);
  }
 
-function getCategoriesList(grocery){
- let list =  [...grocery.getCustomCategories()];
- if (list.length > 0){list.sort((a,b) => a.desc.localeCompare(b.desc))};
- return list;
-}
-
 function getStoresList(grocery){
  let list =  [...grocery.getCustomStores()];
  if (list){list.sort((a,b) => a.desc.localeCompare(b.desc))};
  return list;
-}
-
-async function handleCategoryUpdate(list){
-  const groceryId = grocery.getId();
-  let res = await updateCustomCategories(groceryId,list);
-  setCategoriesOptionsList(list.map(e=>{return {desc : e, type : 'custom'}}));
-  return res;
-}
-
-async function handleCategoryDelete(category){
-  const groceryId = grocery.getId();
-  let res = await removeOneCustomCategories(groceryId,category);
-  setCategoriesOptionsList(categoriesOptionsList.filter(item => item.desc !== category))
-  return res;
 }
 
 async function handleStoreUpdate(list){
@@ -343,6 +325,36 @@ function validateInput(value) {
   return false;
 }
 
+function resolveCategoryId(categoryValue){
+  const raw = (categoryValue || '').toString().trim();
+  if (!raw) return '';
+
+  const allCategories = getAllCategoriesList();
+  const match = allCategories.find((cat) => {
+    if (cat.id === raw) return true;
+    const names = Object.values(cat.names || {}).map((name) => (name || '').toString().trim().toLowerCase());
+    return names.includes(raw);
+  });
+
+  return match ? match.id : raw;
+}
+
+function removePreviewItem(itemName){
+  setPreviewItemsList(prev => prev.filter(item => item.name !== itemName));
+}
+
+function editPreviewItemCategory(itemName, newCategoryId){
+  setPreviewItemsList(prev => prev.map(item => {
+    if (item.name === itemName){
+      return {
+        ...item,
+        category: newCategoryId || item.category
+      };
+    }
+    return item;
+  }));
+}
+
  const changeLanguage = (e) => i18n.changeLanguage(e.target.value);
  
  if (!grocery) return null; 
@@ -392,7 +404,7 @@ function validateInput(value) {
               <Category list={categoriesOptionsList} ref={categoryRef}  onUpdate={(cat)=>handleCategoryUpdate(cat)} onDelete={(cat)=>handleCategoryDelete(cat)} setCategory={()=>{return null}}/>
               */ }
               <label htmlFor="itemStore" >{t("STORE")} :</label>
-              <Category list={storesOptionsList} ref={storeRef} onUpdate={(store)=>handleStoreUpdate(store)} onDelete={(store)=>handleStoreRemove(store)} setCategory={()=>{return null}}/>
+              <Category list={storesOptionsList} ref={storeRef} onUpdate={(store)=>handleStoreUpdate(store)} onDelete={(store)=>handleStoreRemove(store)}/>
               <label htmlFor="items" >{t('ITEMS')} :</label>
               <AddItems id="items" setItemsList={(val)=>setItemsList(val)}/>
               <button type='button' onClick={(e)=>{ e.preventDefault(); loadPreviewList(e)}} className={"saveButton"}>{t('SAVE')}</button>
@@ -406,7 +418,14 @@ function validateInput(value) {
             <div className={gr.previewList}>
               {previewItemsList.map((item,index) => (
                 <div key={index} className={gr.previewItem}>
-                  <PreviewItemCard data={item} actions={{}} categoriesList={getAllCategoriesList()} />
+                  <PreviewItemCard
+                    data={item}
+                    actions={{
+                      remove: (itemName) => removePreviewItem(itemName),
+                      editCategory: (itemName, newCategoryId) => editPreviewItemCategory(itemName, newCategoryId)
+                    }}
+                    categoriesList={getAllCategoriesList()}
+                  />
                 </div>
               ))}
             </div>

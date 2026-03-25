@@ -10,6 +10,7 @@ import noteIcon from '../../assets/images/icons/name.svg'
 export default function ItemCard({data,actions}) {
     const { t } = useTranslation();
     const rightItemsIcons = [{src : data.status === "active" ? check : redo, alt : "Check", clickaction : changeStatusCall},{src : remove, alt : "Remove", clickaction : removeCall}];
+  const categoryLabel = data.category ? t(`CATEGORIES.${(data.category || '').toUpperCase()}`, { defaultValue: data.category }) : t('NO_CATEGORY');
       
      function removeCall(){
         let res = window.confirm(t("REMOVE_ITEM"))
@@ -32,7 +33,7 @@ export default function ItemCard({data,actions}) {
                  <div className={ic.labelsWrapper}>
                 <div className={ic.category}>
                   <img alt="Category Icon" src={categoryIcon} className={ic.icon} />
-                  <span className={ic.dataLabel}>{data.category}</span>
+                  <span className={ic.dataLabel}>{categoryLabel}</span>
                   </div> 
                 <div className={ic.store}>
                   <img alt="Store Icon" src={storeIcon} className={ic.icon} />

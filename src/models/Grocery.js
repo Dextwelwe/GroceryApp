@@ -24,7 +24,12 @@ export default class Grocery {
 
     getCategoriesFromAddedItems() {
         const unique = new Set(this.items.map(item => item.category)); 
-        const categories = Array.from(unique).map(c => ({desc: c, label: c, type: 'item'}));
+        const categories = Array.from(unique).map(c => ({
+            desc: c,
+            value: c,
+            label: i18n.t(`CATEGORIES.${(c || '').toUpperCase()}`, { defaultValue: c }),
+            type: 'item'
+        }));
         return categories;
     }
 

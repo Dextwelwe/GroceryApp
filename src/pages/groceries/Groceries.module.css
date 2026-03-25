@@ -183,6 +183,12 @@ label{
     transform: translateY(-1px);
 }
 
+.previewList{
+    overflow: auto;
+    max-height: 60vh;
+    max-height: 60dvh;
+}
+
 .recipeBottomActions {
     display: flex;
     align-items: center;
@@ -192,6 +198,11 @@ label{
 
 .recipeSaveButton {
     margin-top: 0;
+}
+
+.recipeAddItemsButton{
+    margin: 5px 0px; 
+    background-color: #4CAF50 !important;
 }
 
 .popupActions {

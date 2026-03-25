@@ -50,6 +50,9 @@ const Category = forwardRef(({list, setCategory, onUpdate, onDelete},ref) => {
 
   const handleSaveNewOption = async() =>{
      let val = newCategoryRef.current.value;
+     if (val.trim() === "") {
+      return;
+    }
      let isUnique = true;
     for (let x=0;x< list.length; x++){
       let el = list[x];
@@ -120,8 +123,8 @@ const handleEditOptionMenu = () => {
     <div className="headerWrapper categoryWrapper">
      <div className="itemsCategory">
        {displayEditCategory && isEditCategory && <img src={iconDelete} className="menuIcon" onClick={removeCategory} alt="icon delete" />}           {/* Remove an Option  */}
-       {isAddNewCategory && <input type="text" ref={newCategoryRef} placeholder={t('NEW_CATEGORY')}  className="newCategoryInput" />}
-       {isEditCategory && <input type="text" ref={newCategoryRef} placeholder={t('EDIT_CATEGORY')} value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} className="newCategoryInput" />} 
+       {isAddNewCategory && <input type="text" ref={newCategoryRef}   className="newCategoryInput" />}
+       {isEditCategory && <input type="text" ref={newCategoryRef}  value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} className="newCategoryInput" />} 
        {!isAddNewCategory && !isEditCategory && 
           <select className="oneCategoryItem" ref={ref} value={selectedCategory} onChange={(e) => handleSelect(e)} >
             {list.map((item, index) => (<option key={index} value={item.desc}>{item.desc}</option>))}

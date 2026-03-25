@@ -34,6 +34,19 @@
         "Z-A" : "Z-A",
         "CATEGORY" : "Category"
     },
+    "CATEGORIES": {
+        "PRODUCE": "Produce",
+        "MEAT": "Meat",
+        "DAIRY": "Dairy",
+        "BAKERY": "Bakery",
+        "PANTRY": "Pantry",
+        "FROZEN": "Frozen",
+        "SNACKS_DRINKS": "Snacks & Drinks",
+        "HOUSEHOLD": "Household",
+        "PERSONAL_CARE": "Personal Care",
+        "PETS": "Pets",
+        "SEAFOOD": "Seafood"
+    },
     "ALL" : "All",
     "HI" : "Hello",
     "USER" : "User",

@@ -35,7 +35,7 @@
 .countText {
 	font-size: 0.9rem;
 	opacity: 0.75;
-    margin-left: 5px;
+    margin-left: 30px;
 	color: var(--subTextFontColor);
 }
 
