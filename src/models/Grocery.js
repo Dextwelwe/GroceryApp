@@ -52,7 +52,11 @@ export default class Grocery {
     }
 
     getStoresFromAddedItems(){
-        const unique = new Set(this.items.map(item => item.store));
+        const unique = new Set();
+        this.items.forEach(item => {
+            const trimmed = (item.store || '').trim();
+            if (trimmed) unique.add(trimmed);
+        });
         const stores = Array.from(unique).map(c => ({desc : c, label : c, type : 'item'}))
         return stores;
     }
@@ -66,9 +70,23 @@ export default class Grocery {
     }
 
     getStores() {
-    const unique = new Set(this.items.map(item => item.store));
+    const unique = new Set();
+    this.items.forEach(item => {
+        const trimmed = (item.store || '').trim();
+        if (trimmed) unique.add(trimmed);
+    });
     const stores = Array.from(unique).map(c => ({value: c, label: c}));
     return [{value : "all", label: i18n.t("ALL")}, ...stores];
+    }
+
+    getRecipes() {
+    const unique = new Set();
+    this.items.forEach(item => {
+        const trimmed = (item.recipe || '').trim();
+        if (trimmed) unique.add(trimmed);
+    });
+    const recipes = Array.from(unique).map(r => ({value: r, label: r}));
+    return [{value: "all", label: i18n.t("ALL")}, ...recipes];
     }
 
     getCompletedItemsCount(){

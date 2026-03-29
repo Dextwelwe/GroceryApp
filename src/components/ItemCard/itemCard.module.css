@@ -17,6 +17,8 @@
 
 .dataWrapper{
     flex-grow: 1;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .name {
@@ -24,6 +26,9 @@
     font-weight: 500;
     text-transform: capitalize;
     font-size: 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .nameWrapper{
@@ -32,6 +37,8 @@
     align-items: center;
     gap: 5px;
     margin-bottom : 8px;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .category{
@@ -39,33 +46,52 @@
     border-radius:20px;
     box-sizing: border-box;
     display: flex;
-    justify-content: space-between;
     align-items : center;
     gap: 5px;
-    width: max-content;
+    max-width: 140px;
     height: 26px;
     background: #FFF4D6;
     color: #8A5A00;
     padding: 0px 10px;
-  
+    flex-shrink: 1;
+    min-width: 0;
 }
 
 .store {
     margin-left: 2px;
     display: flex;
-    justify-content: space-between;
     align-items : center;
     gap: 5px;
-    width: max-content;
+    max-width: 140px;
     background: #E6EEF8;
     color: #2D4F90;
     border-radius: 20px;
     padding: 0px 10px;
     height: 26px;
+    flex-shrink: 1;
+    min-width: 0;
+}
+
+.recipe {
+    margin-left: 2px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    max-width: 140px;
+    background: #F3E5F5;
+    color: #6A1B9A;
+    border-radius: 20px;
+    padding: 0px 10px;
+    height: 26px;
+    flex-shrink: 1;
+    min-width: 0;
 }
 
 .dataLabel{
-    font-size: 0.82rem;   
+    font-size: 0.82rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .rightItems{
@@ -80,16 +106,21 @@
     justify-content: flex-start;
     align-items: center;
     gap: 5px;
+    flex-wrap: wrap;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .icon{
     height: 20px;
     width: 20px;
+    flex-shrink: 0;
 }
 
 .nameIcon{
     height: 25px;
     width: 25px;
+    flex-shrink: 0;
 }
 
 .menuIcon{

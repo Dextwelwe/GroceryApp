@@ -47,8 +47,6 @@ export default function Groceries({ goToGrocery, refresh }) {
   const [groceries, setGroceries] = useState([]);
   const [usersList, setUsersList] = useState([]);
   const [recipes, setRecipes] = useState([]);
-  const [recipeItems, setRecipeItems] = useState([]);
-  const [editRecipeItems, setEditRecipeItems] = useState([]);
   const [previewRecipeList, setPreviewRecipeList] = useState([]);
   const [usersEmailList, setUsersEmailList] = useState([]);
   const [isAddNewGroceryVisible, setIsAddNewGroceryVisible] = useState(false);
@@ -57,6 +55,7 @@ export default function Groceries({ goToGrocery, refresh }) {
   const [isPreviewListPopup, setIsPreviewListPopup] = useState(false);
   const [isEditRecipePopup, setIsEditRecipePopup] = useState(false);
   const [isAddItemsToRecipePopup, setIsAddItemsToRecipePopup] = useState(false);
+  const [hasAddItemsPending, setHasAddItemsPending] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
 
   const [defaultLabel, setDefaultLabel] = useLocalStorage('FLabel', 'all');
@@ -69,10 +68,8 @@ export default function Groceries({ goToGrocery, refresh }) {
   let nameRef = useRef(null);
   let dateRef = useRef(null);
   let usersRef = useRef(null);
-  let refRecipeItemsInput = useRef(null);
-  let refEditRecipeItemsInput = useRef(null);
   const touchStartRef = useRef({ x: 0, y: 0 });
-  const { getBestMatch, getAllCategoriesList } = useCategorySearch();
+  const { getAllCategoriesList } = useCategorySearch();
 
   const headerItems = [{ src: iconMore, alt: 'Icon More', clickaction: () => setIsSettingsPopup(!isSettingsPopup), buttonLabel: t('OPTIONS') }];
 
@@ -279,10 +276,6 @@ export default function Groceries({ goToGrocery, refresh }) {
     setIsEditRecipePopup(false);
     setSelectedRecipe(null);
     setPreviewRecipeList([]);
-    setEditRecipeItems([]);
-    if (refEditRecipeItemsInput.current) {
-      refEditRecipeItemsInput.current.value = '';
-    }
   }
 
   function openRecipeEditor(recipeId) {
@@ -291,53 +284,29 @@ export default function Groceries({ goToGrocery, refresh }) {
 
     setSelectedRecipe(recipe);
     setPreviewRecipeList(recipe.items || []);
-    setEditRecipeItems([]);
     setIsEditRecipePopup(true);
   }
 
-  function addItemsToEditedRecipe() {
-    if (editRecipeItems.length === 0) {
+  function addItemsToEditedRecipe(newItems) {
+    if (!newItems || newItems.length === 0) {
       return alert(t('WARNINGS.NO_ITEMS_TO_ADD'));
     }
 
     const existingNames = new Set(
       previewRecipeList.map((item) => (item.name || '').trim().toLowerCase())
     );
-    const seenNewItems = new Set();
 
-    const normalizedNewItems = editRecipeItems
-      .map((item) => item.trim())
-      .filter((item) => item.length > 0)
-      .filter((item) => {
-        const key = item.toLowerCase();
-        if (existingNames.has(key) || seenNewItems.has(key)) {
-          return false;
-        }
-        seenNewItems.add(key);
-        return true;
-      });
+    const itemsToAdd = newItems.filter((item) => {
+      const key = item.name.trim().toLowerCase();
+      return !existingNames.has(key);
+    });
 
-    if (normalizedNewItems.length === 0) {
+    if (itemsToAdd.length === 0) {
       return alert(t('WARNINGS.ALREADY_EXISTS'));
     }
 
-    const itemsToAdd = normalizedNewItems.map((itemName) => {
-      const matchedCategory = getBestMatch(itemName);
-      return {
-        name: itemName,
-        category: matchedCategory || '',
-        store: '',
-        status: 'active',
-        addedBy: userData.firstName
-      };
-    });
-
     setPreviewRecipeList((prev) => [...prev, ...itemsToAdd]);
     setIsAddItemsToRecipePopup(false);
-    setEditRecipeItems([]);
-    if (refEditRecipeItemsInput.current) {
-      refEditRecipeItemsInput.current.value = '';
-    }
   }
 
   function editPreviewRecipeItem(itemName, newCategoryId) {
@@ -372,10 +341,6 @@ export default function Groceries({ goToGrocery, refresh }) {
     if (result.success) {
       setIsPreviewListPopup(false);
       setPreviewRecipeList([]);
-      setRecipeItems([]);
-      if (refRecipeItemsInput.current) {
-        refRecipeItemsInput.current.value = '';
-      }
       toggleNewRecipe();
       await loadRecipes();
     } else {
@@ -417,38 +382,14 @@ export default function Groceries({ goToGrocery, refresh }) {
     }
   }
 
-  function loadPreviewList(e) {
-    let isValid = true;
-    e.preventDefault();
+  function handleRecipeItemsReady(items) {
     if (!validateInput(nameRef.current.value)) {
       nameRef.current.style.borderColor = 'red';
-      isValid = false;
-    } else {
-      nameRef.current.style.borderColor = '';
+      return;
     }
-
-    if (recipeItems.length === 0) {
-      isValid = false;
-      refRecipeItemsInput.current.style.borderColor = 'red';
-    } else {
-      refRecipeItemsInput.current.style.borderColor = '';
-    }
-
-    if (isValid) {
-      let previewItemsArray = recipeItems.map(item => {
-        const matchedCategory = getBestMatch(item);
-
-        return {
-          name: item,
-          category: matchedCategory || '',
-          store: '',
-          status: 'active',
-          addedBy: userData.firstName
-        };
-      });
-      setPreviewRecipeList(previewItemsArray);
-      setIsPreviewListPopup(true);
-    }
+    nameRef.current.style.borderColor = '';
+    setPreviewRecipeList(items);
+    setIsPreviewListPopup(true);
   }
 
   const addUser = async () => {
@@ -596,15 +537,12 @@ export default function Groceries({ goToGrocery, refresh }) {
       }
 
       {isAddNewRecipeVisible &&
-        <Popup title={t('ADD_NEW_RECIPE')} close={() => { if (!isPreviewListPopup) toggleNewRecipe() }}>
+        <Popup title={t('ADD_NEW_RECIPE')} close={() => { if (!isPreviewListPopup) toggleNewRecipe() }} closeOnOutsideClick={!hasAddItemsPending}>
           <form className={gr.form} onSubmit={(e) => e.preventDefault()}>
             <label htmlFor='recipeName' >{t('RECIPE_NAME')} :</label>
             <input id='recipeName' ref={nameRef} className='input'></input>
             <label htmlFor='items' >{t('ITEMS')} :</label>
-            <AddItems id='items' ref={refRecipeItemsInput} setItemsList={(val) => setRecipeItems(val)} />
-
-            {usersEmailList.length > 0 && <><span className={gr.addedUsersTitle}>{t('ADDED_USERS')}</span><span className={gr.formMessage}>{usersEmailList.join(', ')}</span></>}
-            <button type='button' onClick={(e) => { e.preventDefault(); loadPreviewList(e) }} className='saveButton'>{t('SAVE')}</button>
+            <AddItems onSave={handleRecipeItemsReady} onItemsChange={setHasAddItemsPending} storesList={[]} userName={userData.firstName} />
           </form>
         </Popup>
       }
@@ -641,13 +579,9 @@ export default function Groceries({ goToGrocery, refresh }) {
       }
 
       {isAddItemsToRecipePopup &&
-        <Popup title={t('ADD_ITEMS')} close={() => setIsAddItemsToRecipePopup(false)}>
+        <Popup title={t('ADD_ITEMS')} close={() => setIsAddItemsToRecipePopup(false)} closeOnOutsideClick={!hasAddItemsPending}>
           <div className={gr.form}>
-            <label htmlFor='editRecipeItems'>{t('ITEMS')} :</label>
-            <AddItems id='editRecipeItems' ref={refEditRecipeItemsInput} setItemsList={(val) => setEditRecipeItems(val)} />
-            <div className={gr.popupActions}>
-              <button type='button' onClick={(e) => { e.preventDefault(); addItemsToEditedRecipe() }} className='saveButton'>{t('ADD_ITEMS')}</button>
-            </div>
+            <AddItems onSave={addItemsToEditedRecipe} onItemsChange={setHasAddItemsPending} storesList={[]} userName={userData.firstName} />
           </div>
         </Popup>
       }

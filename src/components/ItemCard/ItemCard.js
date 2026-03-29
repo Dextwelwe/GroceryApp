@@ -5,6 +5,7 @@ import redo from '../../assets/images/icons/redo.svg'
 import { useTranslation} from 'react-i18next';
 import categoryIcon from '../../assets/images/icons/category.svg';
 import storeIcon from '../../assets/images/icons/store.svg';
+import recipeIcon from '../../assets/images/icons/recipe.svg';
 import noteIcon from '../../assets/images/icons/name.svg'
 
 export default function ItemCard({data,actions}) {
@@ -35,10 +36,18 @@ export default function ItemCard({data,actions}) {
                   <img alt="Category Icon" src={categoryIcon} className={ic.icon} />
                   <span className={ic.dataLabel}>{categoryLabel}</span>
                   </div> 
+                {data.store && (
                 <div className={ic.store}>
                   <img alt="Store Icon" src={storeIcon} className={ic.icon} />
                   <span className={ic.dataLabel}>{data.store}</span>
-                  </div>
+                </div>
+                )}
+                {data.recipe && (
+                <div className={ic.recipe}>
+                  <img alt="Recipe Icon" src={recipeIcon} className={ic.icon} />
+                  <span className={ic.dataLabel}>{data.recipe}</span>
+                </div>
+                )}
                 </div>
            </div>
             <div className={ic.rightItems}>

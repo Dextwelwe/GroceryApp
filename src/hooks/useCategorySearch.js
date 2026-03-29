@@ -1,112 +1,86 @@
 import { useMemo, useCallback } from 'react';
-import Fuse from 'fuse.js';
-import categoriesData from '../categories.json';
+import groceryItems from '../data/groceryItems.json';
 import i18n from '../i18n';
+
+const CATEGORY_IDS = [
+  'produce', 'meat', 'dairy', 'bakery', 'pantry',
+  'frozen', 'snacks_drinks', 'household', 'personal_care', 'pets', 'seafood'
+];
+
+const normalize = (value) =>
+  (value || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
 
 export const useCategorySearch = () => {
 
-  const normalizeTerm = useCallback((value) => {
-    return (value || '')
-      .toString()
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .trim();
-  }, []);
-
-  const singularizeWord = useCallback((word) => {
-    if (word.length <= 3) return word;
-    if (word.endsWith('ies') && word.length > 4) return `${word.slice(0, -3)}y`;
-    if (/(xes|zes|ches|shes|ses|oes)$/i.test(word) && word.length > 4) return word.slice(0, -2);
-    if (word.endsWith('s') && !word.endsWith('ss')) return word.slice(0, -1);
-    return word;
-  }, []);
-
-  const getQueryVariants = useCallback((query) => {
-    const normalized = normalizeTerm(query);
-    if (!normalized) return [];
-
-    const variants = new Set([normalized]);
-    variants.add(singularizeWord(normalized));
-
-    const words = normalized.split(/\s+/).filter(Boolean);
-    if (words.length > 1) {
-      variants.add(words.map((w) => singularizeWord(w)).join(' '));
-    }
-
-    return [...variants].filter(Boolean);
-  }, [normalizeTerm, singularizeWord]);
-
-  const exactCategoryIndex = useMemo(() => {
+  const itemIndex = useMemo(() => {
     const index = new Map();
-
-    categoriesData.forEach((category) => {
-      const id = category.id;
-      const names = Object.values(category.names || {});
-      const keywords = Object.values(category.keywords || {}).flat();
-      const terms = [...names, ...keywords];
-
-      terms.forEach((term) => {
-        const variants = getQueryVariants(term);
-        variants.forEach((variant) => {
-          if (!index.has(variant)) {
-            index.set(variant, id);
-          }
-        });
-      });
+    groceryItems.forEach((item) => {
+      const enKey = normalize(item.en);
+      const frKey = normalize(item.fr);
+      if (enKey && !index.has(enKey)) index.set(enKey, item);
+      if (frKey && !index.has(frKey)) index.set(frKey, item);
     });
-
     return index;
-  }, [getQueryVariants]);
-
-  const fuse = useMemo(() => {
-    return new Fuse(categoriesData, {
-      keys: [
-        { name: "names.en", weight: 2 },
-        { name: "names.ru", weight: 2 },
-        { name: "names.fr", weight: 2 },
-        { name: "keywords.en", weight: 1 },
-        { name: "keywords.ru", weight: 1 },
-        { name: "keywords.fr", weight: 1 }
-      ],
-      threshold: 0.3,
-      includeScore: true,
-      ignoreLocation: true,
-      minMatchCharLength: 3
-    });
   }, []);
 
   const getBestMatch = useCallback((query) => {
-    const trimmed = query?.trim();
-    if (!trimmed) return null;
+    const q = normalize(query);
+    if (!q) return null;
 
-    const queryVariants = getQueryVariants(trimmed);
-    for (const variant of queryVariants) {
-      const exactMatch = exactCategoryIndex.get(variant);
-      if (exactMatch) return exactMatch;
+    const exact = itemIndex.get(q);
+    if (exact) return exact.category;
+
+    for (const [key, item] of itemIndex) {
+      if (key.startsWith(q) || q.startsWith(key)) return item.category;
     }
-    
-    const results = fuse.search(trimmed);
-    return results.length > 0 ? results[0].item.id : null;
-  }, [exactCategoryIndex, fuse, getQueryVariants]);
+    for (const [key, item] of itemIndex) {
+      if (key.includes(q) || q.includes(key)) return item.category;
+    }
+    return null;
+  }, [itemIndex]);
+
+  const getItemSuggestions = useCallback((query) => {
+    const q = normalize(query);
+    if (!q || q.length < 2) return [];
+
+    const lang = (i18n.language || 'en').toLowerCase().split('-')[0];
+    const seen = new Set();
+    const results = [];
+
+    for (const item of groceryItems) {
+      const en = normalize(item.en);
+      const fr = normalize(item.fr);
+      if (en.startsWith(q) || fr.startsWith(q)) {
+        if (!seen.has(en)) {
+          seen.add(en);
+          results.push({ ...item, label: lang === 'fr' ? item.fr : item.en });
+        }
+      }
+    }
+    if (results.length < 8) {
+      for (const item of groceryItems) {
+        const en = normalize(item.en);
+        const fr = normalize(item.fr);
+        if (!seen.has(en) && (en.includes(q) || fr.includes(q))) {
+          seen.add(en);
+          results.push({ ...item, label: lang === 'fr' ? item.fr : item.en });
+        }
+        if (results.length >= 8) break;
+      }
+    }
+    return results.slice(0, 8);
+  }, []);
 
   const getAllCategoriesList = useCallback(() => {
-    return categoriesData.map(item => ({
-      id: item.id,
-      names: item.names
-    }));
+    return CATEGORY_IDS.map(id => ({ id, names: { en: id, fr: id } }));
   }, []);
 
   const getOneCategory = useCallback((categoryId) => {
     const key = (categoryId || '').toString().trim().toLowerCase();
     if (!key) return '';
-
-    const category = categoriesData.find((item) => item.id === key);
-    if (!category) return categoryId;
-
-    const lang = (i18n.language || 'en').toLowerCase().split('-')[0];
-    return category.names?.[lang] || category.names?.en || category.id;
+    const translated = i18n.t(`CATEGORIES.${key.toUpperCase()}`, { defaultValue: '' });
+    return translated || categoryId;
   }, []);
 
-  return { getBestMatch, getAllCategoriesList, getOneCategory, fuse };
+  return { getBestMatch, getAllCategoriesList, getOneCategory, getItemSuggestions };
 };

@@ -44,7 +44,7 @@ async function removeGroceryCall() {
 }
 
   return (
-    <div className={gc.groceryCardWrapper}>
+    <div className={`${gc.groceryCardWrapper} ${data.status === 'completed' ? gc.completedCard : ''}`}>
         <div className={gc.leftItems}>
         {leftItemsIcons.length > 0 && 
             leftItemsIcons.map((item, index) => (
@@ -62,7 +62,7 @@ async function removeGroceryCall() {
                 {data.type=== 'shared' ? t('FILTERS.SHARED') : t('FILTERS.PERSONAL')}
                 </div>
               <div className={`${gc.label} ${data.status==="active" ? gc.colorCompleted : gc.colorActive}`}>
-                <img src={data.status === "active" ? pendingIcon : checkIcon} alt="Icon User" className={gc.userIcon}  />
+                <img src={data.status === "active" ? pendingIcon : checkIcon} alt="Status Icon" className={gc.userIcon}  />
                 {data.status === 'active' ? t('STATUS.ACTIVE') : t('STATUS.COMPLETED')}
                 </div> 
             </div>

@@ -1,11 +1,113 @@
-.add-item-input{
+.add-items-root {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    position: relative;
+}
+
+.add-items-input-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+}
+
+.add-items-input {
     border: var(--border);
     box-sizing: border-box;
     padding: 10px;
     width: 100%;
-    min-height: 200px;
-    height: 100%;
-    resize: none;
-    white-space: pre-wrap;
+    height: var(--inputHeight);
     border-radius: 15px;
+    font-family: var(--fontFamily);
+    font-size: 1rem;
+}
+
+.add-items-input:focus {
+    outline: none;
+    border-color: #888;
+}
+
+.add-items-add-btn {
+    background-color: #2196F3;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.add-items-add-icon {
+    font-size: 1.5rem;
+    color: white;
+    line-height: 1;
+}
+
+.add-items-suggestions {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: var(--border);
+    border-radius: 12px;
+    background: var(--modalBackGround, #fff);
+    max-height: 220px;
+    overflow-y: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    z-index: 10;
+    position: absolute;
+    top: 120%;
+    left: 0;
+    right: 0;
+}
+
+.add-items-suggestion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: background-color 0.15s;
+}
+
+.add-items-suggestion:hover {
+    background-color: #f0f0f0;
+}
+
+.add-items-suggestion-name {
+    font-weight: 500;
+    text-transform: capitalize;
+    font-size: 0.95rem;
+}
+
+.add-items-suggestion-category {
+    font-size: 0.8rem;
+    color: #888;
+    text-transform: capitalize;
+}
+
+.add-items-list {
+    height: 300px;
+    overflow-y: auto;
+}
+
+.add-items-select {
+    width: 80px;
+    background-color: transparent;
+    border: none;
+    height: 25px;
+    font-family: var(--fontFamily);
+    text-align: start;
+    padding-left: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.add-items-select:focus-visible {
+    outline: none;
 }

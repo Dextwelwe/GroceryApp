@@ -17,6 +17,7 @@
         "NO_ITEMS" : "Aucun item ne correspond à vos filtres.",
         "CLEAR_LIST_WARN" : "Êtes-vous sûr de vouloir effacer la liste de courses ?",
         "COMPLETE_GROCERY_WARN": "Êtes-vous sûr de vouloir terminer la liste d'épicerie?",
+        "RESTART_GROCERY_WARN": "Êtes-vous sûr de vouloir relancer la liste d'épicerie?",
         "FILL_ALL_CATEGORIES" : "Certains articles n'ont pas de catégorie.",
         "REMOVE_RECIPE" : "Êtes-vous sûr de vouloir supprimer la recette?"
     },
@@ -50,6 +51,7 @@
     "ALL": "Tous",
     "HI" : "Bonjour",
     "ADD_ITEM_DESC": "-Pommes\n-Bananes\n-Pain",
+    "ADD_ITEM_PLACEHOLDER": "Tapez un nom d'article...",
     "USER" : "Utilisateur",
     "TYPE" : "Type",
     "STATUS_LBL" : "Statut",
@@ -74,8 +76,7 @@
     "NO_DATE" : "Aucune date",
     "LAST_UPDATED" : "Dernière mise à jour",
     "ACTIONS": "Actions",
-    "COMPLETE_GROCERY": "Compléter l’épicerie",
-    "CLEAR_LIST" :"Vider la liste",
+    "COMPLETE_GROCERY": "Compléter l’épicerie",    "RESTART_GROCERY": "Relancer l'épicerie",    "CLEAR_LIST" :"Vider la liste",
     "LANGUAGE": "Langue",
     "LOGOUT": "Se déconnecter",
     "FILTERS_LABEL": "Filtres",
@@ -88,5 +89,7 @@
     "CONFIRM" : "Confirmer",
     "BACK" : "Retour",
     "ADD_RECIPE" : "Ajouter une recette",
-    "RECIPE_ITEMS" : "articles"
+    "RECIPE_ITEMS" : "articles",
+    "RECIPE" : "Recette",
+    "RECIPE_ALREADY_ADDED" : "Déjà ajoutée"
 }

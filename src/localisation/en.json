@@ -17,6 +17,7 @@
         "NO_ITEMS" : "No items match your filters.",
         "CLEAR_LIST_WARN" : "Are you sure you want to clear the grocery list?",
         "COMPLETE_GROCERY_WARN": "Are you sure you want to complete the grocery list?",
+        "RESTART_GROCERY_WARN": "Are you sure you want to restart the grocery list?",
         "FILL_ALL_CATEGORIES" : "Some items are missing categories.",
         "REMOVE_RECIPE" : "Are you sure you want to remove the recipe?"
 
@@ -52,6 +53,7 @@
     "HI" : "Hello",
     "USER" : "User",
     "ADD_ITEM_DESC": "- Apples\n- Bananas\n- Bread",
+    "ADD_ITEM_PLACEHOLDER": "Type an item name...",
     "TYPE" : "Type",
     "STATUS_LBL" : "Status",
     "SORT_BY" : "Sort by",
@@ -77,6 +79,7 @@
     "LAST_UPDATED" : "Last updated",
     "ACTIONS" : "Actions",
     "COMPLETE_GROCERY" : "End Grocery",
+    "RESTART_GROCERY" : "Restart Grocery",
     "CLEAR_LIST" : "Clear grocery list",
     "LANGUAGE" : "Language",
     "LOGOUT" : "Logout",
@@ -91,5 +94,7 @@
     "CONFIRM" : "Confirm",
     "BACK" : "Back",
     "ADD_RECIPE" : "Add recipe",
-    "RECIPE_ITEMS" : "items"
+    "RECIPE_ITEMS" : "items",
+    "RECIPE" : "Recipe",
+    "RECIPE_ALREADY_ADDED" : "Already added"
 }

@@ -1,7 +1,7 @@
 import {useEffect, useState, useMemo, useRef, useCallback, memo } from 'react'
 import gr from './grocery.module.css'
 import '../../groceryCommon.css'
-import { norm, validateInput, resolveCategoryId } from '../../utils/itemUtils';
+import { norm, resolveCategoryId } from '../../utils/itemUtils';
 
 import HeaderMenu from '../../components/header/header';
 import add from '../../assets/images/icons/add.svg'
@@ -28,11 +28,8 @@ import filterIcon from '../../assets/images/icons/filter.svg'
 import listIcon from '../../assets/images/icons/listItems.svg'
 import iconErase from '../../assets/images/icons/erase.svg'
 import completeGroceryIcon from '../../assets/images/icons/completeGroceryIcon.svg'
-import PreviewItemsPopup from '../../components/previewItemsPopup/PreviewItemsPopup';
 import rc from '../../components/recipeCard/recipeCard.module.css';
 import { useCategorySearch } from '../../hooks/useCategorySearch';
-
-
 
 const defaultFilterValues = { categories: 'all', sortBy: 'az' };
 
@@ -44,23 +41,20 @@ function Grocery({goBack, groceryId}) {
   const [defaultStore, setDefaulStore] = useLocalStorage('gStore', 'all');
   const [defaultStatus,setDefaultStatus] = useLocalStorage('gStatus','all');
   const [defaultSortBy,setDefaultSortBy] = useLocalStorage('gSortBy','az');
+  const [defaultRecipe,setDefaultRecipe] = useLocalStorage('gRecipe','all');
   const [isAddItemsPopup, setIsAddItemsPopup] = useState(false);
   const [isSettingsPopup, setIsSettingsPopup] = useState(false);
-  const [isPreviewListPopup, setIsPreviewListPopup] = useState(false);
   const [isAddRecipePopup, setIsAddRecipePopup] = useState(false);
   const [userRecipes, setUserRecipes] = useState([]);
   const [selectedRecipeIds, setSelectedRecipeIds] = useState(new Set());
   const [storesOptionsList, setStoresOptionsList] = useState([])
-  const [filters, setFilters] = useState({category: defaultCategory,store: defaultStore,status: defaultStatus, sortBy: defaultSortBy});
+  const [filters, setFilters] = useState({category: defaultCategory,store: defaultStore,status: defaultStatus, sortBy: defaultSortBy, recipe: defaultRecipe});
   const [nbFilters, setNbFilters] = useState(0);
   const optionsStatus = [ { value: "all", label: t('ALL') },{ value: "active", label: t('STATUS.ACTIVE') },{ value: "completed", label: t('STATUS.COMPLETED')}];
   const optionsSortBy = [ { value: "az", label: t("FILTERS.A-Z") }, { value: "za", label: t("FILTERS.Z-A") }];
-  const [itemsList, setItemsList] = useState([])
-  const [previewItemsList, setPreviewItemsList] = useState([]);
-  let storeRef = useRef(null);
   let recipeStoreRef = useRef(null);
   let settingsPopupRef = useRef(null);
-  const { getBestMatch, getAllCategoriesList } = useCategorySearch();
+  const { getAllCategoriesList } = useCategorySearch();
   
 
   async function loadUserRecipes() {
@@ -102,6 +96,7 @@ function Grocery({goBack, groceryId}) {
     if (filters.sortBy !== defaultFilterValues.sortBy) count++;
     if (filters.store !== defaultFilterValues.categories) count++;
     if (filters.status !== 'all') count++;
+    if (filters.recipe !== 'all') count++;
     setNbFilters(count);
     // eslint-disable-next-line
   }, [filters]);
@@ -127,17 +122,23 @@ function Grocery({goBack, groceryId}) {
     () => (grocery?.getStores() ?? []), [grocery]
   );
 
+  const optionsRecipe = useMemo(
+    () => (grocery?.getRecipes() ?? []), [grocery]
+  );
+
   const view = useMemo(() => {
     const filtered = (grocery?.items ?? []).filter(g => {
       const gCategory = norm(g.category);
       const gStore    = norm(g.store);
       const gStatus   = norm(g.status);
+      const gRecipe   = norm(g.recipe);
 
       const passCategory = filters.category === "all" || gCategory === norm(filters.category);
       const passStore    = filters.store    === "all" || gStore    === norm(filters.store);
       const passStatus   = filters.status   === "all" || gStatus   === norm(filters.status);
+      const passRecipe   = filters.recipe   === "all" || gRecipe   === norm(filters.recipe);
 
-      return passCategory && passStore && passStatus;
+      return passCategory && passStore && passStatus && passRecipe;
     });
 
     return [...filtered].sort((a, b) => {
@@ -213,6 +214,7 @@ function Grocery({goBack, groceryId}) {
     if (name === 'store') setDefaulStore(value);
     if (name === 'status') setDefaultStatus(value);
     if (name === 'sortBy') setDefaultSortBy(value);
+    if (name === 'recipe') setDefaultRecipe(value);
   }
 
   function resetFilters(){
@@ -220,52 +222,13 @@ function Grocery({goBack, groceryId}) {
     setDefaultStatus("all");
     setDefaulStore('all');
     setDefaultSortBy("az");
-    setFilters({category: 'all', store: 'all', status : "all", sortBy: 'az'});
+    setDefaultRecipe("all");
+    setFilters({category: 'all', store: 'all', status : "all", sortBy: 'az', recipe: 'all'});
  }
 
-  function loadPreviewList(e){
-   let isValid = true;
-   let errorMessage = '';
-    e.preventDefault();
-
-    if (itemsList.length === 0){
-      isValid = false;
-      errorMessage = t('WARNINGS.NO_ITEMS_TO_ADD');
-    }
-
-    if (itemsList.length > 50){
-      isValid = false;
-      errorMessage = t('WARNINGS.TOO_MANY_ITEMS');
-    }
-   
-      if (!validateInput(storeRef.current.value)){
-          storeRef.current.style.backgroundColor = '#ffcdd2';
-          isValid = false;
-      }
-      
-if (isValid) {
-  let previewItemsArray = itemsList.map(item => {
-    const matchedCategory = getBestMatch(item);
-
-    return {
-      name: item,
-      category: matchedCategory || "",
-      store: storeRef.current.value,
-      status: "active",
-      addedBy: userData.firstName
-    };
-  });
-
-  setPreviewItemsList(previewItemsArray);
-  setIsPreviewListPopup(true);
-} else {
-      alert(errorMessage);
-    }
- }
-
- async function saveItems(){
+ async function saveItems(itemsToSave){
       const result = await addItems(
-        previewItemsList.map((item) => ({
+        itemsToSave.map((item) => ({
           ...item,
           category: resolveCategoryId(item.category, getAllCategoriesList)
         })),
@@ -273,7 +236,6 @@ if (isValid) {
       );
       if (result.success){
         await getFullGrocery();
-        if (storeRef.current) storeRef.current.value = '';
       } else {
         if ((result.error?.code === "permission-denied")) {
           alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'))
@@ -282,9 +244,6 @@ if (isValid) {
         } 
       }
       setIsAddItemsPopup(false);
-      setItemsList([]);
-      setPreviewItemsList([]);
-      setIsPreviewListPopup(false);
  }
 
 async function handleStoreUpdate(list){
@@ -321,9 +280,21 @@ async function handleStoreRemove(store) {
   }
  }
 
-function removePreviewItem(itemName){
-  setPreviewItemsList(prev => prev.filter(item => item.name !== itemName));
-}
+ const restartGrocery = async() => {
+  let doRestart = window.confirm(t('WARNINGS.RESTART_GROCERY_WARN'));
+  if (doRestart){
+    const groceryId = grocery.getId();
+    let res = await updateGroceryStatus(userData.uid, groceryId, "active");
+    if (res.success === true){
+      setGrocery(prev => {
+        const updated = Object.assign(Object.create(Object.getPrototypeOf(prev)), prev);
+        updated.status = "active";
+        return updated;
+      });
+      setIsSettingsPopup(false);
+    }
+  }
+ }
 
 function toggleRecipeSelection(recipeId) {
   setSelectedRecipeIds(prev => {
@@ -352,7 +323,8 @@ async function addRecipeItems() {
         category: resolveCategoryId(item.category, getAllCategoriesList),
         store: recipeStoreRef.current?.value || '',
         status: 'active',
-        addedBy: userData.firstName
+        addedBy: userData.firstName,
+        recipe: recipe.name
       });
     }
   }
@@ -377,23 +349,12 @@ async function addRecipeItems() {
   setSelectedRecipeIds(new Set());
 }
 
-function editPreviewItemCategory(itemName, newCategoryId){
-  setPreviewItemsList(prev => prev.map(item => {
-    if (item.name === itemName){
-      return {
-        ...item,
-        category: newCategoryId || item.category
-      };
-    }
-    return item;
-  }));
-}
-
  if (!grocery) return null; 
 
   const headerGroceryTitle = grocery.getTitle();
   const headerGroceryNav = [{src : iconBack , alt : "Back", clickaction : goBack}]
   const headerItems = [{src : iconMore, alt : "Options", clickaction : ()=> setIsSettingsPopup(!isSettingsPopup), buttonLabel :t('OPTIONS')} ]
+  const addedRecipeNames = new Set((grocery?.items ?? []).map(i => norm(i.recipe)).filter(Boolean));
 
   return (
     <div className='mainContentWrapper'>
@@ -403,6 +364,7 @@ function editPreviewItemCategory(itemName, newCategoryId){
           <FilterPanel title={`${t('FILTERS_LABEL')}${nbFilters > 0 ? ` (${nbFilters})` : ""}`} icon={filterIcon} onReset={resetFilters} resetLabel={t('RESET_FILTERS')}>
             <Select label={t('FILTERS.CATEGORY')} options={optionsCategories} name="category" value={filters.category} onChange={handleFilterChange} doHighLight={filters.category !== defaultFilterValues.categories && true} />
             <Select label={t('STORE')} options={optionsStore} name="store"  value={filters.store} onChange={handleFilterChange} doHighLight={filters.store !== defaultFilterValues.categories && true} />
+            <Select label={t('RECIPE')} options={optionsRecipe} name="recipe" value={filters.recipe} onChange={handleFilterChange} doHighLight={filters.recipe !== 'all' && true} />
             <Select label={t('STATUS_LBL')} options={optionsStatus} name="status" value={filters.status} onChange={handleFilterChange} doHighLight={filters.status !== defaultFilterValues.categories && true}/>
             <Select label={t("SORT_BY")} options={optionsSortBy} name="sortBy" value={filters.sortBy} onChange={handleFilterChange} doHighLight={filters.sortBy !== defaultFilterValues.sortBy && true}/>
           </FilterPanel>
@@ -437,11 +399,13 @@ function editPreviewItemCategory(itemName, newCategoryId){
                   {userRecipes.length === 0 && <div className={gr.empty}>{t('NO_RECIPES_YET')}</div>}
                   {userRecipes.map((recipe) => {
                     const isSelected = selectedRecipeIds.has(recipe.id);
+                    const isAlreadyAdded = addedRecipeNames.has(norm(recipe.name));
                     return (
                       <div
                         key={recipe.id}
-                        className={`${rc.recipeCardWrapper} ${isSelected ? gr.recipeSelected : ''}`}
-                        onClick={() => toggleRecipeSelection(recipe.id)}
+                        className={`${rc.recipeCardWrapper} ${isSelected ? gr.recipeSelected : ''} ${isAlreadyAdded ? gr.recipeDisabled : ''}`}
+                        onClick={() => !isAlreadyAdded && toggleRecipeSelection(recipe.id)}
+                        style={isAlreadyAdded ? { opacity: 0.55, cursor: 'default' } : {}}
                       >
                         <div className={rc.dataWrapper}>
                           <div className={rc.title}>
@@ -449,12 +413,12 @@ function editPreviewItemCategory(itemName, newCategoryId){
                             {recipe.name}
                           </div>
                           <div className={rc.countText}>
-                            {(recipe.items || []).length} {t('ITEMS')}
+                            {isAlreadyAdded ? t('RECIPE_ALREADY_ADDED') : `${(recipe.items || []).length} ${t('ITEMS')}`}
                           </div>
                         </div>
-                        <button type="button" className={rc.deleteButton} onClick={(e) => { e.stopPropagation(); toggleRecipeSelection(recipe.id); }}>
+                        <button type="button" className={rc.deleteButton} onClick={(e) => { e.stopPropagation(); if (!isAlreadyAdded) toggleRecipeSelection(recipe.id); }} disabled={isAlreadyAdded}>
                           <span className={isSelected ? gr.recipeSelectIconSelected : gr.recipeSelectIcon}>
-                            {isSelected ? '' : '+'}
+                            {isAlreadyAdded ? '' : isSelected ? '' : '+'}
                           </span>
                         </button>
                       </div>
@@ -462,50 +426,26 @@ function editPreviewItemCategory(itemName, newCategoryId){
                   })}
                 </div>
                 {userRecipes.length > 0 && (
-                  <button
-                    type="button"
-                    className="saveButton"
-                    onClick={addRecipeItems}
-                    disabled={selectedRecipeIds.size === 0}
-                  >
-                    {t('CONFIRM')}
-                  </button>
+                  <button type="button" className="saveButton"  onClick={addRecipeItems} disabled={selectedRecipeIds.size === 0} > {t('CONFIRM')} </button>
                 )}
               </div>
             </Popup>
           }
 
           { isAddItemsPopup && 
-            <Popup title={t('ADD_ITEMS')} close={()=>{if (!isPreviewListPopup) setIsAddItemsPopup(false)}}>
-            <form className={gr.form}>
-              <label htmlFor="itemStore" >{t("STORE")} :</label>
-              <Category list={storesOptionsList} ref={storeRef} onUpdate={(store)=>handleStoreUpdate(store)} onDelete={(store)=>handleStoreRemove(store)}/>
-              <label htmlFor="items" >{t('ITEMS')} :</label>
-              <AddItems id="items" setItemsList={(val)=>setItemsList(val)}/>
-              <button type='button' onClick={(e)=>{ e.preventDefault(); loadPreviewList(e)}} className={"saveButton"}>{t('SAVE')}</button>
-            </form>  
+            <Popup title={t('ADD_ITEMS')} close={()=> setIsAddItemsPopup(false)} closeOnOutsideClick={false}>
+              <div className={gr.form}>
+                <AddItems onSave={saveItems} storesList={storesOptionsList} onStoreAdd={(store)=>handleStoreUpdate(store)} userName={userData.firstName} />
+              </div>
             </Popup>
           }
-
-        {isPreviewListPopup &&
-          <PreviewItemsPopup
-            items={previewItemsList}
-          categoriesList={getAllCategoriesList()}
-          listClassName={gr.previewList}
-          itemClassName={gr.previewItem}
-          onRemove={removePreviewItem}
-          onEditCategory={editPreviewItemCategory}
-            onBack={() => setIsPreviewListPopup(false)}
-            onConfirm={saveItems}
-          />
-        }
           
           {
             isSettingsPopup &&
               <SettingsMenu ref={settingsPopupRef} close={()=>setIsSettingsPopup(false)}>
-                <div className='SettingItemWrapper settingsBtBorder' onClick={completeGrocery}>
-                  <img src={completeGroceryIcon} alt="Erase Icon" className="settingsIcon" />
-                  <div className="settingsItem ">{t('COMPLETE_GROCERY')}</div>
+                <div className='SettingItemWrapper settingsBtBorder' onClick={grocery?.status === 'completed' ? restartGrocery : completeGrocery}>
+                  <img src={completeGroceryIcon} alt="Complete Icon" className="settingsIcon" />
+                  <div className="settingsItem ">{grocery?.status === 'completed' ? t('RESTART_GROCERY') : t('COMPLETE_GROCERY')}</div>
                 </div>
                 <div className='SettingItemWrapper settingsBtBorder' onClick={clearList}>
                   <img src={iconErase} alt="Erase Icon" className="settingsIcon" />

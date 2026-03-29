@@ -83,11 +83,11 @@
 
 .addUserButton{
     cursor: pointer;
-    width: 60px;
+    width: 45px;
     border: none;
     background-color: #2196F3;  
     color: white;
-    border-radius: 15px;
+    border-radius: 100%;
 }
 
 .loadingAnimation{
