@@ -5,15 +5,18 @@ import en from './localisation/en.json';
 import fr from './localisation/fr.json';
 import ru from './localisation/ru.json';
 
+
+const savedLang = localStorage.getItem('i18nextLng');
+
 i18n
   .use(initReactI18next)
   .init({
     resources: {
       en: { translation: en },
       fr: { translation: fr },
-      ru: {translation :ru}
+      ru: { translation: ru }
     },
-    lng: 'en', 
+    lng: savedLang || 'en',
     fallbackLng: 'en',
     interpolation: {
       escapeValue: false,

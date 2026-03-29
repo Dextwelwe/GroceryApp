@@ -50,10 +50,18 @@ export const useCategorySearch = () => {
     for (const item of groceryItems) {
       const en = normalize(item.en);
       const fr = normalize(item.fr);
-      if (en.startsWith(q) || fr.startsWith(q)) {
+      const ru = normalize(item.ru);
+      if (
+        en.startsWith(q) ||
+        fr.startsWith(q) ||
+        ru.startsWith(q)
+      ) {
         if (!seen.has(en)) {
           seen.add(en);
-          results.push({ ...item, label: lang === 'fr' ? item.fr : item.en });
+          let label = item.en;
+          if (lang === 'fr') label = item.fr;
+          else if (lang === 'ru') label = item.ru;
+          results.push({ ...item, label });
         }
       }
     }
@@ -61,9 +69,16 @@ export const useCategorySearch = () => {
       for (const item of groceryItems) {
         const en = normalize(item.en);
         const fr = normalize(item.fr);
-        if (!seen.has(en) && (en.includes(q) || fr.includes(q))) {
+        const ru = normalize(item.ru);
+        if (
+          !seen.has(en) &&
+          (en.includes(q) || fr.includes(q) || ru.includes(q))
+        ) {
           seen.add(en);
-          results.push({ ...item, label: lang === 'fr' ? item.fr : item.en });
+          let label = item.en;
+          if (lang === 'fr') label = item.fr;
+          else if (lang === 'ru') label = item.ru;
+          results.push({ ...item, label });
         }
         if (results.length >= 8) break;
       }
