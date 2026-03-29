@@ -39,9 +39,9 @@ function App() {
      </div>
      
       <div style={{ display: page === 'grocery' ? 'block' : 'none' }}>
-        { groceryId &&
-          <Grocery key={groceryId ?? 'none'} groceryId={groceryId} goBack={goBack}  />
-        }
+      {groceryId &&
+        <Grocery key={groceryId ?? 'none'} groceryId={groceryId} goBack={goBack}  />
+      }
       </div>
      </>
   )

@@ -4,10 +4,12 @@ import Header from '../header/header'
 import closeIcon from '../../assets/images/icons/close.svg'
 import { useEffect,useRef } from 'react'
 
-export default function Popup({children, title, close, hideCloseButton}) {
+export default function Popup({children, title, close, hideCloseButton, closeOnOutsideClick = true}) {
   const contentRef = useRef(null);
 
   useEffect(() => {
+    if (!closeOnOutsideClick) return;
+
     const handleClickOutside = (event) => {
       if (contentRef.current && !contentRef.current.contains(event.target)) {
         close();
@@ -19,7 +21,7 @@ export default function Popup({children, title, close, hideCloseButton}) {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('touchend', handleClickOutside);
     };
-  }, [close]);  
+  }, [close, closeOnOutsideClick]);  
   
   let closeButton = [{src : closeIcon, alt : "close", clickaction : close}]
   return (

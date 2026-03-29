@@ -143,33 +143,17 @@ label{
 .dateWrapper{
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 5px;
-}
-
-.addDateCheckbox{
-    margin: 0;
-    padding: 0;
-    width: 30px;
-    accent-color: #2196F3;  
-    border-radius: 10px; 
-}
-
-.addDateCheckboxWrapper{
-    display: flex;
-    width: 40%;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 10px;
+    height: max-content;
 }
 
 .dateInput{
   box-sizing: border-box !important;
   background-color: white;
-  height: 40px !important;
   text-align: center;
   padding-right: 15px;
-
+  width: 100%;
 }
 
 .addItemsFloatingImage {

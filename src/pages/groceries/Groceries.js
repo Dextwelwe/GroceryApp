@@ -1,5 +1,6 @@
 import gr from './Groceries.module.css'
 import '../../groceryCommon.css'
+import { norm, validateInput, getDate, resolveCategoryId } from '../../utils/itemUtils';
 
 import { useAuth } from '../../providers/AuthProvider';
 import { useTranslation } from 'react-i18next';
@@ -18,10 +19,12 @@ import Popup from '../../components/popup/Popup';
 import HeaderMenu from '../../components/header/header';
 import GroceryCard from '../../components/groceryCard/GroceryCard';
 import RecipeCard from '../../components/recipeCard/RecipeCard';
-import Collapsible from '../../components/collapsible/collapsible';
+import FilterPanel from '../../components/filterPanel/FilterPanel';
 import SettingsMenu from '../../components/settings/settingsMenu';
+import SettingsLanguageSelect from '../../components/settings/SettingsLanguageSelect';
 import AddItems from '../../components/add/addItems';
 import PreviewItemCard from '../../components/previewItemCard/PreviewItemCard';
+import PreviewItemsPopup from '../../components/previewItemsPopup/PreviewItemsPopup';
 
 // Icons
 import add from '../../assets/images/icons/add.svg'
@@ -30,11 +33,13 @@ import animLoading from '../../assets/images/animations/loading.gif'
 import filterIcon from '../../assets/images/icons/filter.svg'
 import listIcon from '../../assets/images/icons/list.svg'
 import iconMore from '../../assets/images/icons/more.svg'
-import iconLanguage from '../../assets/images/icons/lang.svg'
 import iconRecipe from '../../assets/images/icons/recipe.svg'
 
+const STATUS_MAP = { active: 'active', completed: 'completed' };
+const defaultFilterValues = { categories: 'all', sortBy: 'newest' };
+
 export default function Groceries({ goToGrocery, refresh }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { userData, logout } = useAuth();
 
   const [activeTab, setActiveTab] = useState('groceries');
@@ -48,7 +53,6 @@ export default function Groceries({ goToGrocery, refresh }) {
   const [usersEmailList, setUsersEmailList] = useState([]);
   const [isAddNewGroceryVisible, setIsAddNewGroceryVisible] = useState(false);
   const [isAddNewRecipeVisible, setIsAddNewRecipeVisible] = useState(false);
-  const [isDateDisabled, setIsDateDisabled] = useState(false);
   const [isSettingsPopup, setIsSettingsPopup] = useState(false);
   const [isPreviewListPopup, setIsPreviewListPopup] = useState(false);
   const [isEditRecipePopup, setIsEditRecipePopup] = useState(false);
@@ -60,7 +64,6 @@ export default function Groceries({ goToGrocery, refresh }) {
   const [defaultSortBy, setDefaultSortBy] = useLocalStorage('FSortBy', 'newest');
   const [filters, setFilters] = useState({ label: defaultLabel, status: defaultStatus, sortBy: defaultSortBy });
   const [nbFilters, setNbFilters] = useState(0);
-  const defaultFilterValues = { categories: 'all', sortBy: 'newest' }
 
   let settingsPopupRef = useRef(null);
   let nameRef = useRef(null);
@@ -71,7 +74,6 @@ export default function Groceries({ goToGrocery, refresh }) {
   const touchStartRef = useRef({ x: 0, y: 0 });
   const { getBestMatch, getAllCategoriesList } = useCategorySearch();
 
-  const STATUS_MAP = { active: 'active', completed: 'completed' };
   const headerItems = [{ src: iconMore, alt: 'Icon More', clickaction: () => setIsSettingsPopup(!isSettingsPopup), buttonLabel: t('OPTIONS') }];
 
   const optionsLabel = [
@@ -98,10 +100,19 @@ export default function Groceries({ goToGrocery, refresh }) {
       loadGroceries();
       loadRecipes();
     }
-
-    setNumberOfFilters();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userData, refresh, filters, activeTab]);
+  }, [userData, refresh]);
+
+  useEffect(() => {
+    let count = 0;
+    if (activeTab === 'groceries') {
+      if (filters.label !== defaultFilterValues.categories) count++;
+      if (filters.status !== defaultFilterValues.categories) count++;
+    }
+    if (filters.sortBy !== defaultFilterValues.sortBy) count++;
+    setNbFilters(count);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filters, activeTab]);
 
   useEffect(() => {
     if (!isSettingsPopup) return;
@@ -115,8 +126,6 @@ export default function Groceries({ goToGrocery, refresh }) {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isSettingsPopup]);
-
-  const norm = (s) => (s || '').toString().trim().toLowerCase();
 
   const view = useMemo(() => {
     const filtered = groceries.filter(g => {
@@ -216,9 +225,8 @@ export default function Groceries({ goToGrocery, refresh }) {
 
   const saveNewGrocery = async (e) => {
     let isValid = true;
-    let disabledDateVal = null;
     e.preventDefault();
-    let inputsRef = [nameRef, ...(!isDateDisabled ? [dateRef] : [])];
+    let inputsRef = [nameRef];
 
     inputsRef.forEach(element => {
       if (!validateInput(element.current.value)) {
@@ -243,7 +251,7 @@ export default function Groceries({ goToGrocery, refresh }) {
         {
           owner: userData.uid,
           name: nameRef.current.value,
-          date: !isDateDisabled ? parsedDate : disabledDateVal,
+          date: parsedDate,
           sharedWith: usersList,
           type: usersList.length > 0 ? 'shared' : 'personal'
         }
@@ -253,7 +261,7 @@ export default function Groceries({ goToGrocery, refresh }) {
         toggleNewGrocery();
         setUsersList([])
       } else {
-        if (result.error.code === 'permission-denied') {
+        if (result.error?.code === 'permission-denied') {
           alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'))
         } else {
           alert(t('WARNINGS.SERVER_ERROR'));
@@ -344,21 +352,6 @@ export default function Groceries({ goToGrocery, refresh }) {
     }));
   }
 
-  function resolveCategoryId(categoryValue) {
-    const raw = (categoryValue || '').toString().trim();
-    if (!raw) return '';
-
-    const allCategories = getAllCategoriesList();
-    const lowerRaw = raw.toLowerCase();
-    const match = allCategories.find((cat) => {
-      if (cat.id === raw) return true;
-      const names = Object.values(cat.names || {}).map((name) => (name || '').toString().trim().toLowerCase());
-      return names.includes(lowerRaw);
-    });
-
-    return match ? match.id : raw;
-  }
-
   const saveNewRecipe = async () => {
     if (previewRecipeList.some(item => !item.category || item.category.trim() === '')) {
       return alert(t('WARNINGS.FILL_ALL_CATEGORIES'));
@@ -369,7 +362,7 @@ export default function Groceries({ goToGrocery, refresh }) {
       owner: userData.uid,
       items: previewRecipeList.map(item => ({
         name: item.name,
-        category: resolveCategoryId(item.category),
+        category: resolveCategoryId(item.category, getAllCategoriesList),
         store: item.store,
         status: item.status,
         addedBy: item.addedBy
@@ -405,7 +398,7 @@ export default function Groceries({ goToGrocery, refresh }) {
       recipeId: selectedRecipe.id,
       items: previewRecipeList.map(item => ({
         name: item.name,
-        category: resolveCategoryId(item.category),
+        category: resolveCategoryId(item.category, getAllCategoriesList),
         store: item.store || '',
         status: item.status || 'active',
         addedBy: item.addedBy || userData.firstName
@@ -482,44 +475,6 @@ export default function Groceries({ goToGrocery, refresh }) {
     if (name === 'sortBy') setDefaultSortBy(value);
   }
 
-  function validateInput(value) {
-    if (value == null) return false;
-
-    if (value instanceof Date) {
-      return !isNaN(value.getTime());
-    }
-
-    if (typeof value === 'number') {
-      return !isNaN(value);
-    }
-
-    if (typeof value === 'string') {
-      const trimmed = value.trim();
-      return trimmed.length > 0 && trimmed.length <= 50;
-    }
-    return false;
-  }
-
-  function getDate(d) {
-    if (!d) return null;
-    try { return typeof d?.toDate === 'function' ? d.toDate() : new Date(d); }
-    catch { return null; }
-  };
-
-  const openGrocery = (id) => {
-    goToGrocery(id);
-  }
-
-  function setNumberOfFilters() {
-    let count = 0;
-    if (activeTab === 'groceries') {
-      if (filters.label !== defaultFilterValues.categories) count++;
-      if (filters.status !== defaultFilterValues.categories) count++;
-    }
-    if (filters.sortBy !== defaultFilterValues.sortBy) count++;
-    setNbFilters(count);
-  }
-
   function resetFilters() {
     setDefaultLabel('all');
     setDefaultStatus('all');
@@ -527,8 +482,6 @@ export default function Groceries({ goToGrocery, refresh }) {
     setFilters({ label: 'all', status: 'all', sortBy: 'newest' });
     setNbFilters(0);
   }
-
-  const changeLanguage = (e) => i18n.changeLanguage(e.target.value);
 
   function handleTabTouchStart(e) {
     const touch = e.touches?.[0];
@@ -569,42 +522,15 @@ export default function Groceries({ goToGrocery, refresh }) {
     <div className='mainContentWrapper' onTouchStart={handleTabTouchStart} onTouchEnd={handleTabTouchEnd}>
       <HeaderMenu title={headerTitle} headerItems={headerItems} headerNav={null} />
 
-      {activeTab === 'groceries' && <div className='subHeaderWrapper'>
-        <Collapsible title={`${t('FILTERS_LABEL')}${nbFilters > 0 ? ` (${nbFilters})` : ''}`} icon={filterIcon}>
-          <div className='filtersWrapper'>
+      <div className='subHeaderWrapper'>
+        <FilterPanel title={`${t('FILTERS_LABEL')}${nbFilters > 0 ? ` (${nbFilters})` : ''}`} icon={filterIcon} onReset={resetFilters} resetLabel={t('RESET_FILTERS')}>
+          {activeTab === 'groceries' && <>
             <Select label={t('TYPE')} options={optionsLabel} name='label' value={filters.label} onChange={handleFilterChange} doHighLight={filters.label !== defaultFilterValues.categories && true} />
             <Select label={t('STATUS_LBL')} options={optionsStatus} name='status' value={filters.status} onChange={handleFilterChange} doHighLight={filters.status !== defaultFilterValues.categories && true} />
-            <Select label={t('SORT_BY')} options={optionsSortBy} name='sortBy' value={filters.sortBy} onChange={handleFilterChange} doHighLight={filters.sortBy !== defaultFilterValues.sortBy && true} />
-          </div>
-          <button className='actionButton resetFilterBgColor resetFiltersButton' onClick={resetFilters}>{t('RESET_FILTERS')}</button>
-        </Collapsible>
-        <div className='subFiltersContentWrapper'>
-          <div className={gr.tabMenu}>
-            <button
-              className={`${gr.tabButton} ${activeTab === 'groceries' ? gr.tabButtonActive : ''}`}
-              onClick={() => setActiveTab('groceries')}
-            >
-              <img src={listIcon} alt='list icon' className={gr.tabButtonIcon} />
-              {t('MY_GROCERIES')}
-            </button>
-            <button
-              className={`${gr.tabButton} ${activeTab === 'recipes' ? gr.tabButtonActive : ''}`}
-              onClick={() => setActiveTab('recipes')}
-            >
-              <img src={iconRecipe} alt='list icon' className={gr.tabButtonIcon} />
-              {t('MY_RECIPES')}
-            </button>
-          </div>
-        </div>
-      </div>}
+          </>}
+          <Select label={t('SORT_BY')} options={optionsSortBy} name='sortBy' value={filters.sortBy} onChange={handleFilterChange} doHighLight={filters.sortBy !== defaultFilterValues.sortBy && true} />
+        </FilterPanel>
 
-      {activeTab === 'recipes' && <div className='subHeaderWrapper'>
-        <Collapsible title={`${t('FILTERS_LABEL')}${nbFilters > 0 ? ` (${nbFilters})` : ''}`} icon={filterIcon}>
-          <div className='filtersWrapper'>
-            <Select label={t('SORT_BY')} options={optionsSortBy} name='sortBy' value={filters.sortBy} onChange={handleFilterChange} doHighLight={filters.sortBy !== defaultFilterValues.sortBy && true} />
-          </div>
-          <button className='actionButton resetFilterBgColor resetFiltersButton' onClick={resetFilters}>{t('RESET_FILTERS')}</button>
-        </Collapsible>
         <div className='subFiltersContentWrapper'>
           <div className={gr.tabMenu}>
             <button
@@ -623,7 +549,7 @@ export default function Groceries({ goToGrocery, refresh }) {
             </button>
           </div>
         </div>
-      </div>}
+      </div>
 
       {activeTab === 'groceries' && <div className={gr.list}>
         {
@@ -631,8 +557,8 @@ export default function Groceries({ goToGrocery, refresh }) {
           <img className={gr.loadingAnimation} alt='loading' src={animLoading} />
         }
         {!isLoading && <>
-          {(view.length ? view : []).map((grocery) => (
-            <GroceryCard key={grocery.id} data={grocery} onClick={(e) => openGrocery(e)} onDelete={loadGroceries} />
+          {view.map((grocery) => (
+            <GroceryCard key={grocery.id} data={grocery} onClick={goToGrocery} onDelete={loadGroceries} />
           ))}
           {view.length === 0 && groceries.length > 0 && <div className={gr.empty}>{t('WARNINGS.NO_GROCERIES')}</div>}
         </>
@@ -650,24 +576,20 @@ export default function Groceries({ goToGrocery, refresh }) {
       </div>}
 
       {isAddNewGroceryVisible &&
-        <Popup title={t('ADD_NEW_GROCERY')} close={toggleNewGrocery}>
+        <Popup title={t('ADD_NEW_GROCERY')} close={toggleNewGrocery} closeOnOutsideClick={false}>
           <form className={gr.form} onSubmit={(e) => e.preventDefault()}>
             <label htmlFor='groceryName' >{t('NAME')} :</label>
             <input id='groceryName' ref={nameRef} className='input'></input>
             <label htmlFor='groceryDate'>{t('DATE')} :</label>
             <div className={gr.dateWrapper}>
-              <input id='groceryDate' disabled={isDateDisabled === true} className={`${gr.dateInput} input`} type='date' onKeyDown={(e) => e.preventDefault()} onClick={(e) => e.target.showPicker && e.target.showPicker()} ref={dateRef}></input>
-              <div className={gr.addDateCheckboxWrapper}>
-                <label htmlFor='noDateCheckbox'>{t('NO_DATE')} :</label>
-                <input id='noDateCheckbox' className={gr.addDateCheckbox} type='checkbox' checked={isDateDisabled} onChange={() => setIsDateDisabled(!isDateDisabled)}></input>
-              </div>
+              <input id='groceryDate' className={`${gr.dateInput} `} type='date' onKeyDown={(e) => e.preventDefault()} onClick={(e) => e.target.showPicker && e.target.showPicker()} ref={dateRef}></input>
             </div>
             <label htmlFor='userList'>{t('ADD_USERS')}</label>
             <div className={gr.userListWrapper}>
               <input id='userList' ref={usersRef} className={`input ${gr.userList}`} placeholder='user1234@mail.com'></input>
               <button type='button' onClick={addUser} className={gr.addUserButton}>+</button>
             </div>
-            {usersEmailList.length > 0 && <><span className={gr.addedUsersTitle}>{t('ADDED_USERS')}</span><span className={gr.formMessage}>{usersEmailList.map(e => e).join(', ')}</span></>}
+            {usersEmailList.length > 0 && <><span className={gr.addedUsersTitle}>{t('ADDED_USERS')}</span><span className={gr.formMessage}>{usersEmailList.join(', ')}</span></>}
             <button type='button' onClick={(e) => { e.preventDefault(); saveNewGrocery(e) }} className='saveButton'>{t('SAVE')}</button>
           </form>
         </Popup>
@@ -680,28 +602,24 @@ export default function Groceries({ goToGrocery, refresh }) {
             <input id='recipeName' ref={nameRef} className='input'></input>
             <label htmlFor='items' >{t('ITEMS')} :</label>
             <AddItems id='items' ref={refRecipeItemsInput} setItemsList={(val) => setRecipeItems(val)} />
-            {usersEmailList.length > 0 && <><span className={gr.addedUsersTitle}>{t('ADDED_USERS')}</span><span className={gr.formMessage}>{usersEmailList.map(e => e).join(', ')}</span></>}
+
+            {usersEmailList.length > 0 && <><span className={gr.addedUsersTitle}>{t('ADDED_USERS')}</span><span className={gr.formMessage}>{usersEmailList.join(', ')}</span></>}
             <button type='button' onClick={(e) => { e.preventDefault(); loadPreviewList(e) }} className='saveButton'>{t('SAVE')}</button>
           </form>
         </Popup>
       }
 
       {isPreviewListPopup && previewRecipeList.length > 0 &&
-        <Popup title={t('PREVIEW_LIST')} close={() => setTimeout(() => setIsPreviewListPopup(false), 50)} hideCloseButton={true}>
-          <div>
-            <div className={gr.previewList}>
-              {previewRecipeList.map((item, index) => (
-                <div key={index} className={gr.previewItem}>
-                  <PreviewItemCard data={item} actions={{ remove: (item) => removeRecipeItem(item), editCategory: (itemName, newCategoryId) => editPreviewRecipeItem(itemName, newCategoryId) }} categoriesList={getAllCategoriesList()} />
-                </div>
-              ))}
-            </div>
-            <div style={{ display: 'flex', gap: 10 }}>
-              <button type='button' onClick={(e) => { e.preventDefault(); setIsPreviewListPopup(false) }} className='backButton'>{t('BACK')}</button>
-              <button type='button' onClick={(e) => { e.preventDefault(); saveNewRecipe() }} className='saveButton'>{t('CONFIRM')}</button>
-            </div>
-          </div>
-        </Popup>
+        <PreviewItemsPopup
+        items={previewRecipeList}
+        categoriesList={getAllCategoriesList()}
+        listClassName={gr.previewList}
+        itemClassName={gr.previewItem}
+        onRemove={removeRecipeItem}
+        onEditCategory={editPreviewRecipeItem}
+        onBack={() => setIsPreviewListPopup(false)}
+        onConfirm={saveNewRecipe}
+        />
       }
 
       {isEditRecipePopup &&
@@ -741,17 +659,7 @@ export default function Groceries({ goToGrocery, refresh }) {
             <img src={iconLogout} alt='Logout Icon' className='settingsIcon' />
             <button className='settingsItem' onClick={logout}>{t('LOGOUT')}</button>
           </div>
-          <div className='settingsLanguageWrapper'>
-            <div className='SettingItemWrapper'>
-              <img src={iconLanguage} alt='Logout Icon' className='settingsIcon' />
-              <span className='settingsItem'>{t('LANGUAGE')}</span>
-            </div>
-            <select name='settingsSelect' className='settingsSelect' defaultValue={i18n.language} onChange={changeLanguage}>
-              <option value='en'>English</option>
-              <option value='fr'>Français</option>
-              <option value='ru'>Русский</option>
-            </select>
-          </div>
+          <SettingsLanguageSelect />
         </SettingsMenu>
       }
 

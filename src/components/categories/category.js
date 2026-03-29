@@ -12,7 +12,7 @@ import './category.css';
 
 import { useTranslation} from 'react-i18next';
 
-const Category = forwardRef(({list, setCategory, onUpdate, onDelete},ref) => {
+const Category = forwardRef(({list, onUpdate, onDelete},ref) => {
 
   usePreloadImages([iconAdd, iconUndo, iconEdit, iconCheck, iconDelete]);
   const [isAddNewCategory, setIsAddNewCategory] = useState(false);
@@ -105,7 +105,6 @@ const handleEditOptionMenu = () => {
 
   const handleSelect = (e) => {
     let value = e.target.value;
-    setCategory(value)
     setSelectedCategory(value)
   }
 

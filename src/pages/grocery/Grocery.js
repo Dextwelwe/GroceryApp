@@ -1,6 +1,7 @@
-import {useEffect, useState, useMemo, useRef, memo } from 'react'
+import {useEffect, useState, useMemo, useRef, useCallback, memo } from 'react'
 import gr from './grocery.module.css'
 import '../../groceryCommon.css'
+import { norm, validateInput, resolveCategoryId } from '../../utils/itemUtils';
 
 import HeaderMenu from '../../components/header/header';
 import add from '../../assets/images/icons/add.svg'
@@ -21,27 +22,28 @@ import AddItems from '../../components/add/addItems';
 import { useAuth } from '../../providers/AuthProvider';
 import Category from '../../components/categories/category';
 import SettingsMenu from '../../components/settings/settingsMenu';
-import Collapsible from '../../components/collapsible/collapsible';
+import SettingsLanguageSelect from '../../components/settings/SettingsLanguageSelect';
+import FilterPanel from '../../components/filterPanel/FilterPanel';
 import filterIcon from '../../assets/images/icons/filter.svg'
 import listIcon from '../../assets/images/icons/listItems.svg'
-import iconLanguage from '../../assets/images/icons/lang.svg'
 import iconErase from '../../assets/images/icons/erase.svg'
 import completeGroceryIcon from '../../assets/images/icons/completeGroceryIcon.svg'
-import PreviewItemCard from '../../components/previewItemCard/PreviewItemCard';
+import PreviewItemsPopup from '../../components/previewItemsPopup/PreviewItemsPopup';
 import rc from '../../components/recipeCard/recipeCard.module.css';
 import { useCategorySearch } from '../../hooks/useCategorySearch';
 
 
 
+const defaultFilterValues = { categories: 'all', sortBy: 'az' };
+
 function Grocery({goBack, groceryId}) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const {userData} = useAuth();
   const [grocery, setGrocery] = useState(null);
   const [defaultCategory,setDefaultCategory] = useLocalStorage('gLabel','all');
   const [defaultStore, setDefaulStore] = useLocalStorage('gStore', 'all');
   const [defaultStatus,setDefaultStatus] = useLocalStorage('gStatus','all');
   const [defaultSortBy,setDefaultSortBy] = useLocalStorage('gSortBy','az');
-  const defaultFilterValues = { categories : 'all', sortBy : "az"}
   const [isAddItemsPopup, setIsAddItemsPopup] = useState(false);
   const [isSettingsPopup, setIsSettingsPopup] = useState(false);
   const [isPreviewListPopup, setIsPreviewListPopup] = useState(false);
@@ -53,24 +55,24 @@ function Grocery({goBack, groceryId}) {
   const [nbFilters, setNbFilters] = useState(0);
   const optionsStatus = [ { value: "all", label: t('ALL') },{ value: "active", label: t('STATUS.ACTIVE') },{ value: "completed", label: t('STATUS.COMPLETED')}];
   const optionsSortBy = [ { value: "az", label: t("FILTERS.A-Z") }, { value: "za", label: t("FILTERS.Z-A") }];
-  const itemActions = { remove : removeItemCall, changeStatus : changeItemStatus};
   const [itemsList, setItemsList] = useState([])
   const [previewItemsList, setPreviewItemsList] = useState([]);
-  let categoryRef = useRef(null);
   let storeRef = useRef(null);
   let recipeStoreRef = useRef(null);
   let settingsPopupRef = useRef(null);
   const { getBestMatch, getAllCategoriesList } = useCategorySearch();
   
-  const norm = s => (s ?? "").toString().trim().toLowerCase();
+
+  async function loadUserRecipes() {
+    if (!userData) return;
+    const res = await fetchUserRecipes(userData.uid);
+    if (res.success) setUserRecipes(res.data);
+  }
   
  useEffect(() => {
   (async () => {
     await getFullGrocery();
-    if (userData) {
-      const res = await fetchUserRecipes(userData.uid);
-      if (res.success) setUserRecipes(res.data);
-    }
+    await loadUserRecipes();
   })();
 
   const unsub = subscribeGroceryItems(
@@ -89,9 +91,20 @@ function Grocery({goBack, groceryId}) {
 }, [groceryId]);
 
   useEffect(() => {
- setNumberOfFilters();
- // eslint-disable-next-line
-}, [filters]);
+    if (!isAddRecipePopup || !userData) return;
+    loadUserRecipes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAddRecipePopup, userData]);
+
+  useEffect(() => {
+    let count = 0;
+    if (filters.category !== defaultFilterValues.categories) count++;
+    if (filters.sortBy !== defaultFilterValues.sortBy) count++;
+    if (filters.store !== defaultFilterValues.categories) count++;
+    if (filters.status !== 'all') count++;
+    setNbFilters(count);
+    // eslint-disable-next-line
+  }, [filters]);
 
   useEffect(() => {
   if (!isSettingsPopup) return;
@@ -146,40 +159,42 @@ function Grocery({goBack, groceryId}) {
   async function getFullGrocery() {
     let g = await getGroceryById(groceryId);
     if (!g) return;
-      setGrocery(g);
-      setStoresOptionsList(getStoresList(g))
+    setGrocery(g);
+    const storeList = [...g.getCustomStores()];
+    storeList.sort((a, b) => a.desc.localeCompare(b.desc));
+    setStoresOptionsList(storeList);
   }
 
-   async function removeItemCall(id) {
-   const groceryId = grocery.getId();
-   let result = await removeItem(groceryId, id);
-   if (result.success){
-     setGrocery(prev => {
-       const nextItems = (prev.items ?? []).filter(it => it.id !== id);
-       return new GroceryObj(groceryId, { ...prev, items: nextItems});
-     });
-   } else {
-    if ((result.error.code === "permission-denied")) {
-        alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'))
+  const removeItemCall = useCallback(async (id) => {
+    const groceryId = grocery.getId();
+    let result = await removeItem(groceryId, id);
+    if (result.success){
+      setGrocery(prev => {
+        const nextItems = (prev.items ?? []).filter(it => it.id !== id);
+        return new GroceryObj(groceryId, { ...prev, items: nextItems});
+      });
+    } else {
+      if ((result.error?.code === "permission-denied")) {
+          alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'))
 
-      } else {
-          alert(t('WARNINGS.SERVER_ERROR'));
+        } else {
+            alert(t('WARNINGS.SERVER_ERROR'));
 
+        }
       }
-    }
-  }
+  }, [grocery, t]);
 
-  async function changeItemStatus(id, status){
+  const changeItemStatus = useCallback(async (id, status) => {
     let result = await setItemStatus(grocery.getId(),id, status);
     if (result.success){
-    setGrocery(prev => {
-      if (!prev) return prev;
-      const nextItems = prev.items.map(it =>  it.id === id ? { ...it, status: status} : it);
-      return new GroceryObj(prev.getId(), { ...prev, items: nextItems });
-    });
-  }
+      setGrocery(prev => {
+        if (!prev) return prev;
+        const nextItems = prev.items.map(it =>  it.id === id ? { ...it, status: status} : it);
+        return new GroceryObj(prev.getId(), { ...prev, items: nextItems });
+      });
+    }
     else {
-      if ((result.err.code = "permission-denied")) {
+      if (result.error?.code === 'permission-denied') {
         alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'))  
 
       } else {
@@ -187,7 +202,9 @@ function Grocery({goBack, groceryId}) {
 
       }
     }
-  }
+  }, [grocery, t]);
+
+  const itemActions = useMemo(() => ({ remove : removeItemCall, changeStatus : changeItemStatus}), [removeItemCall, changeItemStatus]);
 
   function handleFilterChange(e) {
     const { name, value } = e.target;
@@ -206,16 +223,7 @@ function Grocery({goBack, groceryId}) {
     setFilters({category: 'all', store: 'all', status : "all", sortBy: 'az'});
  }
 
- function setNumberOfFilters(){
-  let count = 0;
-  if (filters.category !== defaultFilterValues.categories) count++;
-  if (filters.sortBy !== defaultFilterValues.sortBy) count++;
-  if (filters.store !== defaultFilterValues.categories) count++;
-  if (filters.status !== 'all') count++;
-  setNbFilters(count);
-}
-
-   function loadPreviewList(e){
+  function loadPreviewList(e){
    let isValid = true;
    let errorMessage = '';
     e.preventDefault();
@@ -259,16 +267,15 @@ if (isValid) {
       const result = await addItems(
         previewItemsList.map((item) => ({
           ...item,
-          category: resolveCategoryId(item.category)
+          category: resolveCategoryId(item.category, getAllCategoriesList)
         })),
         grocery.getId()
       );
       if (result.success){
         await getFullGrocery();
-        if (categoryRef.current) categoryRef.current.value = '';
         if (storeRef.current) storeRef.current.value = '';
       } else {
-        if ((result.error.code === "permission-denied")) {
+        if ((result.error?.code === "permission-denied")) {
           alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'))
         } else {
           alert(t('WARNINGS.SERVER_ERROR'));
@@ -279,12 +286,6 @@ if (isValid) {
       setPreviewItemsList([]);
       setIsPreviewListPopup(false);
  }
-
-function getStoresList(grocery){
- let list =  [...grocery.getCustomStores()];
- if (list){list.sort((a,b) => a.desc.localeCompare(b.desc))};
- return list;
-}
 
 async function handleStoreUpdate(list){
     const groceryId = grocery.getId();
@@ -320,38 +321,6 @@ async function handleStoreRemove(store) {
   }
  }
 
-function validateInput(value) {
-  if (value == null) return false;
-
-  if (value instanceof Date) {
-    return !isNaN(value.getTime());
-  }
-
-  if (typeof value === 'number') {
-    return !isNaN(value);
-  }
-
-  if (typeof value === 'string') {
-    const trimmed = value.trim();
-    return trimmed.length > 0 && trimmed.length <= 50;
-  }
-  return false;
-}
-
-function resolveCategoryId(categoryValue){
-  const raw = (categoryValue || '').toString().trim();
-  if (!raw) return '';
-
-  const allCategories = getAllCategoriesList();
-  const match = allCategories.find((cat) => {
-    if (cat.id === raw) return true;
-    const names = Object.values(cat.names || {}).map((name) => (name || '').toString().trim().toLowerCase());
-    return names.includes(raw);
-  });
-
-  return match ? match.id : raw;
-}
-
 function removePreviewItem(itemName){
   setPreviewItemsList(prev => prev.filter(item => item.name !== itemName));
 }
@@ -380,7 +349,7 @@ async function addRecipeItems() {
       seen.add(key);
       itemsToAdd.push({
         name: item.name,
-        category: resolveCategoryId(item.category),
+        category: resolveCategoryId(item.category, getAllCategoriesList),
         store: recipeStoreRef.current?.value || '',
         status: 'active',
         addedBy: userData.firstName
@@ -420,8 +389,6 @@ function editPreviewItemCategory(itemName, newCategoryId){
   }));
 }
 
- const changeLanguage = (e) => i18n.changeLanguage(e.target.value);
- 
  if (!grocery) return null; 
 
   const headerGroceryTitle = grocery.getTitle();
@@ -432,15 +399,14 @@ function editPreviewItemCategory(itemName, newCategoryId){
     <div className='mainContentWrapper'>
         <HeaderMenu title={headerGroceryTitle} headerNav={headerGroceryNav} headerItems={headerItems} />
         <div className="subHeaderWrapper">
-          <Collapsible title={`${t('FILTERS_LABEL')}${nbFilters > 0 ? ` (${nbFilters})` : ""}`} icon={filterIcon}>
-         <div className="filtersWrapper">
-               <Select label={t('FILTERS.CATEGORY')} options={optionsCategories} name="category" value={filters.category} onChange={handleFilterChange} doHighLight={filters.category !== defaultFilterValues.categories && true} />
-               <Select label={t('STORE')} options={optionsStore} name="store"  value={filters.store} onChange={handleFilterChange} doHighLight={filters.store !== defaultFilterValues.categories && true} />
-               <Select label={t('STATUS_LBL')} options={optionsStatus} name="status" value={filters.status} onChange={handleFilterChange} doHighLight={filters.status !== defaultFilterValues.categories && true}/>
-               <Select label={t("SORT_BY")} options={optionsSortBy} name="sortBy" value={filters.sortBy} onChange={handleFilterChange} doHighLight={filters.sortBy !== defaultFilterValues.sortBy && true}/>
-             </div>
-              <button className={`actionButton resetFilterBgColor resetFiltersButton`} onClick={resetFilters}>{t('RESET_FILTERS')}</button>
-             </Collapsible>
+          
+          <FilterPanel title={`${t('FILTERS_LABEL')}${nbFilters > 0 ? ` (${nbFilters})` : ""}`} icon={filterIcon} onReset={resetFilters} resetLabel={t('RESET_FILTERS')}>
+            <Select label={t('FILTERS.CATEGORY')} options={optionsCategories} name="category" value={filters.category} onChange={handleFilterChange} doHighLight={filters.category !== defaultFilterValues.categories && true} />
+            <Select label={t('STORE')} options={optionsStore} name="store"  value={filters.store} onChange={handleFilterChange} doHighLight={filters.store !== defaultFilterValues.categories && true} />
+            <Select label={t('STATUS_LBL')} options={optionsStatus} name="status" value={filters.status} onChange={handleFilterChange} doHighLight={filters.status !== defaultFilterValues.categories && true}/>
+            <Select label={t("SORT_BY")} options={optionsSortBy} name="sortBy" value={filters.sortBy} onChange={handleFilterChange} doHighLight={filters.sortBy !== defaultFilterValues.sortBy && true}/>
+          </FilterPanel>
+
               <div className='MenuTitle'>
                 <div className={gr.listTitleWrapper}>
                   <div className={gr.listTitle}>
@@ -456,7 +422,7 @@ function editPreviewItemCategory(itemName, newCategoryId){
               </div>
         </div>      
         <div className={gr.list}>
-            {(view.length ? view : []).map(item => (
+          {view.map(item => (
             <ItemCard key={item.id} data={item} actions={itemActions} />
              ))}
             {view.length === 0 && grocery?.items.length > 0 && <div className={gr.empty}>{t('WARNINGS.NO_ITEMS')}</div>}
@@ -512,9 +478,6 @@ function editPreviewItemCategory(itemName, newCategoryId){
           { isAddItemsPopup && 
             <Popup title={t('ADD_ITEMS')} close={()=>{if (!isPreviewListPopup) setIsAddItemsPopup(false)}}>
             <form className={gr.form}>
-              { /* <label htmlFor="itemName">{t('FILTERS.CATEGORY')}  :</label>
-              <Category list={categoriesOptionsList} ref={categoryRef}  onUpdate={(cat)=>handleCategoryUpdate(cat)} onDelete={(cat)=>handleCategoryDelete(cat)} setCategory={()=>{return null}}/>
-              */ }
               <label htmlFor="itemStore" >{t("STORE")} :</label>
               <Category list={storesOptionsList} ref={storeRef} onUpdate={(store)=>handleStoreUpdate(store)} onDelete={(store)=>handleStoreRemove(store)}/>
               <label htmlFor="items" >{t('ITEMS')} :</label>
@@ -525,28 +488,16 @@ function editPreviewItemCategory(itemName, newCategoryId){
           }
 
         {isPreviewListPopup &&
-         <Popup title={t('PREVIEW_LIST')} close={()=>setTimeout(() => setIsPreviewListPopup(false),50)} hideCloseButton={true}>
-          <div>
-            <div className={gr.previewList}>
-              {previewItemsList.map((item,index) => (
-                <div key={index} className={gr.previewItem}>
-                  <PreviewItemCard
-                    data={item}
-                    actions={{
-                      remove: (itemName) => removePreviewItem(itemName),
-                      editCategory: (itemName, newCategoryId) => editPreviewItemCategory(itemName, newCategoryId)
-                    }}
-                    categoriesList={getAllCategoriesList()}
-                  />
-                </div>
-              ))}
-            </div>
-            <div style={{display : 'flex', gap : 10}}>
-            <button type='button' onClick={(e)=>{ e.preventDefault(); setIsPreviewListPopup(false)}} className={"backButton"}>{t('BACK')}</button>
-            <button type='button' onClick={(e)=>{ e.preventDefault(); saveItems(e)}} className={"saveButton"}>{t('CONFIRM')}</button>
-            </div>
-          </div>
-          </Popup>
+          <PreviewItemsPopup
+            items={previewItemsList}
+          categoriesList={getAllCategoriesList()}
+          listClassName={gr.previewList}
+          itemClassName={gr.previewItem}
+          onRemove={removePreviewItem}
+          onEditCategory={editPreviewItemCategory}
+            onBack={() => setIsPreviewListPopup(false)}
+            onConfirm={saveItems}
+          />
         }
           
           {
@@ -560,17 +511,7 @@ function editPreviewItemCategory(itemName, newCategoryId){
                   <img src={iconErase} alt="Erase Icon" className="settingsIcon" />
                   <div className="settingsItem" >{t("CLEAR_LIST")} </div>
                 </div>
-                <div className='settingsLanguageWrapper'>
-                  <div className='SettingItemWrapper'>
-                    <img src={iconLanguage} alt="Language Icon" className="settingsIcon" />
-                    <span className="settingsItem">{t('LANGUAGE')}</span>
-                  </div>
-                  <select className='settingsSelect' defaultValue={i18n.language} onChange={changeLanguage}>
-                    <option value="en">English</option>
-                    <option value="fr">Français</option>
-                    <option value="ru">Руccкий</option>
-                  </select>
-                </div>
+                <SettingsLanguageSelect />
               </SettingsMenu>
           }
           
