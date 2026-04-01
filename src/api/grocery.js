@@ -1,6 +1,33 @@
-import { collection, doc, deleteDoc, serverTimestamp, writeBatch,Timestamp, getDoc, getDocs, updateDoc, arrayRemove, query, onSnapshot } from "firebase/firestore";
+import { collection, doc, deleteDoc, serverTimestamp, writeBatch,Timestamp, getDoc, getDocs, updateDoc, arrayUnion, arrayRemove, query, onSnapshot } from "firebase/firestore";
 import { db } from "../api/initFirebase";
 import Grocery from "../models/Grocery";
+
+
+async function fetchGroceries(groceryIds) {
+  if (!groceryIds || groceryIds.length === 0) return [];
+
+  const groceriesRef = collection(db, "groceries");
+  const promises = groceryIds.map(id => getDoc(doc(groceriesRef, id)));
+  const snapshots = await Promise.all(promises);
+
+  return snapshots
+    .filter(snap => snap.exists())
+    .map(snap => ({ id: snap.id, ...snap.data() }));
+}
+
+export async function fetchAllGroceries(userId) {
+  if (!userId) throw new Error("Missing userId");
+
+  const userRef = doc(db, "users", userId);
+  const userSnap = await getDoc(userRef);
+  if (!userSnap.exists()) throw new Error("User not found");
+
+  const userData = userSnap.data();
+  const groceryIds = userData.groceries || [];
+  const allGroceries = await fetchGroceries(groceryIds);
+
+  return allGroceries;
+}
 
 export async function saveNew(grocery) {
   
@@ -21,14 +48,16 @@ export async function saveNew(grocery) {
   };
 
   const batch = writeBatch(db);
+
   batch.set(groceryRef, root);
 
-  const ownerBacklinkRef = doc(db, "users", grocery.owner, "groceries", groceryId);
-  batch.set(ownerBacklinkRef,root);
+  const ownerRef = doc(db, "users", grocery.owner);
+  batch.update(ownerRef, { groceries: arrayUnion(groceryId) });
 
-  sharedWith.forEach(user => {
-    const ref = doc(db, "users", user, "sharedGroceries", groceryId);
-    batch.set(ref, root);
+  // Add groceryId to groceries array for each user in sharedWith
+  sharedWith.forEach(userId => {
+    const userRef = doc(db, "users", userId);
+    batch.update(userRef, { groceries: arrayUnion(groceryId) });
   });
 
   try {
@@ -55,9 +84,12 @@ export default async function removeGrocery(ownerUid, groceryId, sharedWith = []
 
     batch.delete(groceryRef);
 
-    batch.delete(doc(db, "users", ownerUid, "groceries", groceryId));
+    const ownerRef = doc(db, "users", ownerUid);
+    batch.update(ownerRef, { groceries: arrayRemove(groceryId) });
+
     sharedWith.forEach(u => {
-      batch.delete(doc(db, "users", u, "sharedGroceries", groceryId));
+      const userRef = doc(db, "users", u);
+      batch.update(userRef, { groceries: arrayRemove(groceryId) });
     });
 
     await batch.commit();
@@ -89,28 +121,49 @@ export async function getGroceryById(groceryId) {
   }
 }
 
-export async function updateCustomCategories(groceryId,list){
-      const groceryRef = doc(db, "groceries", groceryId);
-      try {
-        await updateDoc(groceryRef, {
-        customCategories: list
-        });
-        return {success : true}
-      } catch (e){
-        return {success : false, error : e}
-      }
+export function subscribeGroceryItems(groceryId, onNext, onError) {
+  const q = query(collection(db, 'groceries', groceryId, 'items'));
+
+  return onSnapshot(q, (snap) => {
+      const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      onNext(items);
+    }, onError );
 }
 
-export async function removeOneCustomCategories(groceryId,category) {
-     const groceryRef = doc(db, "groceries", groceryId);
-     try {
-       await updateDoc(groceryRef, {
-         customCategories: arrayRemove(category)
-       });
-       return {success : true}
-     } catch (e){
-       return {success : false, error : e}
-     }
+export async function clearItemsList(groceryId){
+  try {
+    const itemsCol = collection(db, "groceries", groceryId, "items");
+    const itemsSnap = await getDocs(itemsCol);
+
+    if (itemsSnap.empty) {
+      return { success: true };
+    }
+
+    const batch = writeBatch(db);
+
+    itemsSnap.forEach(itemDoc => {
+      batch.delete(itemDoc.ref);
+    });
+
+    await batch.commit();
+
+    return { success: true };
+
+  } catch (error) {
+    console.error("Error clearing items:", error);
+    return { success: false, error };
+  }
+}
+
+export async function updateGroceryStatus(groceryId, status) {
+  try {
+    const groceryRef = doc(db, "groceries", groceryId);
+    await updateDoc(groceryRef, { status: status });
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating grocery status:", error);
+    return { success: false, error };
+  }
 }
 
 export async function updateCustomStores(groceryId, stores) {
@@ -136,56 +189,6 @@ export async function removeOneCustomStore(groceryId, store) {
        return {success : false, error : e}
      }
 }
-
-export function subscribeGroceryItems(groceryId, onNext, onError) {
-  const q = query(collection(db, 'groceries', groceryId, 'items'));
-
-  return onSnapshot(q, (snap) => {
-      const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      onNext(items);
-    }, onError );
-}
-
-export async function clearItemsList(groceryId){
-  try {
-    const itemsCol = collection(db, "groceries", groceryId, "items");
-    const itemsSnap = await getDocs(itemsCol);
-
-    if (itemsSnap.empty) {
-      return;
-    }
-
-    const batch = writeBatch(db);
-
-    itemsSnap.forEach(itemDoc => {
-      batch.delete(itemDoc.ref);
-    });
-
-    await batch.commit();
-
-  } catch (error) {
-    console.error("Error clearing items:", error);
-    return { success: false, error };
-  }
-}
-
-export async function updateGroceryStatus(ownerUid, groceryId, status) {
-  try {
-    const userGroceryRef = doc(db, "users", ownerUid, "groceries", groceryId);
-    const groceryRef = doc(db, "groceries", groceryId);
-
-   await Promise.all([
-      updateDoc(userGroceryRef, { status : status}),
-      updateDoc(groceryRef, { status : status })
-    ]);
-    
-    return { success: true} ;
-  } catch (error) {
-    console.error("Error updating grocery status:", error);
-    return { success: false, error };
-  }
-}
-
 
 
 

@@ -92,6 +92,7 @@
     "CONFIRM" : "Подтвердить",
     "BACK" : "Назад",
     "ADD_RECIPE" : "Добавить рецепт",
+    "EDIT_STORES" : "Редактировать магазины",
     "RECIPE_ITEMS" : "продуктов",
     "RECIPE" : "Рецепт",
     "RECIPE_ALREADY_ADDED" : "Уже добавлен"

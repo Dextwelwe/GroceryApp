@@ -1,26 +1,41 @@
-.fieldset{
-width: 250px;
-max-width: 250px;
+.fieldset {
+  width: 100%;
+  min-width: 0;
 }
 
-.select{
-    font-size: 0.8rem;
-    width: 100%;
-    border : none;
-    height: 25px;
-    box-sizing: border-box;
-    margin-top: 2px;
-    padding-left: 5px;
-    color: var(--fontColor);
-    font-family: var(--fontFamily);
-    border-radius: 5px;
-    cursor: pointer;
-    text-transform: capitalize;
-    background-color: #F0F3ED;
-    text-overflow: ellipsis;
+.select {
+  font-size: 0.8rem;
+  width: 100%;
+  border: 1px solid #E0E0E0;
+  height: 32px;
+  box-sizing: border-box;
+  margin-top: 3px;
+  padding: 0 8px;
+  color: var(--fontColor);
+  font-family: var(--fontFamily);
+  border-radius: 8px;
+  cursor: pointer;
+  text-transform: capitalize;
+  background-color: #F5F7F3;
+  text-overflow: ellipsis;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23757575' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 24px;
 }
 
-.label{
-    font-size: 0.7rem;
-    padding-left: 0px;
+.select:focus {
+  outline: none;
+  border-color: var(--secondaryColor);
+  background-color: #fff;
+}
+
+.label {
+  font-size: 0.7rem;
+  padding-left: 2px;
+  color: var(--subTextFontColor);
+  font-weight: 500;
 }

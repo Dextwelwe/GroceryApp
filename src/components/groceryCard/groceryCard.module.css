@@ -25,26 +25,27 @@
     flex-grow: 1;
 }
 
+
 .colorShared {
-  background-color: #FFF4CE;
-  color: #6A5E2E;
+    background-color: #FFF9C4;
+    color: #8D6E63; 
 }
 
 .colorPersonal {
-  background-color: #DDEBFF;
-  color: #1A4BA3;
+    background-color: #B2DFDB; 
+    color: #00695C;
 }
 
 .colorCompleted {
-  background-color: #FFE7D1;
-  color: #7A421E;
-  text-transform: capitalize;
+    background-color: #C8E6C9;
+    color: #2E7D32;
+    text-transform: capitalize;
 }
 
 .colorActive {
-  background-color: #E3F8E0;
-  color: #2F7A32;
-  text-transform: capitalize;
+    background-color: #B3E5FC;
+    color: #0277BD;
+    text-transform: capitalize;
 }
 
 .name{

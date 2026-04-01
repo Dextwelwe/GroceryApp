@@ -94,6 +94,7 @@
     "CONFIRM" : "Confirm",
     "BACK" : "Back",
     "ADD_RECIPE" : "Add recipe",
+    "EDIT_STORES" : "Edit stores",
     "RECIPE_ITEMS" : "items",
     "RECIPE" : "Recipe",
     "RECIPE_ALREADY_ADDED" : "Already added"

@@ -1,0 +1,38 @@
+.filtersGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px 12px;
+  padding: 4px 8px 8px;
+  box-sizing: border-box;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 4px 8px 6px;
+}
+
+.resetButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 14px;
+  border: none;
+  border-radius: 20px;
+  background-color: #EEEEEE;
+  color: var(--fontColor);
+  font-size: 0.75rem;
+  font-weight: 500;
+  font-family: var(--fontFamily);
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.resetButton:hover {
+  background-color: #E0E0E0;
+}
+
+.resetButton:active {
+  transform: scale(0.97);
+  background-color: #D5D5D5;
+}

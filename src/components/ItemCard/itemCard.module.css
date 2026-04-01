@@ -12,7 +12,7 @@
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     cursor: pointer;
     margin-bottom: 12px;
-    border-radius: 12px;
+    border-radius : 12px;
 }
 
 .dataWrapper{
@@ -41,6 +41,7 @@
     overflow: hidden;
 }
 
+
 .category{
     margin-left: 2px;
     border-radius:20px;
@@ -50,12 +51,13 @@
     gap: 5px;
     max-width: 140px;
     height: 26px;
-    background: #FFF4D6;
+    background: #FFE0B2; /* earthy/amber */
     color: #8A5A00;
     padding: 0px 10px;
     flex-shrink: 1;
     min-width: 0;
 }
+
 
 .store {
     margin-left: 2px;
@@ -63,8 +65,8 @@
     align-items : center;
     gap: 5px;
     max-width: 140px;
-    background: #E6EEF8;
-    color: #2D4F90;
+    background: #BBDEFB; /* blue */
+    color: #1565C0;
     border-radius: 20px;
     padding: 0px 10px;
     height: 26px;
@@ -72,13 +74,14 @@
     min-width: 0;
 }
 
+
 .recipe {
     margin-left: 2px;
     display: flex;
     align-items: center;
     gap: 5px;
     max-width: 140px;
-    background: #F3E5F5;
+    background: #E1BEE7; /* purple */
     color: #6A1B9A;
     border-radius: 20px;
     padding: 0px 10px;

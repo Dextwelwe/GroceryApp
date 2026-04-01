@@ -27,7 +27,6 @@ export async function addItems(items,groceryId){
   }
 }
 
-
 export async function removeItem(groceryId, itemId) {
   if (!groceryId || !itemId) throw new Error("Missing groceryId or itemId");
   try {

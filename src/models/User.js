@@ -6,10 +6,6 @@ export default class User {
     this.lastName = data.lastName || "";
     this.profileIconURL = data.profileIcon || "";
     this.groceries = data.groceries || [];
-    this.sharedGroceries = data.sharedGroceries || [];
-    this.customItems = data.customItems || [];
-    this.customStores = data.customStores || [];
-    this.isTestUser = data.isTestUser || false;
 }
 
     getGroceries(){
@@ -19,20 +15,5 @@ export default class User {
     getName(){
       return this.name;
     }
-
-    getSharedGroceries(){
-      return this.sharedGroceries;
-    }
-    
-    getPersonalGroceries(){
-      return this.groceries;
-    }
-
-    getCustomItems(){
-      return this.customItems;
-    }
-
-    getCustomStores(){
-      return this.customStores;
-    }
+     
 }

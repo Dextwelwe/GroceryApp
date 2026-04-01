@@ -1,50 +1,93 @@
-.container{
- width: 100%;
- background-color: transparent;
- padding: 10px 10px;
- padding-bottom: 10px;
- box-sizing: border-box;
- border-bottom: var(--border);
- cursor: pointer;
+.container {
+  width: 100%;
+  background-color: transparent;
+  box-sizing: border-box;
+  border-bottom: var(--border);
 }
 
-.titleWrapper{
- display: flex;
- align-items: center;
- gap: 10px;
+
+.titleWrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.title{
-    font-size: 1rem;
-    font-weight: normal;
+.title {
+  font-size: 0.9rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: var(--fontColor);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background-color: var(--secondaryColor);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1;
 }
 
 .header {
- display: flex;
- justify-content: space-between;
- background-color: transparent;
- border: none;
- width: 100%;
- cursor: pointer;
- font-family: inherit;
- color: inherit;
- font-size: 1rem;
- align-items: center;
- height: 30px;
- padding: 0;
+  display: flex;
+  justify-content: space-between;
+  background-color: transparent;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  font-family: inherit;
+  color: inherit;
+  font-size: 1rem;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 12px;
+  transition: background-color 0.15s ease;
 }
 
-.content{
- width: 100%;
+.header:active {
+  background-color: rgba(0, 0, 0, 0.04);
 }
 
-.openFilter{
- font-size: 1.3rem;
- height: 25px;
- margin-right: 10px;
+.contentOuter {
+  overflow: hidden;
+  transition: height 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.icon{
- width: 25px;
- height: 25px;
+.content {
+  width: 100%;
+  padding: 0 4px 8px;
+  box-sizing: border-box;
+}
+
+.chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: var(--subTextFontColor);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 0.15s ease;
+  flex-shrink: 0;
+}
+
+.chevron:hover {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.icon {
+  width: 22px;
+  height: 22px;
+  opacity: 0.8;
 }

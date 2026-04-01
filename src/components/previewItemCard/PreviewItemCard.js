@@ -9,11 +9,11 @@ import noteIcon from '../../assets/images/icons/name.svg'
 import { useCategorySearch } from '../../hooks/useCategorySearch';
 
 
-export default function PreviewItemCard({data,actions, categoriesList}) {
+export default function PreviewItemCard({data, actions, categoriesList, storesList, showRemove = true, showRecipe = true}) {
 
   const { t } = useTranslation();
   const { getOneCategory } = useCategorySearch();
-  const rightItemsIcons = [{src : remove, alt : "Remove", clickaction : removeCall}];
+  const rightItemsIcons = showRemove ? [{src : remove, alt : "Remove", clickaction : removeCall}] : [];
   const categoryLabel = data.category ? getOneCategory(data.category) : t('NO_CATEGORY');
 
     function removeCall(){
@@ -23,6 +23,11 @@ export default function PreviewItemCard({data,actions, categoriesList}) {
     function categoryChangeCall(e){
       const newCategoryId = e.target.value;
       actions.editCategory && actions.editCategory(data.name, newCategoryId);
+    }
+
+    function storeChangeCall(e){
+      const newStore = e.target.value;
+      actions.editStore && actions.editStore(data.name, newStore);
     }
 
   return (
@@ -42,13 +47,23 @@ export default function PreviewItemCard({data,actions, categoriesList}) {
                         ))}
                         </select>
                         </div> 
-                        {data.store &&
+                        {storesList ?
+                      <div className={ic.store}>
+                        <img alt="Store Icon" src={storeIcon} className={ic.icon} />
+                        <select name='store' onChange={storeChangeCall} value={data.store || ''} className={`${ic.dataLabel} ${ic.store} ${pic.categorySelect}`}>
+                        <option value=''>{t('NO_STORE')}</option>
+                        {storesList.map((store, index) => (
+                          <option key={index} value={store.desc}>{store.desc}</option>
+                        ))}
+                        </select>
+                        </div>
+                        : data.store &&
                       <div className={ic.store}>
                         <img alt="Store Icon" src={storeIcon} className={ic.icon} />
                         <span className={ic.dataLabel}>{data.store}</span>
                         </div>
                         }
-                        {data.recipe &&
+                        {showRecipe && data.recipe &&
                       <div className={ic.recipe}>
                         <img alt="Recipe Icon" src={recipeIcon} className={ic.icon} />
                         <span className={ic.dataLabel}>{data.recipe}</span>
@@ -56,13 +71,14 @@ export default function PreviewItemCard({data,actions, categoriesList}) {
                         }
                       </div>
                  </div>
+                  {rightItemsIcons.length > 0 &&
                   <div className={ic.rightItems}>
-                   {rightItemsIcons && 
-                      rightItemsIcons.map((item, index) => (
+                   {rightItemsIcons.map((item, index) => (
                      <img  key={index} src={item.src} className={ic.menuIcon} onClick={() => item.clickaction(data)} alt={item.alt} />
                        ))
                    }
                   </div>
+                  }
               </div>
   )
 }

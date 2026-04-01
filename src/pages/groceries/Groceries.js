@@ -9,8 +9,8 @@ import useLocalStorage from '../../hooks/useLocalStorage'
 import { useCategorySearch } from '../../hooks/useCategorySearch';
 
 // Api
-import { saveNew } from '../../api/grocery';
-import { fetchUserGroceries, getUserId } from '../../api/user';
+import { saveNew, fetchAllGroceries } from '../../api/grocery';
+import { getUserIdFromEmail } from '../../api/user';
 import { fetchUserRecipes, saveNewRecipe as saveNewRecipeApi, updateRecipe as updateRecipeApi, deleteRecipe as deleteRecipeApi } from '../../api/recipes';
 
 // Components
@@ -170,6 +170,7 @@ export default function Groceries({ goToGrocery, refresh }) {
   if (!userData) return null;
 
   const headerTitle = t('HI') + ', ' + userData.firstName + '!';
+
   const toggleNewGrocery = () => {
     setIsAddNewGroceryVisible(!isAddNewGroceryVisible);
   }
@@ -182,13 +183,7 @@ export default function Groceries({ goToGrocery, refresh }) {
     let timer;
     try {
       timer = setTimeout(() => setIsLoading(true), 500);
-
-      const [personal, shared] = await Promise.all([
-        fetchUserGroceries(userData.uid),
-        fetchUserGroceries(userData.uid, 'shared'),
-      ]);
-
-      setGroceries([...personal, ...shared]);
+      setGroceries(await fetchAllGroceries(userData.uid));
     } catch (err) {
       console.error('Failed to fetch groceries:', err);
     } finally {
@@ -212,6 +207,7 @@ export default function Groceries({ goToGrocery, refresh }) {
     if (res.success) {
       setRecipes(prev => prev.filter(r => r.id !== recipeId));
     } else {
+      console.log(res.error);
       if (res.error?.code === 'permission-denied') {
         alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'));
       } else {
@@ -399,7 +395,7 @@ export default function Groceries({ goToGrocery, refresh }) {
     if (usersEmailList.includes(userInput)) return;
     if (userInput === userData.email) return;
 
-    let userId = await getUserId(userInput);
+    let userId = await getUserIdFromEmail(userInput);
     if (userId) {
       setUsersEmailList(prev => ([...prev, userInput]));
       setUsersList(prev => ([...prev, userId]));
@@ -464,7 +460,7 @@ export default function Groceries({ goToGrocery, refresh }) {
       <HeaderMenu title={headerTitle} headerItems={headerItems} headerNav={null} />
 
       <div className='subHeaderWrapper'>
-        <FilterPanel title={`${t('FILTERS_LABEL')}${nbFilters > 0 ? ` (${nbFilters})` : ''}`} icon={filterIcon} onReset={resetFilters} resetLabel={t('RESET_FILTERS')}>
+        <FilterPanel title={t('FILTERS_LABEL')} icon={filterIcon} onReset={resetFilters} resetLabel={t('RESET_FILTERS')} badge={nbFilters}>
           {activeTab === 'groceries' && <>
             <Select label={t('TYPE')} options={optionsLabel} name='label' value={filters.label} onChange={handleFilterChange} doHighLight={filters.label !== defaultFilterValues.categories && true} />
             <Select label={t('STATUS_LBL')} options={optionsStatus} name='status' value={filters.status} onChange={handleFilterChange} doHighLight={filters.status !== defaultFilterValues.categories && true} />

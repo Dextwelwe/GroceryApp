@@ -25,9 +25,8 @@ function App() {
   }, []);
 
   const goBack = useCallback((refreshPage=false) => {
-    refreshPage && setRefresh(!refresh);
+    if (refreshPage) setRefresh(prev => !prev);
     setPage(prev => (prev === 'groceries' ? prev : 'groceries'));
-    // eslint-disable-next-line
   }, []);
   
   if (!user?.email) return <Login />;

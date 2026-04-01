@@ -3,6 +3,8 @@
     overflow-y: auto;
     gap : 20px;
     touch-action: pan-y;
+    box-sizing: border-box;
+    padding: 0px 5px;
 }
 
 .tabMenu{

@@ -9,8 +9,7 @@ export default class Grocery {
         this.items = data.items || [];
         this.dateLastUpdated = data.dateLastUpdated ? data.dateLastUpdated : "";
         this.status = data.status;
-        this.sharedWith = data.sharedWith || []
-        this.customCategories = data.customCategories || [];
+        this.sharedWith = data.sharedWith || [];
         this.customStores = data.customStores || [];
     }
 
@@ -33,24 +32,6 @@ export default class Grocery {
         return categories;
     }
 
-    getCustomCategories(){
-        return this.customCategories.map(el => {
-           return {
-             desc : el,
-             type : 'custom'
-            }
-        });
-    }
-
-    getCustomStores(){
-        return this.customStores.map(el => {
-            return {
-                desc : el,
-                type : 'custom'
-            }
-        })
-    }
-
     getStoresFromAddedItems(){
         const unique = new Set();
         this.items.forEach(item => {
@@ -67,6 +48,15 @@ export default class Grocery {
 
     getCategoryOptionUnspecified(){
          return {value : "unspecified", label: i18n.t("UNSPECIFIED")};
+    }
+
+     getCustomStores(){
+        return this.customStores.map(el => {
+            return {
+                desc : el,
+                type : 'custom'
+            }
+        })
     }
 
     getStores() {

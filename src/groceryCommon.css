@@ -5,35 +5,14 @@
   z-index: 2;
 }
 
-.filtersWrapper{
-  box-sizing: border-box;
-  width: 100%;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 10px;
-  padding-bottom: 5px;
-  gap: 15px;
-  height:max-content;
-}
-
 .subFiltersContentWrapper{
   display: flex;
   justify-content: flex-start;
   align-items: center;
   padding: 10px 0px;
   padding-top: 0;
-  margin-top: 6px;
   margin-bottom: 12px;
   gap: 10px;
-}
-
-.resetFiltersButton{
-    margin-left: 10px;
-    margin-top: 10px;
-    width: max-content;
-    text-align: center;
-    float: left;
 }
 
 .contentListLabel{
@@ -42,19 +21,6 @@
     font-weight: 500;
     padding-top: 0px;
     margin: 0;
-}
-
-.actionButton {
-    text-align: end;
-    font-size: 0.7rem;
-    color: black;
-    box-shadow: none;
-    cursor: pointer;
-    align-self: end;
-    height: 30px;
-    border-radius: 25px;
-    border-color: transparent;
-    align-self: flex-start;
 }
 
 .MenuTitle{
@@ -69,6 +35,7 @@
   font-size: 0.7rem;
   padding-right: 10px;
   text-align: start;
+  margin-top: 8px;
 }
 
 .settingsPopupWrapper{
@@ -82,6 +49,9 @@
   background-color: white;
   border: var(--border);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 5px;
 }
 
 .settingContainer{
@@ -101,13 +71,23 @@
   height: 50px;
   cursor: pointer;
   background-color: white;
-  padding: 5px;
+  padding: 12px;
   font-weight: 500;
   font-size: 0.9rem;
   color: black;
   box-sizing: border-box;
   display: grid;
   align-items: center;
+}
+
+.settingsItem:first-child{
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.settingsItem:last-child{
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
 }
 
 .SettingItemWrapper{
@@ -135,11 +115,11 @@
   border-top: 1px solid black;
   height: 30px;
   border: none;
-  border-radius: 0;
+  border-radius: 12px;
   background-color: white;
   border: var(--border);
   box-sizing: border-box;
-  padding: 5px;
+  padding: 0px 10px;
   min-width:50%;
 
 }
