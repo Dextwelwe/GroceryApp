@@ -40,11 +40,9 @@ const Category = forwardRef(({list, onUpdate, onDelete},ref) => {
     let val = newCategoryRef.current.value;
     if(onDelete){
      let res = await onDelete(val);
-     if (res.success){
+     if (res){
        exitEditMenu();
-     } else {
-      alert(res.error)
-     }
+     } 
     } 
   };
 
@@ -65,11 +63,9 @@ const Category = forwardRef(({list, onUpdate, onDelete},ref) => {
       let finalArr = [val, ...list.map(e => e.desc)]
       setIsAddNewCategory(false);
       let res = await onUpdate(finalArr)
-      if (res.success === true){
+      if (res){
         setSelectedCategory(val)
-      } else {
-        alert(res.error)
-      }
+    }
     }
   }
 
@@ -89,12 +85,10 @@ const Category = forwardRef(({list, onUpdate, onDelete},ref) => {
       if (onUpdate) {
         const finalArr = updatedList.map((e) => e.desc);
         const res = await onUpdate(finalArr);
-        if (res.success === true) {
+        if (res) {
           setSelectedCategory(val);
           exitEditMenu();
-        } else {
-          alert(res.error);
-        }
+        } 
       }
     }
   };

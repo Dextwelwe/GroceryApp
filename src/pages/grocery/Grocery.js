@@ -5,6 +5,9 @@ import { norm, resolveCategoryId } from '../../utils/itemUtils';
 
 import HeaderMenu from '../../components/header/header';
 import add from '../../assets/images/icons/add.svg'
+import shoppingBasketIcon from '../../assets/images/icons/shopping-cart.svg'
+import recipeIcon from '../../assets/images/icons/recipe.svg'
+import storeIcon from '../../assets/images/icons/store.svg'
 import noteIcon from '../../assets/images/icons/name.svg'
 
 import iconBack from '../../assets/images/icons/back.svg'
@@ -212,7 +215,7 @@ function Grocery({goBack, groceryId}) {
       });
     }
     else {
-      if (result.error?.code === 'permission-denied') {
+      if (result.err?.code === 'permission-denied') {
         alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'))  
 
       } else {
@@ -266,15 +269,33 @@ function Grocery({goBack, groceryId}) {
 async function handleStoreUpdate(list){
     const groceryId = grocery.getId();
     let res = await updateCustomStores(groceryId,list);
+    if (res.success){
     setStoresOptionsList(list.map(e=>{return {desc : e, type : 'custom'}}));
-    return res;
+    } else {
+      if (res.error?.code === 'permission-denied') {
+        alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'))
+      } else {
+        alert(t('WARNINGS.SERVER_ERROR'));
+      }
+      return false;
+    }
+    return true;
 }
 
 async function handleStoreRemove(store) {
   const groceryId = grocery.getId();
   let res = await removeOneCustomStore(groceryId,store);
+  if (res.success) {
   setStoresOptionsList(storesOptionsList.filter(item => item.desc !== store))
-  return res;
+  } else {
+    if (res.error?.code === 'permission-denied') {
+      alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'))
+    } else {
+      alert(t('WARNINGS.SERVER_ERROR'));
+    }
+    return false;
+  }
+  return true;
 }
 
  const clearList = async() => {
@@ -553,9 +574,18 @@ function editRecipePreviewItemStore(itemName, newStore) {
           <div className={gr.fabWrapper} ref={fabMenuRef}>
             {isAddMenuOpen && (
               <div className={gr.fabMenu}>
-                <div className={gr.fabMenuItem} onClick={() => { setIsAddMenuOpen(false); setIsAddItemsPopup(true); }}>{t('ADD_ITEMS')}</div>
-                <div className={gr.fabMenuItem} onClick={() => { setIsAddMenuOpen(false); setSelectedRecipeIds(new Set()); setIsAddRecipePopup(true); }}>{t('ADD_RECIPE')}</div>
-                <div className={gr.fabMenuItem} onClick={() => { setIsAddMenuOpen(false); setIsEditStoresPopup(true); }}>{t('EDIT_STORES')}</div>
+                <div className={gr.fabMenuItem} onClick={() => { setIsAddMenuOpen(false); setIsAddItemsPopup(true); }}>
+                  <img src={shoppingBasketIcon} alt="Add items" className={gr.fabMenuItemIcon} />
+                  {t('ADD_ITEMS')}
+                </div>
+                <div className={gr.fabMenuItem} onClick={() => { setIsAddMenuOpen(false); setSelectedRecipeIds(new Set()); setIsAddRecipePopup(true); }}>
+                  <img src={recipeIcon} alt="Add recipe" className={gr.fabMenuItemIcon} />
+                  {t('ADD_RECIPE')}
+                </div>
+                <div className={gr.fabMenuItem} onClick={() => { setIsAddMenuOpen(false); setIsEditStoresPopup(true); }}>
+                  <img src={storeIcon} alt="Edit stores" className={gr.fabMenuItemIcon} />
+                  {t('EDIT_STORES')}
+                </div>
               </div>
             )}
             <img alt='Add' src={add} className={gr.addGrocery} onClick={() => setIsAddMenuOpen(prev => !prev)} />
