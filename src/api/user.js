@@ -21,4 +21,13 @@ export async function getUserIdFromEmail(email){
     return snap.docs[0].id;
 }
 
-
+export async function getEmailsFromIds(uids = []) {
+  return Promise.all((uids || []).map(async (uid) => {
+    try {
+      const user = await fetchUser(uid);
+      return user?.email || null;
+    } catch (error) {
+      return null;
+    }
+  }));
+}

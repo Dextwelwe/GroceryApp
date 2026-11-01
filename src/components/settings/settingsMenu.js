@@ -1,20 +1,17 @@
-import { forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import Header from '../header/header';
-import closeIcon from '../../assets/images/icons/close.svg'
+import Popup from '../popup/Popup';
+import { ActionList } from '../actionList/ActionList';
+import SettingsLanguageSelect from './SettingsLanguageSelect';
 
-const SettingsMenu = forwardRef(function SettingsMenu({ children, close }, ref) {
-    const { t } = useTranslation();
-    const settingsHeaderItems =  [{src : closeIcon, alt : "close", clickaction : close}]
+export default function SettingsMenu({ children, close }) {
+  const { t } = useTranslation();
 
-    return (
-        <div className='settingContainer'>
-            <div className='settingsPopupWrapper' ref={ref}>
-                <Header headerItems={settingsHeaderItems} title={t('ACTIONS')} isPopup={true} />
-                {children}
-            </div>
-        </div>
-    );
-});
-
-export default SettingsMenu;
+  return (
+    <Popup title={t('ACTIONS')} close={close}>
+      <ActionList>
+        {children}
+        <SettingsLanguageSelect />
+      </ActionList>
+    </Popup>
+  );
+}

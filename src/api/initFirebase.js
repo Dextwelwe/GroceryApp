@@ -2,7 +2,6 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, setPersistence, browserLocalPersistence } from 'firebase/auth';
 import { getFirestore } from "firebase/firestore";
 
-
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_FIREBASE_KEY,
   authDomain: process.env.REACT_APP_API_FIREBASE_AUTH_DOMAIN,
@@ -11,9 +10,8 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app); 
+const auth = getAuth(app);
 const db = getFirestore(app);
-
 
 setPersistence(auth, browserLocalPersistence)
   .catch((error) => {

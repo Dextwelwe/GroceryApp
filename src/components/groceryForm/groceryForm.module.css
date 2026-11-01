@@ -1,0 +1,29 @@
+.userRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.userRow input {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.userChips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.formSection {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.formSection + .formSection {
+    margin-top: 6px;
+    padding-top: 12px;
+    border-top: 1px solid var(--hairline, #E6E8E2);
+}

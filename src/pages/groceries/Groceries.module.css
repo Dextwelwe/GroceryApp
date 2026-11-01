@@ -1,95 +1,67 @@
 .list{
     width: 100%;
+    max-width: var(--contentMax, 720px);
+    margin: 0 auto;
     overflow-y: auto;
-    gap : 20px;
     touch-action: pan-y;
     box-sizing: border-box;
-    padding: 0px 5px;
+    padding: 0 16px calc(var(--fabClearance, 96px) + env(safe-area-inset-bottom));
 }
 
-.tabMenu{
-    display: flex;
-    gap: 10px;
-    padding: 0;
-    background-color: var(--backgroundColor);
-    width: 100%;
-    align-items: center;
-}
-
-.tabButton{
-    padding: 10px 0px;
-    width: 50%;
-    background-color: transparent;
-    border: none;
-    border-bottom: 3px solid transparent;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--fontColor);
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-}
-
-.tabButton:hover{
-    background-color: rgba(0, 0, 0, 0.05);
-    border-radius: 5px 5px 0 0;
-}
-
-.tabButtonActive{
-    border-bottom-color: #2196F3;
-}
-
-.tabButtonIcon{
-    height: 25px;
-    width: 25px;
-}
-
-.myGroceriesLabel{
-    text-align: start;
-    font-size: 1rem;
-    font-weight: 300;
-    padding: 5px;
-    margin: 0;
-    margin-top: 5px;
-}
-
-.myGroceriesLabelWrapper{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.form{
+.toolbar{
     box-sizing: border-box;
-    padding: 10px;
-    display: grid;
-    gap: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    max-width: var(--contentMax, 720px);
+    margin: 0 auto;
+    padding: 8px 16px 10px;
 }
 
-.listIcon{
-    height: 25px;
-    width: 25px;
+.segmentedControl{
+    flex: 1 1 auto;
+    min-width: 0;
 }
 
 .addGrocery{
     position: absolute;
-    bottom: 35px;
+    bottom: calc(20px + env(safe-area-inset-bottom));
     right: 20px;
-    height: 65px;
-    width: 65px;
+    width: var(--fabSize, 56px);
+    height: var(--fabSize, 56px);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    background-color: rgba(236, 238, 232, 0.95);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    color: var(--primaryInk, #58624F);
+    box-shadow: 0 8px 24px rgba(70, 76, 66, 0.18);
     cursor: pointer;
+    transition: background-color var(--transitionFast, 150ms ease),
+                transform var(--transitionFast, 150ms ease);
 }
 
-.addUserButton{
-    cursor: pointer;
-    width: 45px;
-    border: none;
-    background-color: #2196F3;  
-    color: white;
-    border-radius: 100%;
+.addGrocery:hover{
+    background-color: rgba(243, 245, 240, 0.98);
+}
+
+.addGrocery:active{
+    transform: scale(0.94);
+}
+
+.addGrocery:focus-visible{
+    outline: 2px solid var(--primary, #6E7A69);
+    outline-offset: 3px;
+}
+
+.addIcon{
+    width: 26px;
+    height: 26px;
 }
 
 .loadingAnimation{
@@ -105,75 +77,14 @@
     text-align: center;
 }
 
-.formMessage{
-    font-size: 0.8rem;
-    margin-top: 5px;
-    color : green;
-    text-align: start;
-}
-
-.addedUsersTitle{
-    font-size : 0.8rem;
-}
-
-.userList::placeholder{
-    padding-left: 5px;
-}
-
-.saveButton:hover {
-  background-color: #1976D2;
-}
-
-.userListWrapper{
-    display: flex;
-    gap: 10px;
-}
-
-input {
-    border: var(--border);
-    height: var(--inputHeight) !important;
-    border-radius: 10px;
-}
-label{
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--fontColor);
-    width: max-content;
-    
-}
-
-.dateWrapper{
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-    gap: 5px;
-    height: max-content;
-}
-
-.dateInput{
-  box-sizing: border-box !important;
-  background-color: white;
-  text-align: center;
-  padding-right: 15px;
-  width: 100%;
-}
-
-.addItemsFloatingImage {
-    height: 60px;
-    width: 60px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-    flex-shrink: 0;
-}
-
-.addItemsFloatingImage:hover {
-    transform: translateY(-1px);
-}
-
-.previewList{
+.previewList {
     overflow: auto;
     max-height: 60vh;
     max-height: 60dvh;
+}
+
+.previewItem {
+    width: 100%;
 }
 
 .recipeBottomActions {
@@ -181,57 +92,100 @@ label{
     align-items: center;
     gap: 10px;
     width: 100%;
-    margin-top: 10px;
+    margin-top: 12px;
 }
 
-.recipeSaveButton {
-    margin-top: 0;
-}
-
-.recipeAddItemsButton{
-    margin: 20px 0px; 
-    margin-bottom: 0;
-    width: max-content;
-    background-color: #2196F3 !important;
-    border-radius: 50%;
-    border-color: transparent;
-    float : right;
-    height: 50px;
-    width: 50px;
-    color: white;
-    font-size: 35px;
-    padding: 0;
+.recipeAddItemsButton {
     display: inline-flex;
     align-items: center;
-    justify-content: center; 
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background-color: var(--primarySoft, #E8EBE3);
+    color: var(--primaryInk, #58624F);
     cursor: pointer;
+    transition: background-color var(--transitionFast, 150ms ease),
+                transform var(--transitionFast, 150ms ease);
 }
 
-.recipeAddItemsButton span {
-    transform: translateY(-1.8px); 
+.recipeAddItemsButton:hover {
+    background-color: var(--primarySoftHover, #DDE2D6);
 }
 
-.popupActions {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
+.recipeAddItemsButton:active {
+    transform: scale(0.94);
 }
 
-.popupActions button {
-    flex: 1;
+.recipeAddItemsButton:focus-visible {
+    outline: 2px solid var(--primary, #6E7A69);
+    outline-offset: 2px;
 }
 
-@media (min-width: 800px){
-    .resetFiltersBtn{
-        max-width: unset;
-        
+.recipeAddIcon {
+    width: 22px;
+    height: 22px;
+}
+
+.slideOutLeft {
+    animation: slideOutLeft 160ms ease-in both;
+}
+
+.slideInRight {
+    animation: slideInRight 220ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.slideOutRight {
+    animation: slideOutRight 160ms ease-in both;
+}
+
+.slideInLeft {
+    animation: slideInLeft 220ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes slideOutLeft {
+    from {
+        opacity: 1;
+        transform: none;
     }
-
-    .sortBy {
-        justify-content: center;
+    to {
+        opacity: 0;
+        transform: translateX(-14%);
     }
+}
 
-    .tabMenu{
-        font-size: 0.7rem;
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(14%);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        opacity: 1;
+        transform: none;
+    }
+    to {
+        opacity: 0;
+        transform: translateX(14%);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-14%);
+    }
+    to {
+        opacity: 1;
+        transform: none;
     }
 }

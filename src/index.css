@@ -2,11 +2,23 @@ body {
   overscroll-behavior: none;
   margin: 0;
   font-family: var(--fontFamily);
+  background-color: var(--canvas, #F8FAF7);
 }
 
 html, body {
   overscroll-behavior: none;
-  -ms-overflow-style: none; 
+  -ms-overflow-style: none;
   overscroll-behavior: none;
-  touch-action: pan-y pan-x; 
+  touch-action: pan-y pan-x;
+}
+
+#statusBarBacking {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: var(--canvas, #F8FAF7);
+  pointer-events: none;
+  z-index: 100000;
 }

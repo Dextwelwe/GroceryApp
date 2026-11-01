@@ -1,41 +1,58 @@
-
 import hm from './header.module.css'
 import cartIcon from '../../assets/images/icons/cart.svg'
+import { useTranslation } from 'react-i18next';
 
 export default function Header({title, headerNav, headerItems, isPopup = false}) {
+  const { t } = useTranslation();
+
   return (
-     <div className={hm.headerWrapper} style={isPopup ? {height : '50px'} : {}}>
-         <div className={hm.headerButtonsWrapper}>
-            <div className={hm.headerNavTitleWrapper}>
-               {headerNav && 
-                  headerNav.map((item, index) => (
-                 <img  key={index} src={item.src} className={hm.menuIcon} onClick={item.clickaction} alt={item.alt} />
-                ))
-               }
-            <div className={hm.headerTitleWrapper}>
-               { !isPopup ? (
-               <>
-               <img src={cartIcon} className={hm.cartIcon} alt="cart icon" />
-               <div>
-                  <h2 className={hm.headerTitle}>{title}</h2>
-                  <h6 className={hm.headerSubtitle}>My Groceries</h6>
-               </div>
-               </>
-               ) : (
-               <h2 className={hm.headerTitle}>{title}</h2>
-               )}
-               </div>
-            </div>
-            <div className={hm.itemsWrapper}>
-            {headerItems && 
-               headerItems.map((item, index) => (
-                  <div className={hm.headerNavImageWrapper} key={index} onClick={item.clickaction}>
-                  <img key={index} src={item.src} className={hm.menuIcon} alt={item.alt} />
-                  <h6 className={hm.buttonLabel}>{item.buttonLabel}</h6>
-                  </div>
-                ))}
-            </div>     
-         </div>
-     </div>
+    <div className={`${hm.headerWrapper} ${isPopup ? hm.headerPopup : ''}`}>
+      <div className={hm.headerButtonsWrapper}>
+        <div className={hm.headerNavTitleWrapper}>
+          {headerNav &&
+            headerNav.map((item, index) => (
+              <button
+                key={index}
+                type='button'
+                className='uiIconBtn'
+                onClick={item.clickaction}
+                aria-label={item.alt}
+                title={item.alt}
+              >
+                <img src={item.src} alt='' />
+              </button>
+            ))
+          }
+          {isPopup
+            ? <h2 className={hm.headerTitlePopup}>{title}</h2>
+            : (
+              <div className={hm.headerTitleWrapper}>
+                <img src={cartIcon} alt='' className={hm.cartIcon} />
+                <div className={hm.headerTextWrapper}>
+                  <h1 className={hm.headerTitle}>{title}</h1>
+                  <p className={hm.headerSubtitle}>{t('MY_GROCERIES')}</p>
+                </div>
+              </div>
+            )
+          }
+        </div>
+        <div className={hm.itemsWrapper}>
+          {headerItems &&
+            headerItems.map((item, index) => (
+              <button
+                key={index}
+                type='button'
+                className='uiIconBtn'
+                onClick={item.clickaction}
+                aria-label={item.buttonLabel || item.alt}
+                title={item.buttonLabel || item.alt}
+              >
+                <img src={item.src} alt='' />
+              </button>
+            ))
+          }
+        </div>
+      </div>
+    </div>
   )
 }

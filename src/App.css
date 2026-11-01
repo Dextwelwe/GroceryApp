@@ -1,34 +1,74 @@
 :root {
-  /* COLORS */
+
   --modalBackGround       : #F8FAF7;
-  --buttonColor           : #93aad2;
-  --buttonFocusColor      : #859fcc;
-  --primaryColor          : #F0F4F8;
-  --secondaryColor        : #859fcc;
-  --thirdColor            : #a9bbdb;
   --fontColor             : #212121 ;
   --subTextFontColor      : #757575;
-  --resetFilterBgColor    :   #E0E0E0;
-  --infoBox               : transparent;
-  --borderColorLoginInput : rgb(204, 219, 232);
   --border                : 1px solid  #E0E0E0;
-  
-  /* PADDING/MARGINS */
-  --rootHeight        :    100dvh;
-  --modalBorderRadius :    10px;
-  --paddingHeader     :    5px;
-  --borderRadius      :    15px;
-  --inputHeight       :    40px; 
-  --descriptionFontSize  : 18px;
-  --iconSize             : 28px;
-  
-  /* OTHER */
-  --fontFamily            : 'Lato', 'Roboto','Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+  --inputHeight       :    40px;
+
+  --fontFamily            : 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  --textHeadline          : 1.0625rem;
+  --textFootnote          : 0.8125rem;
+
+  --dotActive             : #2196F3;
+  --dotDone               : #34C759;
+  --contentMax            : 720px;
+  --fabSize               : 56px;
+  --fabClearance          : 96px;
+
+  --safeTop               : env(safe-area-inset-top, 0px);
+
+  --headerTopGap          : 30px;
+
+  --primary               : #6E7A69;
+  --primaryHover          : #616D5C;
+  --primarySoft           : #E8EBE3;
+  --primarySoftHover      : #DDE2D6;
+  --primaryInk            : #58624F;
+  --primaryDisabled       : #C6CBC0;
+  --primaryRing           : 0 0 0 3px rgba(110, 122, 105, 0.18);
+  --primaryField          : #F2F3EF;
+
+  --canvas                : #F8FAF7;
+  --surface               : #FFFFFF;
+  --hairline              : #E6E8E2;
+  --hairlineStrong        : #DCE0D9;
+
+  --accent                : #2196F3;
+  --accentHover           : #1976D2;
+  --accentSoft            : #EAF1FB;
+  --dangerFg              : #C62828;
+  --dangerBg              : #FDECEA;
+
+  --radiusSm              : 10px;
+  --radiusLg              : 20px;
+  --radiusPill            : 999px;
+  --ring                  : 0 0 0 3px rgba(33, 150, 243, 0.18);
+
+  --transitionFast        : 150ms ease;
+  --transitionBase        : 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 700px) {
+  :root {
+    --headerTopGap: 14px;
+  }
 }
 
 .mainContentWrapper{
     height: 100dvh;
     background-color: var(--modalBackGround);
+    background-image: linear-gradient(
+        180deg,
+        rgba(248, 250, 247, 0.72) 0%,
+        rgba(248, 250, 247, 0.80) 45%,
+        rgba(248, 250, 247, 0.88) 100%
+    ), var(--bgMobile);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -36,61 +76,22 @@
     align-items: center;
     box-sizing: border-box;
     position: relative;
+    overflow: hidden;
+}
+
+@media (min-width: 900px) {
+    .mainContentWrapper {
+        background-image: linear-gradient(
+            180deg,
+            rgba(248, 250, 247, 0.72) 0%,
+            rgba(248, 250, 247, 0.80) 45%,
+            rgba(248, 250, 247, 0.88) 100%
+        ), var(--bgDesktop);
+    }
 }
 
 button {
   font-family: var(--fontFamily);
   font-size: 15px;
 }
-
-.input{
-    height: 30px;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px;
-}
-
-
-@font-face {
-  font-family: 'Roboto';
-  src: url('assets/fonts/Roboto/Roboto-Regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Roboto';
-  src: url('assets/fonts/Roboto/Roboto-Bold.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Roboto';
-  src: url('assets/fonts/Roboto/Roboto-Medium.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Lato';
-  src: url('assets/fonts/Lato/Lato-Black.ttf') format('truetype');
-  font-weight: 700;
-  font-style: bold;
-}
-
-@font-face {
-  font-family: 'Lato';
-  src: url('assets/fonts/Lato/Lato-Regular.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Lato';
-  src: url('assets/fonts/Lato/Lato-Light.ttf') format('truetype');
-  font-weight: 100;
-  font-style: normal;
-}
-
 

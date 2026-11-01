@@ -1,0 +1,281 @@
+.page {
+    box-sizing: border-box;
+    min-height: 100dvh;
+    display: grid;
+    place-items: center;
+    position: relative;
+    padding-top: calc(24px + env(safe-area-inset-top));
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+    padding-left: 16px;
+    padding-right: 16px;
+    background-color: var(--canvas, #F8FAF7);
+    background-image: var(--bgMobile);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+@media (min-width: 900px) {
+    .page {
+        background-image: var(--bgDesktop);
+    }
+}
+
+.page::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: linear-gradient(
+        180deg,
+        rgba(248, 250, 247, 0.34) 0%,
+        rgba(248, 250, 247, 0.56) 50%,
+        rgba(248, 250, 247, 0.74) 100%
+    );
+}
+
+.languageBar {
+    position: absolute;
+    top: calc(12px + env(safe-area-inset-top));
+    right: 12px;
+    z-index: 2;
+}
+
+.languagePill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-sizing: border-box;
+    height: 32px;
+    padding: 0 10px;
+    border: 1px solid #E0E3DB;
+    border-radius: var(--radiusPill, 999px);
+    background-color: var(--surface, #FFFFFF);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    color: var(--fontColor, #212121);
+    transition: border-color var(--transitionFast, 150ms ease),
+                background-color var(--transitionFast, 150ms ease);
+}
+
+.languagePill:hover {
+    border-color: var(--hairlineStrong, #DCE0D9);
+    background-color: var(--surface, #FFFFFF);
+}
+
+.languageIcon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    opacity: 0.75;
+}
+
+.languageSelect {
+    border: none;
+    background: transparent;
+    font-family: var(--fontFamily);
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+    max-width: 96px;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.languageSelect:focus-visible {
+    outline: 2px solid var(--accent, #2196F3);
+    outline-offset: 3px;
+    border-radius: 6px;
+}
+
+.languageChevron {
+    font-size: 0.6rem;
+    line-height: 1;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.card {
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+    width: min(380px, 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 26px 22px 20px;
+    border: 1px solid var(--hairline, #E6E8E2);
+    border-radius: var(--radiusLg, 20px);
+    background-color: var(--surface, #FFFFFF);
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.18);
+    animation: cardIn var(--transitionBase, 250ms cubic-bezier(0.4, 0, 0.2, 1)) both;
+}
+
+@keyframes cardIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .card {
+        animation: none;
+    }
+
+    .spinner {
+        animation-duration: 2s;
+    }
+}
+
+.title {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--fontColor, #212121);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.passwordWrapper {
+    position: relative;
+    display: flex;
+}
+
+.passwordWrapper :global(.uiField) {
+    padding-right: 48px;
+}
+
+.eyeButton {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--subTextFontColor, #757575);
+    cursor: pointer;
+    transition: background-color var(--transitionFast, 150ms ease),
+                color var(--transitionFast, 150ms ease);
+}
+
+.eyeButton:hover {
+    background-color: var(--primarySoft, #E8EBE3);
+    color: var(--fontColor, #212121);
+}
+
+.eyeButton:focus-visible {
+    outline: 2px solid var(--primary, #6E7A69);
+    outline-offset: 1px;
+}
+
+.eyeIcon {
+    width: 18px;
+    height: 18px;
+    display: block;
+}
+
+.banner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 9px 12px;
+    border-radius: var(--radiusSm, 10px);
+    background-color: var(--dangerBg, #FDECEA);
+    color: var(--dangerFg, #C62828);
+    font-size: 0.8rem;
+    line-height: 1.35;
+}
+
+.spinner {
+    width: 15px;
+    height: 15px;
+    box-sizing: border-box;
+    border: 2px solid rgba(255, 255, 255, 0.45);
+    border-top-color: #FFFFFF;
+    border-radius: 50%;
+    animation: spin 700ms linear infinite;
+}
+
+.spinnerSage {
+    width: 12px;
+    height: 12px;
+    border-color: rgba(88, 98, 79, 0.28);
+    border-top-color: var(--primaryInk, #58624F);
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.guestLink {
+    align-self: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: auto;
+    height: auto;
+    margin-top: 2px;
+    padding: 4px 6px;
+    border: none;
+    border-radius: var(--radiusSm, 10px);
+    background: transparent;
+    color: var(--primaryInk, #58624F);
+    font-family: var(--fontFamily);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    transition: color var(--transitionFast, 150ms ease),
+                background-color var(--transitionFast, 150ms ease);
+}
+
+.guestLink:hover:not(:disabled) {
+    color: var(--primaryHover, #616D5C);
+    background-color: var(--primarySoft, #E8EBE3);
+}
+
+.guestLink:focus-visible {
+    outline: 2px solid var(--primary, #6E7A69);
+    outline-offset: 1px;
+}
+
+.guestLink:disabled {
+    cursor: default;
+    opacity: 0.6;
+}
+
+@media (min-width: 480px) {
+    .card {
+        padding: 30px 26px 22px;
+    }
+}

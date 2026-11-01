@@ -1,16 +1,124 @@
-.categorySelect {
-    width : max-content;
-    background-color: transparent;
-    border: none;
-    height: 25px;
-    font-family: var(--fontFamily);
-    border-color: transparent;
-    text-align: start;
-    padding-left: 0;
-    max-width: 150px;
-    text-overflow: ellipsis;
+.row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 8px 8px 12px;
+    margin-top: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    border-radius: 14px;
+    background-color: rgba(255, 255, 255, 0.72);
+    box-shadow: 0 1px 6px rgba(40, 52, 38, 0.06);
 }
 
-.categorySelect:focus-visible {
+.main {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.name {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--fontColor, #212121);
+    text-transform: capitalize;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    min-width: 0;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    max-width: 150px;
+    height: 24px;
+    padding: 0 9px;
+    border-radius: var(--radiusPill, 999px);
+    background-color: var(--primarySoft, #E8EBE3);
+    color: var(--primaryInk, #58624F);
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.chip img {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+    opacity: 0.75;
+}
+
+.chipText {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chipMissing {
+    box-shadow: inset 0 0 0 1px var(--dangerFg, #C62828);
+    color: var(--dangerFg, #C62828);
+}
+
+.select {
+    width: auto;
+    max-width: 112px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    font-family: var(--fontFamily);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: inherit;
+    text-align: start;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+.select:focus-visible {
     outline: none;
+}
+
+.remove {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    opacity: 0.45;
+    transition: opacity var(--transitionFast, 150ms ease),
+                background-color var(--transitionFast, 150ms ease);
+}
+
+.remove img {
+    width: 18px;
+    height: 18px;
+}
+
+.remove:hover {
+    opacity: 1;
+    background-color: var(--dangerBg, #FDECEA);
+}
+
+.remove:focus-visible {
+    outline: 2px solid var(--dangerFg, #C62828);
+    outline-offset: 1px;
 }

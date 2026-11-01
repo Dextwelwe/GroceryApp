@@ -1,71 +1,100 @@
 .headerWrapper {
     box-sizing: border-box;
-    padding: 10px 10px;
     display: flex;
-    align-items:center;
+    align-items: center;
     width: 100%;
-    cursor: default;
     flex-shrink: 0;
-    height: 60px;
-    border-bottom: var(--border);
+    min-height: 60px;
+
+    padding: calc(var(--safeTop, env(safe-area-inset-top, 0px)) + var(--headerTopGap, 16px)) 0 8px;
+    cursor: default;
 }
 
-.headerTitleWrapper{
-    display: inline-flex;
-    gap: 5px;
-    align-items: center;
-    width: max-content;
+.headerPopup {
+    min-height: 48px;
+
+    padding: 2px 6px 0 4px;
+    border-bottom: none;
 }
 
-.cartIcon {
-    height: 45px;
-    width:  45px
+.headerPopup .headerButtonsWrapper {
+    padding: 0;
 }
 
-.headerSubtitle{
-    margin: 0;
-    font-size: 0.7rem;
-}
-
-.headerNavImageWrapper{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.buttonLabel{
-    margin: 0;
-    font-size: 0.65rem;
-    font-weight: normal;
-}
-
-.headerNavTitleWrapper{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-}
-
-.headerTitle{
-    font-size: 1.2rem;
-    font-weight: 500;
-    margin: 0;
-    color : var(--fontColor);
-}
-
-.itemsWrapper{
-    display: flex;
-}
-
-.headerButtonsWrapper{
+.headerButtonsWrapper {
+    box-sizing: border-box;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 8px;
     width: 100%;
-    cursor: pointer;
+    max-width: var(--contentMax, 720px);
+    margin: 0 auto;
+    padding: 0 16px;
 }
 
-.menuIcon{
-    height: 25px;
-    width:  25px;
+.headerNavTitleWrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
 
+.headerTitleWrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+
+.cartIcon {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+}
+
+.headerTextWrapper {
+    min-width: 0;
+}
+
+.headerTitle {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--fontColor, #212121);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.headerSubtitle {
+    margin: 0;
+    font-size: 0.72rem;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #4C554A;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.headerTitlePopup {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: var(--fontColor, #212121);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.itemsWrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
 }

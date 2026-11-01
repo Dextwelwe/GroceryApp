@@ -5,8 +5,6 @@ import { useCategorySearch } from '../../hooks/useCategorySearch';
 import deleteIcon from '../../assets/images/icons/delete.svg';
 import categoryIcon from '../../assets/images/icons/category.svg';
 import storeIcon from '../../assets/images/icons/store.svg';
-import noteIcon from '../../assets/images/icons/name.svg';
-import ic from '../ItemCard/itemCard.module.css';
 
 export default function AddItems({ onSave, storesList, userName }) {
   const { t } = useTranslation();
@@ -100,7 +98,7 @@ export default function AddItems({ onSave, storesList, userName }) {
         <input
           ref={inputRef}
           type="text"
-          className="add-items-input"
+          className="uiField"
           value={inputValue}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
@@ -108,8 +106,8 @@ export default function AddItems({ onSave, storesList, userName }) {
           placeholder={t('ADD_ITEM_PLACEHOLDER')}
           autoComplete="off"
         />
-        <button type="button" className="add-items-add-btn" onClick={handleAddClick} aria-label={t('ADD_ITEMS')}>
-          <span className="add-items-add-icon">+</span>
+        <button type="button" className="uiBtnAdd" onClick={handleAddClick} aria-label={t('ADD_ITEMS')}>
+          +
         </button>
 
         {showSuggestions && suggestions.length > 0 && (
@@ -126,18 +124,16 @@ export default function AddItems({ onSave, storesList, userName }) {
 
       <div className="add-items-list">
         {items.map((item, index) => (
-            <div key={index} className={ic.groceryCardWrapper} style={{ marginTop: '10px' }}>
-              <div className={ic.dataWrapper}>
-                <div className={ic.nameWrapper}>
-                  <img alt="Name" src={noteIcon} className={ic.nameIcon} />
-                  <span className={ic.name}>{item.name}</span>
-                </div>
-                <div className={ic.labelsWrapper}>
-                  <div style={{ border: item.category === '' ? '1px solid red' : '' }} className={ic.category}>
-                    <img alt="Category" src={categoryIcon} className={ic.icon} />
+            <div key={index} className="add-items-row">
+              <div className="add-items-row-main">
+                <span className="add-items-row-name">{item.name}</span>
+                <div className="add-items-row-selects">
+                  <span className={`add-items-select-chip ${item.category === '' ? 'add-items-select-chipMissing' : ''}`}>
+                    <img alt="" src={categoryIcon} />
                     <select
-                      className={`${ic.dataLabel} add-items-select`}
+                      className="add-items-select"
                       value={item.category}
+                      aria-label={t('FILTERS.CATEGORY')}
                       onChange={(e) => editItemCategory(item.name, e.target.value)}
                     >
                       <option value="">{t('NO_CATEGORY')}</option>
@@ -145,12 +141,13 @@ export default function AddItems({ onSave, storesList, userName }) {
                         <option key={cat.id} value={cat.id}>{getOneCategory(cat.id)}</option>
                       ))}
                     </select>
-                  </div>
-                  <div className={ic.store}>
-                    <img alt="Store" src={storeIcon} className={ic.icon} />
+                  </span>
+                  <span className="add-items-select-chip">
+                    <img alt="" src={storeIcon} />
                     <select
-                      className={`${ic.dataLabel} add-items-select`}
+                      className="add-items-select"
                       value={item.store}
+                      aria-label={t('STORE')}
                       onChange={(e) => editItemStore(item.name, e.target.value)}
                     >
                       <option value="">{t('NO_STORE')}</option>
@@ -158,19 +155,27 @@ export default function AddItems({ onSave, storesList, userName }) {
                         <option key={si} value={store.desc}>{store.desc}</option>
                       ))}
                     </select>
-                  </div>
+                  </span>
                 </div>
               </div>
-              <div className={ic.rightItems}>
-                <img src={deleteIcon} className={ic.menuIcon} onClick={() => removeItem(item.name)} alt="Remove" />
-              </div>
+              <button
+                type="button"
+                className="add-items-row-remove"
+                onClick={() => removeItem(item.name)}
+                aria-label={t('DELETE')}
+                title={t('DELETE')}
+              >
+                <img src={deleteIcon} alt="" />
+              </button>
             </div>
           ))}
       </div>
 
-      <button type="button" onClick={handleConfirm} className="saveButton" disabled={items.length === 0} style={{ marginTop: '10px' }}>
-        {t('CONFIRM')}
-      </button>
+      <div className="uiBtnRow">
+        <button type="button" onClick={handleConfirm} className="uiBtn uiBtnPrimary" disabled={items.length === 0}>
+          {t('CONFIRM')}
+        </button>
+      </div>
     </div>
   );
 }

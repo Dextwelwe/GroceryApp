@@ -1,84 +1,87 @@
 import remove from '../../assets/images/icons/delete.svg'
-import { useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import categoryIcon from '../../assets/images/icons/category.svg';
 import storeIcon from '../../assets/images/icons/store.svg';
 import recipeIcon from '../../assets/images/icons/recipe.svg';
-import ic from '../ItemCard/itemCard.module.css'
 import pic from './previewItemCard.module.css'
-import noteIcon from '../../assets/images/icons/name.svg'
 import { useCategorySearch } from '../../hooks/useCategorySearch';
-
 
 export default function PreviewItemCard({data, actions, categoriesList, storesList, showRemove = true, showRecipe = true}) {
 
   const { t } = useTranslation();
   const { getOneCategory } = useCategorySearch();
-  const rightItemsIcons = showRemove ? [{src : remove, alt : "Remove", clickaction : removeCall}] : [];
   const categoryLabel = data.category ? getOneCategory(data.category) : t('NO_CATEGORY');
 
-    function removeCall(){
-          actions.remove && actions.remove(data.name);
-    }
+  function removeCall(){
+    actions.remove && actions.remove(data.name);
+  }
 
-    function categoryChangeCall(e){
-      const newCategoryId = e.target.value;
-      actions.editCategory && actions.editCategory(data.name, newCategoryId);
-    }
+  function categoryChangeCall(e){
+    actions.editCategory && actions.editCategory(data.name, e.target.value);
+  }
 
-    function storeChangeCall(e){
-      const newStore = e.target.value;
-      actions.editStore && actions.editStore(data.name, newStore);
-    }
+  function storeChangeCall(e){
+    actions.editStore && actions.editStore(data.name, e.target.value);
+  }
 
   return (
-      <div className={ic.groceryCardWrapper} style={{marginTop : '10px'}}>
-                  <div className={ic.dataWrapper}>
-                       <div className={ic.nameWrapper}>
-                        <img alt="Name Icon" src={noteIcon} className={ic.nameIcon} />
-                        <span className={ic.name}>{data.name}</span>
-                       </div>
-                       <div className={ic.labelsWrapper}>
-                      <div style={{border : data.category === "" ? "1px solid red" : ""}} className={ic.category}>
-                        <img alt="Category Icon" src={categoryIcon} className={ic.icon} />
-                        <select name='category' onChange={categoryChangeCall} value={data.category || ''} className={`${ic.dataLabel} ${ic.category} ${pic.categorySelect}`}>
-                        <option  value={data.category || ''}>{categoryLabel}</option>
-                        {categoriesList && categoriesList.filter(category => category.id !== data.category).map((category, index) => (
-                          <option key={index} value={category.id}>{getOneCategory(category.id)}</option>
-                        ))}
-                        </select>
-                        </div> 
-                        {storesList ?
-                      <div className={ic.store}>
-                        <img alt="Store Icon" src={storeIcon} className={ic.icon} />
-                        <select name='store' onChange={storeChangeCall} value={data.store || ''} className={`${ic.dataLabel} ${ic.store} ${pic.categorySelect}`}>
-                        <option value=''>{t('NO_STORE')}</option>
-                        {storesList.map((store, index) => (
-                          <option key={index} value={store.desc}>{store.desc}</option>
-                        ))}
-                        </select>
-                        </div>
-                        : data.store &&
-                      <div className={ic.store}>
-                        <img alt="Store Icon" src={storeIcon} className={ic.icon} />
-                        <span className={ic.dataLabel}>{data.store}</span>
-                        </div>
-                        }
-                        {showRecipe && data.recipe &&
-                      <div className={ic.recipe}>
-                        <img alt="Recipe Icon" src={recipeIcon} className={ic.icon} />
-                        <span className={ic.dataLabel}>{data.recipe}</span>
-                        </div>
-                        }
-                      </div>
-                 </div>
-                  {rightItemsIcons.length > 0 &&
-                  <div className={ic.rightItems}>
-                   {rightItemsIcons.map((item, index) => (
-                     <img  key={index} src={item.src} className={ic.menuIcon} onClick={() => item.clickaction(data)} alt={item.alt} />
-                       ))
-                   }
-                  </div>
-                  }
-              </div>
+    <div className={pic.row}>
+      <div className={pic.main}>
+        <span className={pic.name}>{data.name}</span>
+        <div className={pic.chips}>
+          <span className={`${pic.chip} ${data.category === '' ? pic.chipMissing : ''}`}>
+            <img alt="" src={categoryIcon} />
+            <select
+              name='category'
+              className={pic.select}
+              value={data.category || ''}
+              onChange={categoryChangeCall}
+              aria-label={t('FILTERS.CATEGORY')}
+            >
+              <option value={data.category || ''}>{categoryLabel}</option>
+              {categoriesList && categoriesList.filter(category => category.id !== data.category).map((category, index) => (
+                <option key={index} value={category.id}>{getOneCategory(category.id)}</option>
+              ))}
+            </select>
+          </span>
+
+          {storesList
+            ? <span className={pic.chip}>
+                <img alt="" src={storeIcon} />
+                <select
+                  name='store'
+                  className={pic.select}
+                  value={data.store || ''}
+                  onChange={storeChangeCall}
+                  aria-label={t('STORE')}
+                >
+                  <option value=''>{t('NO_STORE')}</option>
+                  {storesList.map((store, index) => (
+                    <option key={index} value={store.desc}>{store.desc}</option>
+                  ))}
+                </select>
+              </span>
+            : data.store &&
+              <span className={pic.chip}>
+                <img alt="" src={storeIcon} />
+                <span className={pic.chipText}>{data.store}</span>
+              </span>
+          }
+
+          {showRecipe && data.recipe &&
+            <span className={pic.chip}>
+              <img alt="" src={recipeIcon} />
+              <span className={pic.chipText}>{data.recipe}</span>
+            </span>
+          }
+        </div>
+      </div>
+
+      {showRemove &&
+        <button type='button' className={pic.remove} onClick={removeCall} aria-label={t('DELETE')} title={t('DELETE')}>
+          <img src={remove} alt='' />
+        </button>
+      }
+    </div>
   )
 }

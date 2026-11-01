@@ -35,15 +35,15 @@ const Category = forwardRef(({list, onUpdate, onDelete},ref) => {
   const setNewCategory = () => {
     setIsAddNewCategory(true);
   };
-  
+
   const removeCategory = async() => {
     let val = newCategoryRef.current.value;
     if(onDelete){
      let res = await onDelete(val);
      if (res){
        exitEditMenu();
-     } 
-    } 
+     }
+    }
   };
 
   const handleSaveNewOption = async() =>{
@@ -55,10 +55,10 @@ const Category = forwardRef(({list, onUpdate, onDelete},ref) => {
     for (let x=0;x< list.length; x++){
       let el = list[x];
       if (el.desc.toLowerCase().trim() === val.toLowerCase().trim()){
-        isUnique = false; 
+        isUnique = false;
         alert(t('WARNINGS.ALREADY_EXISTS'))
       }
-    } 
+    }
     if (isUnique && onUpdate){
       let finalArr = [val, ...list.map(e => e.desc)]
       setIsAddNewCategory(false);
@@ -88,7 +88,7 @@ const Category = forwardRef(({list, onUpdate, onDelete},ref) => {
         if (res) {
           setSelectedCategory(val);
           exitEditMenu();
-        } 
+        }
       }
     }
   };
@@ -115,10 +115,10 @@ const handleEditOptionMenu = () => {
   return (
     <div className="headerWrapper categoryWrapper">
      <div className="itemsCategory">
-       {displayEditCategory && isEditCategory && <img src={iconDelete} className="menuIcon" onClick={removeCategory} alt="icon delete" />}           {/* Remove an Option  */}
+       {displayEditCategory && isEditCategory && <img src={iconDelete} className="menuIcon" onClick={removeCategory} alt="icon delete" />}
        {isAddNewCategory && <input type="text" ref={newCategoryRef}   className="newCategoryInput" />}
-       {isEditCategory && <input type="text" ref={newCategoryRef}  value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} className="newCategoryInput" />} 
-       {!isAddNewCategory && !isEditCategory && 
+       {isEditCategory && <input type="text" ref={newCategoryRef}  value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} className="newCategoryInput" />}
+       {!isAddNewCategory && !isEditCategory &&
           <select className="oneCategoryItem" ref={ref} value={selectedCategory} onChange={(e) => handleSelect(e)} >
             {list.map((item, index) => (<option key={index} value={item.desc}>{item.desc}</option>))}
           </select>
@@ -126,17 +126,17 @@ const handleEditOptionMenu = () => {
       </div>
 
       <div className="menuIconWrapper">
-        {isAddNewCategory && <img src={iconCheck} className="menuIcon" onClick={handleSaveNewOption} alt="icon check" />}                                              {/* Confirm add New Option  */}
-        {!displayEditCategory && !isAddNewCategory && <img src={iconAdd} className="menuIcon" onClick={() => {setNewCategory();}} alt="icon add" />}  {/* Open New Option Menu  */}
+        {isAddNewCategory && <img src={iconCheck} className="menuIcon" onClick={handleSaveNewOption} alt="icon check" />}
+        {!displayEditCategory && !isAddNewCategory && <img src={iconAdd} className="menuIcon" onClick={() => {setNewCategory();}} alt="icon add" />}
       </div>
        <div className="menuIconWrapper">
-        {isAddNewCategory && <img src={iconUndo} className="menuIcon" onClick={() => {setIsAddNewCategory(false);}} alt="icon back" />}                 {/* Back from New Option Menu  */}
-         {displayEditCategory && isEditCategory && <img src={iconCheck} className="menuIcon" onClick={handleUpdateOption} alt="icon check" />}              {/* Confirm Edit Name  */}
-        {!isAddNewCategory && !displayEditCategory &&  <img src={iconEdit} className="menuIcon" onClick={() => { setIsAddNewCategory(false); handleEditOptionMenu(); toggleEditMode(); }} alt="icon edit" />}   {/*  Open edit menu  */}
+        {isAddNewCategory && <img src={iconUndo} className="menuIcon" onClick={() => {setIsAddNewCategory(false);}} alt="icon back" />}
+         {displayEditCategory && isEditCategory && <img src={iconCheck} className="menuIcon" onClick={handleUpdateOption} alt="icon check" />}
+        {!isAddNewCategory && !displayEditCategory &&  <img src={iconEdit} className="menuIcon" onClick={() => { setIsAddNewCategory(false); handleEditOptionMenu(); toggleEditMode(); }} alt="icon edit" />}
        </div>
         {displayEditCategory &&
         <div className="menuIconWrapper">
-         <img src={iconUndo} className="menuIcon" onClick={exitEditMenu} alt="icon undo" />  {/* Back from Edit Menu */}
+         <img src={iconUndo} className="menuIcon" onClick={exitEditMenu} alt="icon undo" />
         </div>
         }
     </div>

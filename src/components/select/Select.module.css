@@ -1,41 +1,85 @@
-.fieldset {
-  width: 100%;
-  min-width: 0;
+.chip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    height: 34px;
+    padding: 0 13px;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    border-radius: var(--radiusPill, 999px);
+    background-color: rgba(255, 255, 255, 0.68);
+    box-shadow: 0 1px 3px rgba(40, 52, 38, 0.06);
+    color: var(--fontColor, #212121);
+    scroll-snap-align: start;
+    transition: background-color var(--transitionFast, 150ms ease),
+                border-color var(--transitionFast, 150ms ease),
+                color var(--transitionFast, 150ms ease);
 }
 
-.select {
-  font-size: 0.8rem;
-  width: 100%;
-  border: 1px solid #E0E0E0;
-  height: 32px;
-  box-sizing: border-box;
-  margin-top: 3px;
-  padding: 0 8px;
-  color: var(--fontColor);
-  font-family: var(--fontFamily);
-  border-radius: 8px;
-  cursor: pointer;
-  text-transform: capitalize;
-  background-color: #F5F7F3;
-  text-overflow: ellipsis;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23757575' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 8px center;
-  padding-right: 24px;
+.chip:hover {
+    background-color: rgba(255, 255, 255, 0.95);
 }
 
-.select:focus {
-  outline: none;
-  border-color: var(--secondaryColor);
-  background-color: #fff;
+.chip:focus-within {
+    border-color: var(--accent, #2196F3);
+    box-shadow: var(--ring, 0 0 0 3px rgba(33, 150, 243, 0.18));
+}
+
+.chipActive {
+    border-color: rgba(33, 150, 243, 0.24);
+    background-color: var(--accentSoft, #EAF1FB);
+    color: var(--accentHover, #1976D2);
+    box-shadow: none;
 }
 
 .label {
-  font-size: 0.7rem;
-  padding-left: 2px;
-  color: var(--subTextFontColor);
-  font-weight: 500;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--subTextFontColor, #757575);
+    white-space: nowrap;
+}
+
+.chipActive .label {
+    color: var(--accent, #2196F3);
+    opacity: 0.85;
+}
+
+.value {
+    font-size: 0.82rem;
+    font-weight: 600;
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chevron {
+    width: 10px;
+    height: 10px;
+    flex-shrink: 0;
+    opacity: 0.5;
+}
+
+.native {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    opacity: 0;
+    cursor: pointer;
+    font-family: var(--fontFamily);
+    font-size: 16px;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .chip {
+        transition: none;
+    }
 }

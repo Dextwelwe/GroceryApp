@@ -22,7 +22,7 @@ export default class Grocery {
     }
 
     getCategoriesFromAddedItems() {
-        const unique = new Set(this.items.map(item => item.category)); 
+        const unique = new Set(this.items.map(item => item.category));
         const categories = Array.from(unique).map(c => ({
             desc: c,
             value: c,
@@ -102,4 +102,3 @@ export default class Grocery {
     });
     }
 }
-

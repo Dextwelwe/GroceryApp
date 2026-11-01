@@ -15,5 +15,5 @@ export default class User {
     getName(){
       return this.name;
     }
-     
+
 }

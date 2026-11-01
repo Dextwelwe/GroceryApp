@@ -1,119 +1,138 @@
-.groceryCardWrapper{
+.rowCompleted {
+    border-color: rgba(224, 232, 219, 0.9);
+    background-color: rgba(240, 244, 237, 0.70);
+}
+
+.openButton {
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    height: max-content;
-    width: 100%;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-    padding: 14px 18px;
-    padding-left: 10px;
-    background-color:  #F4F4EF;
+    gap: 12px;
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 12px 4px 12px 12px;
+    border: none;
+    border-radius: 18px;
+    background: transparent;
+    font-family: var(--fontFamily);
+    text-align: start;
     cursor: pointer;
-    padding-right: 20px;
-    margin-bottom: 20px;
-    border-radius: 12px;
+    transition: transform var(--transitionFast, 150ms ease);
 }
 
-.completedCard {
-    background-color: #E8F5E9;
-    opacity: 0.85;
+.openButton:active {
+    transform: scale(0.99);
 }
 
-
-.dataWrapper{
-    flex-grow: 1;
+.openButton:focus-visible {
+    outline: 2px solid var(--primary, #6E7A69);
+    outline-offset: -2px;
 }
 
-
-.colorShared {
-    background-color: #FFF9C4;
-    color: #8D6E63; 
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1 1 auto;
+    min-width: 0;
 }
 
-.colorPersonal {
-    background-color: #B2DFDB; 
-    color: #00695C;
-}
-
-.colorCompleted {
-    background-color: #C8E6C9;
-    color: #2E7D32;
+.name {
+    font-size: var(--textHeadline, 1.0625rem);
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--fontColor, #212121);
     text-transform: capitalize;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.colorActive {
-    background-color: #B3E5FC;
-    color: #0277BD;
-    text-transform: capitalize;
-}
-
-.name{
-    color: #222;
-    font-weight: 500;
-    text-transform: capitalize;
-    font-size: 1.1rem;
-    margin-bottom: 6px;
+.metaRow {
     display: flex;
     align-items: center;
-    gap: 5px;
-}
-
-.dateWrapper{
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-bottom: 8px;
-}
-
-.date{
-    font-size: 0.82rem;
-    opacity: 0.7;
-    margin-left: 2px;
-    color: var(--subTextFontColor);
+    gap: 6px;
+    min-width: 0;
 }
 
 .status {
-    font-size: 0.8rem;
-    margin-left: 2px;
-}
-
-.label{
-    margin-top: 3px;
-    width: max-content;
-    box-sizing: border-box;
-    padding: 0px 10px;
-    font-size: 0.75rem;
-    height: 26px;
-    border-radius: 25px;
     display: inline-flex;
     align-items: center;
     gap: 5px;
+    flex-shrink: 0;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #4C554A;
+    white-space: nowrap;
 }
 
-.label img {
-    height: 20px;
-    width: 20px;
+.count {
+    flex-shrink: 0;
+    font-size: var(--textFootnote, 0.8125rem);
+    font-weight: 600;
+    color: #4C554A;
+    white-space: nowrap;
 }
 
-.userIcon{
-    height: 25px;
-    width: 25px;
+.sep {
+    flex-shrink: 0;
+    font-size: var(--textFootnote, 0.8125rem);
+    color: #B9BEB5;
 }
 
-.menuIcon{
-    height: var(--iconSize);
-    width:  var(--iconSize);
-    cursor: pointer;
+.date {
+    min-width: 0;
+    font-size: var(--textFootnote, 0.8125rem);
+    color: #8A9183;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.labelsWrapper{
-    display: flex;
-    gap: 5px;
-    margin-top: 5px;
+.statusDot {
+    width: 7px;
+    height: 7px;
+    flex-shrink: 0;
+    border-radius: 50%;
+}
+
+.statusActive .statusDot {
+    background-color: var(--dotActive, #2196F3);
+}
+
+.statusDone .statusDot {
+    background-color: var(--dotDone, #34C759);
+}
+
+.menuButton {
+    display: inline-flex;
     align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity var(--transitionFast, 150ms ease),
+                background-color var(--transitionFast, 150ms ease);
 }
 
+.menuButton:hover {
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.05);
+}
 
+.menuButton:focus-visible {
+    opacity: 1;
+    outline: 2px solid var(--primary, #6E7A69);
+    outline-offset: 1px;
+}
 
-
+.menuIcon {
+    width: 18px;
+    height: 18px;
+}

@@ -16,7 +16,6 @@ function App() {
   const [groceryId, setGroceryId] = useState(null);
   const [refresh, setRefresh] = useState(false);
   usePreloadImages([iconLogout, iconLanguage, eraseIcon,clearIcon]);
-  
 
   const goToGrocery = useCallback((id) => {
     if (id == null) return;
@@ -28,7 +27,7 @@ function App() {
     if (refreshPage) setRefresh(prev => !prev);
     setPage(prev => (prev === 'groceries' ? prev : 'groceries'));
   }, []);
-  
+
   if (!user?.email) return <Login />;
 
   return (
@@ -36,7 +35,7 @@ function App() {
      <div style={{ display: page === "groceries" ? "block" : "none" }}>
       <Groceries goToGrocery={goToGrocery} refresh={refresh} />
      </div>
-     
+
       <div style={{ display: page === 'grocery' ? 'block' : 'none' }}>
       {groceryId &&
         <Grocery key={groceryId ?? 'none'} groceryId={groceryId} goBack={goBack}  />

@@ -1,5 +1,7 @@
 import './index.css';
+import './assets/fonts/Nunito/nunito.css';
 import './App.css';
+import './styles/ui.css';
 import './i18n';
 
 import { AuthProvider } from './providers/AuthProvider';

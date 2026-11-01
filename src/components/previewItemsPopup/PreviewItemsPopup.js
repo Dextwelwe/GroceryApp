@@ -22,9 +22,9 @@ export default function PreviewItemsPopup({items, categoriesList, storesList, li
             </div>
           ))}
         </div>
-        <div style={{ display: 'flex', gap: 10 }}>
-          <button type='button' onClick={onBack} className='backButton'>{t('BACK')}</button>
-          <button type='button' onClick={onConfirm} className='saveButton'>{t('CONFIRM')}</button>
+        <div className='uiBtnRow'>
+          <button type='button' onClick={onBack} className='uiBtn uiBtnGhost'>{t('BACK')}</button>
+          <button type='button' onClick={onConfirm} className='uiBtn uiBtnPrimary'>{t('CONFIRM')}</button>
         </div>
       </div>
     </Popup>

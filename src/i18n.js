@@ -5,7 +5,6 @@ import en from './localisation/en.json';
 import fr from './localisation/fr.json';
 import ru from './localisation/ru.json';
 
-
 const savedLang = localStorage.getItem('i18nextLng');
 
 i18n

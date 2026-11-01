@@ -6,7 +6,7 @@ export function usePreloadImages(urls = []) {
       const img = new Image();
       img.decoding = "async";
       img.loading = "eager";
-      img.src = src; 
+      img.src = src;
       return img;
     });
     return () => { imgs.forEach(i => (i.src = "")); };

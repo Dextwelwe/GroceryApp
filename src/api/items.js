@@ -1,7 +1,6 @@
 import { doc, deleteDoc, updateDoc, writeBatch, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../api/initFirebase";
 
-
 export async function addItems(items,groceryId){
     if (!groceryId || !Array.isArray(items)) {
     throw new Error("Missing groceryId or items array");
@@ -53,4 +52,3 @@ export async function setItemStatus(groceryId, itemId, status) {
     return {success: false, err}
   }
 }
-

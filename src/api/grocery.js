@@ -1,7 +1,6 @@
-import { collection, doc, deleteDoc, serverTimestamp, writeBatch,Timestamp, getDoc, getDocs, updateDoc, arrayUnion, arrayRemove, query, onSnapshot } from "firebase/firestore";
+import { collection, doc, deleteDoc, serverTimestamp, writeBatch,Timestamp, getDoc, getDocs, updateDoc, arrayUnion, arrayRemove, query, onSnapshot, getCountFromServer } from "firebase/firestore";
 import { db } from "../api/initFirebase";
 import Grocery from "../models/Grocery";
-
 
 async function fetchGroceries(groceryIds) {
   if (!groceryIds || groceryIds.length === 0) return [];
@@ -10,9 +9,19 @@ async function fetchGroceries(groceryIds) {
   const promises = groceryIds.map(id => getDoc(doc(groceriesRef, id)));
   const snapshots = await Promise.all(promises);
 
-  return snapshots
+  const groceries = snapshots
     .filter(snap => snap.exists())
     .map(snap => ({ id: snap.id, ...snap.data() }));
+
+  return Promise.all(groceries.map(async (grocery) => {
+    try {
+      const countSnap = await getCountFromServer(collection(db, "groceries", grocery.id, "items"));
+      return { ...grocery, itemsCount: countSnap.data().count };
+    } catch (error) {
+      console.error("Error counting items for grocery:", grocery.id, error);
+      return { ...grocery, itemsCount: null };
+    }
+  }));
 }
 
 export async function fetchAllGroceries(userId) {
@@ -30,7 +39,7 @@ export async function fetchAllGroceries(userId) {
 }
 
 export async function saveNew(grocery) {
-  
+
   const sharedWith = Array.from(new Set(grocery.sharedWith || [])).filter(uid => uid && uid !== grocery.owner);
   const groceryRef = doc(collection(db, "groceries"));
   const groceryId = groceryRef.id;
@@ -40,7 +49,7 @@ export async function saveNew(grocery) {
     name: grocery.name,
     date: date !== null ? Timestamp.fromDate(date) : date,
     owner: grocery.owner,
-    type: grocery.type,
+    type: grocery.type || (sharedWith.length > 0 ? 'shared' : 'personal'),
     status: "active",
     createdAt: serverTimestamp(),
     dateLastUpdated : serverTimestamp(),
@@ -54,7 +63,6 @@ export async function saveNew(grocery) {
   const ownerRef = doc(db, "users", grocery.owner);
   batch.update(ownerRef, { groceries: arrayUnion(groceryId) });
 
-  // Add groceryId to groceries array for each user in sharedWith
   sharedWith.forEach(userId => {
     const userRef = doc(db, "users", userId);
     batch.update(userRef, { groceries: arrayUnion(groceryId) });
@@ -66,6 +74,39 @@ export async function saveNew(grocery) {
   } catch (error) {
     console.error("Error adding grocery:", error);
     try { await deleteDoc(groceryRef); } catch {}
+    return { success: false, error };
+  }
+}
+
+export async function updateGrocery(groceryId, { name, date, sharedWith = [], owner, previousSharedWith = [] }) {
+  const groceryRef = doc(db, "groceries", groceryId);
+  const nextShared = Array.from(new Set(sharedWith || [])).filter(uid => uid && uid !== owner);
+  const previous = (previousSharedWith || []).filter(uid => uid && uid !== owner);
+
+  const added = nextShared.filter(uid => !previous.includes(uid));
+  const removed = previous.filter(uid => !nextShared.includes(uid));
+
+  const batch = writeBatch(db);
+
+  batch.update(groceryRef, {
+    name,
+    date: date instanceof Date ? Timestamp.fromDate(date) : null,
+    sharedWith: nextShared,
+    type: nextShared.length > 0 ? 'shared' : 'personal',
+  });
+
+  added.forEach(uid => {
+    batch.update(doc(db, "users", uid), { groceries: arrayUnion(groceryId) });
+  });
+  removed.forEach(uid => {
+    batch.update(doc(db, "users", uid), { groceries: arrayRemove(groceryId) });
+  });
+
+  try {
+    await batch.commit();
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating grocery:", error);
     return { success: false, error };
   }
 }
@@ -100,7 +141,6 @@ export default async function removeGrocery(ownerUid, groceryId, sharedWith = []
     return { success: false, error };
   }
 }
-
 
 export async function getGroceryById(groceryId) {
   if (!groceryId) throw new Error("groceryId is null");
@@ -189,7 +229,3 @@ export async function removeOneCustomStore(groceryId, store) {
        return {success : false, error : e}
      }
 }
-
-
-
-
