@@ -37,19 +37,18 @@
     align-items: center;
     justify-content: center;
     padding: 0;
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(134, 239, 172, 0.25);
     border-radius: 50%;
-    background-color: rgba(14, 28, 18, 0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background-color: #1B432C;
     color: #F0FDF4;
+    box-shadow: none;
     cursor: pointer;
     transition: background-color var(--transitionFast, 150ms ease),
                 transform var(--transitionFast, 150ms ease);
 }
 
 .addGrocery:hover{
-    background-color: rgba(18, 34, 22, 0.7);
+    background-color: #235438;
 }
 
 .addGrocery:active{
@@ -57,7 +56,7 @@
 }
 
 .addGrocery:focus-visible{
-    outline: 2px solid #9EBAA4;
+    outline: 2px solid rgba(158, 186, 164, 0.8);
     outline-offset: 3px;
 }
 
