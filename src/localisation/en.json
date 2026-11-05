@@ -73,7 +73,6 @@
     "REMOVE_RECIPE" : "Delete recipe",
     "REMOVE_GROCERY" : "Delete grocery",
     "DELETE_GROCERY" : "Delete grocery ?",
-    "REMOVE_ITEM" : "Remove Item ?",
     "ADD_ITEMS" : "Add items",
     "STORE" : "Store",
     "ITEMS" : "Items",

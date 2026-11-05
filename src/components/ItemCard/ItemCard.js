@@ -51,7 +51,7 @@ export default function ItemCard({ data, actions, showCategory = true }) {
       label: t('DELETE'),
       tone: 'danger',
       icon: <img src={deleteIcon} alt='' />,
-      onSelect: removeWithConfirm,
+      onSelect: removeItem,
     },
   ];
 
@@ -59,14 +59,9 @@ export default function ItemCard({ data, actions, showCategory = true }) {
     actions?.changeStatus && actions.changeStatus(data.id, isBought ? 'active' : 'completed');
   }
 
-  function removeWithoutConfirm() {
+  // deletion is immediate and undoable by re-adding: no confirm dialog
+  function removeItem() {
     actions?.remove && actions.remove(data.id);
-  }
-
-  function removeWithConfirm() {
-    if (window.confirm(t('REMOVE_ITEM'))) {
-      removeWithoutConfirm();
-    }
   }
 
   function handleBodyClick() {
@@ -112,7 +107,7 @@ export default function ItemCard({ data, actions, showCategory = true }) {
 
   return (
     <div className={ic.swipeWrapper}>
-        <button type='button' className={ic.deleteAction} onClick={removeWithoutConfirm} tabIndex={isRevealed ? 0 : -1} aria-hidden={!isRevealed} aria-label={t('DELETE')} title={t('DELETE')}>
+        <button type='button' className={ic.deleteAction} onClick={removeItem} tabIndex={isRevealed ? 0 : -1} aria-hidden={!isRevealed} aria-label={t('DELETE')} title={t('DELETE')}>
           <img src={deleteIcon} alt='' className={ic.deleteIcon} />
         </button>
 

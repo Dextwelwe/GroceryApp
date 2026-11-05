@@ -4,8 +4,8 @@
     position: relative;
     min-height: 100dvh;
     box-sizing: border-box;
-    background-color: var(--canvas, #F8FAF7);
-    background-image: var(--bgMobile);
+    background-color: var(--modalBackGround, #0A160E);
+    background-image: var(--bgScrim), var(--bgMobile);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -13,31 +13,18 @@
 
 @media (min-width: 900px) {
     .splash {
-        background-image: var(--bgDesktop);
+        background-image: var(--bgScrim), var(--bgDesktop);
     }
-}
-
-.splash::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-image: linear-gradient(
-        180deg,
-        rgba(248, 250, 247, 0.34) 0%,
-        rgba(248, 250, 247, 0.56) 50%,
-        rgba(248, 250, 247, 0.74) 100%
-    );
 }
 
 .spinner {
     position: relative;
     z-index: 1;
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     box-sizing: border-box;
-    border: 2px solid rgba(33, 150, 243, 0.25);
-    border-top-color: var(--accent, #2196F3);
+    border: 2px solid rgba(158, 186, 164, 0.25);
+    border-top-color: #A7F3D0;
     border-radius: 50%;
     animation: spin 700ms linear infinite;
 }
