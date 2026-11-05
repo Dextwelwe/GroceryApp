@@ -4,10 +4,9 @@
     gap: 8px;
     padding: 8px 8px 8px 12px;
     margin-top: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 14px;
-    background-color: rgba(255, 255, 255, 0.72);
-    box-shadow: 0 1px 6px rgba(40, 52, 38, 0.06);
+    background-color: rgba(255, 255, 255, 0.04);
 }
 
 .main {
@@ -18,13 +17,33 @@
     min-width: 0;
 }
 
+.titleRow {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    min-width: 0;
+}
+
 .name {
+    flex: 0 1 auto;
+    min-width: 0;
     font-size: 0.92rem;
     font-weight: 600;
-    color: var(--fontColor, #212121);
-    text-transform: capitalize;
+    color: #F0FDF4;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.quantity {
+    flex-shrink: 0;
+    padding: 1px 7px;
+    border-radius: var(--radiusPill, 999px);
+    background-color: rgba(167, 243, 208, 0.12);
+    color: #A7F3D0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.35;
     white-space: nowrap;
 }
 
@@ -36,6 +55,7 @@
 }
 
 .chip {
+    position: relative;
     display: inline-flex;
     align-items: center;
     gap: 4px;
@@ -43,10 +63,15 @@
     height: 24px;
     padding: 0 9px;
     border-radius: var(--radiusPill, 999px);
-    background-color: var(--primarySoft, #E8EBE3);
-    color: var(--primaryInk, #58624F);
+    background-color: rgba(255, 255, 255, 0.06);
+    color: #9EBAA4;
     font-size: 0.72rem;
     font-weight: 600;
+}
+
+.chip:focus-within {
+    outline: 2px solid rgba(158, 186, 164, 0.7);
+    outline-offset: 1px;
 }
 
 .chip img {
@@ -54,34 +79,36 @@
     height: 12px;
     flex-shrink: 0;
     opacity: 0.75;
+    filter: brightness(0) invert(1);
 }
 
 .chipText {
+    min-width: 0;
+    max-width: 112px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 .chipMissing {
-    box-shadow: inset 0 0 0 1px var(--dangerFg, #C62828);
-    color: var(--dangerFg, #C62828);
+    box-shadow: inset 0 0 0 1px rgba(248, 113, 113, 0.6);
+    color: #F87171;
 }
 
 .select {
-    width: auto;
-    max-width: 112px;
-    height: 24px;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
     padding: 0;
     border: none;
     background-color: transparent;
     font-family: var(--fontFamily);
-    font-size: 0.72rem;
-    font-weight: 600;
+    font-size: 16px;
     color: inherit;
     text-align: start;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    opacity: 0;
     appearance: none;
     -webkit-appearance: none;
     cursor: pointer;
@@ -111,14 +138,15 @@
 .remove img {
     width: 18px;
     height: 18px;
+    filter: brightness(0) invert(1);
 }
 
 .remove:hover {
     opacity: 1;
-    background-color: var(--dangerBg, #FDECEA);
+    background-color: rgba(239, 68, 68, 0.14);
 }
 
 .remove:focus-visible {
-    outline: 2px solid var(--dangerFg, #C62828);
+    outline: 2px solid #F87171;
     outline-offset: 1px;
 }

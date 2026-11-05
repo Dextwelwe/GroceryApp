@@ -26,13 +26,8 @@
     position: absolute;
     inset: 0;
     z-index: 0;
+    background-image: var(--bgScrim);
     pointer-events: none;
-    background-image: linear-gradient(
-        180deg,
-        rgba(248, 250, 247, 0.34) 0%,
-        rgba(248, 250, 247, 0.56) 50%,
-        rgba(248, 250, 247, 0.74) 100%
-    );
 }
 
 .languageBar {
@@ -49,25 +44,27 @@
     box-sizing: border-box;
     height: 32px;
     padding: 0 10px;
-    border: 1px solid #E0E3DB;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radiusPill, 999px);
-    background-color: var(--surface, #FFFFFF);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-    color: var(--fontColor, #212121);
+    background-color: rgba(10, 22, 14, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: rgba(226, 232, 240, 0.8);
     transition: border-color var(--transitionFast, 150ms ease),
                 background-color var(--transitionFast, 150ms ease);
 }
 
 .languagePill:hover {
-    border-color: var(--hairlineStrong, #DCE0D9);
-    background-color: var(--surface, #FFFFFF);
+    border-color: rgba(255, 255, 255, 0.16);
+    background-color: rgba(14, 30, 20, 0.75);
 }
 
 .languageIcon {
     width: 16px;
     height: 16px;
     flex-shrink: 0;
-    opacity: 0.75;
+    filter: brightness(0) invert(1);
+    opacity: 0.8;
 }
 
 .languageSelect {
@@ -85,7 +82,7 @@
 }
 
 .languageSelect:focus-visible {
-    outline: 2px solid var(--accent, #2196F3);
+    outline: 2px solid rgba(158, 186, 164, 0.8);
     outline-offset: 3px;
     border-radius: 6px;
 }
@@ -106,11 +103,20 @@
     flex-direction: column;
     gap: 18px;
     padding: 26px 22px 20px;
-    border: 1px solid var(--hairline, #E6E8E2);
-    border-radius: var(--radiusLg, 20px);
-    background-color: var(--surface, #FFFFFF);
-    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    background-color: #0A160E;
+    background-color: rgba(10, 22, 14, 0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
     animation: cardIn var(--transitionBase, 250ms cubic-bezier(0.4, 0, 0.2, 1)) both;
+}
+
+@supports not ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px))) {
+    .card {
+        background-color: #0A160E;
+    }
 }
 
 @keyframes cardIn {
@@ -137,10 +143,10 @@
 .title {
     margin: 0;
     font-size: 1.35rem;
-    font-weight: 700;
+    font-weight: 600;
     line-height: 1.2;
     letter-spacing: -0.01em;
-    color: var(--fontColor, #212121);
+    color: #F0FDF4;
 }
 
 .form {
@@ -153,6 +159,59 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
+}
+
+/* --- dark botanical form primitives (scoped to the auth card) --------------- */
+
+.card :global(.uiFieldLabel) {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: #9EBAA4;
+}
+
+.card :global(.uiField) {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #F0FDF4;
+}
+
+.card :global(.uiField)::placeholder {
+    color: rgba(240, 253, 244, 0.4);
+}
+
+.card :global(.uiField):focus {
+    border-color: rgba(134, 239, 172, 0.45);
+    background-color: rgba(255, 255, 255, 0.07);
+    box-shadow: 0 0 0 3px rgba(134, 239, 172, 0.16);
+}
+
+.card :global(.uiFieldError) {
+    border-color: rgba(248, 113, 113, 0.6);
+}
+
+.card :global(.uiFieldError):focus {
+    border-color: rgba(248, 113, 113, 0.8);
+    box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.16);
+}
+
+/* same finish as the bottom-sheet "Save" button */
+.card :global(.uiBtnPrimary) {
+    border: 1px solid rgba(134, 239, 172, 0.2);
+    background-color: #1B432C;
+    color: #F0FDF4;
+    font-weight: 600;
+    box-shadow: none;
+}
+
+.card :global(.uiBtnPrimary):hover:not(:disabled) {
+    background-color: #235438;
+}
+
+.card :global(.uiBtnPrimary):disabled {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: rgba(240, 253, 244, 0.4);
 }
 
 .passwordWrapper {
@@ -178,19 +237,19 @@
     border: none;
     border-radius: 50%;
     background: transparent;
-    color: var(--subTextFontColor, #757575);
+    color: rgba(158, 186, 164, 0.7);
     cursor: pointer;
     transition: background-color var(--transitionFast, 150ms ease),
                 color var(--transitionFast, 150ms ease);
 }
 
 .eyeButton:hover {
-    background-color: var(--primarySoft, #E8EBE3);
-    color: var(--fontColor, #212121);
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #F0FDF4;
 }
 
 .eyeButton:focus-visible {
-    outline: 2px solid var(--primary, #6E7A69);
+    outline: 2px solid rgba(158, 186, 164, 0.8);
     outline-offset: 1px;
 }
 
@@ -207,8 +266,8 @@
     margin: 0;
     padding: 9px 12px;
     border-radius: var(--radiusSm, 10px);
-    background-color: var(--dangerBg, #FDECEA);
-    color: var(--dangerFg, #C62828);
+    background-color: rgba(239, 68, 68, 0.12);
+    color: #F87171;
     font-size: 0.8rem;
     line-height: 1.35;
 }
@@ -226,8 +285,8 @@
 .spinnerSage {
     width: 12px;
     height: 12px;
-    border-color: rgba(88, 98, 79, 0.28);
-    border-top-color: var(--primaryInk, #58624F);
+    border-color: rgba(134, 239, 172, 0.3);
+    border-top-color: #86EFAC;
 }
 
 @keyframes spin {
@@ -248,7 +307,7 @@
     border: none;
     border-radius: var(--radiusSm, 10px);
     background: transparent;
-    color: var(--primaryInk, #58624F);
+    color: rgba(134, 239, 172, 0.85);
     font-family: var(--fontFamily);
     font-size: 0.82rem;
     font-weight: 600;
@@ -260,12 +319,12 @@
 }
 
 .guestLink:hover:not(:disabled) {
-    color: var(--primaryHover, #616D5C);
-    background-color: var(--primarySoft, #E8EBE3);
+    color: #F0FDF4;
+    background-color: rgba(255, 255, 255, 0.06);
 }
 
 .guestLink:focus-visible {
-    outline: 2px solid var(--primary, #6E7A69);
+    outline: 2px solid rgba(158, 186, 164, 0.8);
     outline-offset: 1px;
 }
 

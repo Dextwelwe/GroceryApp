@@ -2,7 +2,8 @@ body {
   overscroll-behavior: none;
   margin: 0;
   font-family: var(--fontFamily);
-  background-color: var(--canvas, #F8FAF7);
+  /* dark shell so page transitions never flash a light strip */
+  background-color: #0A160E;
 }
 
 html, body {
@@ -12,13 +13,3 @@ html, body {
   touch-action: pan-y pan-x;
 }
 
-#statusBarBacking {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background-color: var(--canvas, #F8FAF7);
-  pointer-events: none;
-  z-index: 100000;
-}

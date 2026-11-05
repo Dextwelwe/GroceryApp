@@ -44,10 +44,10 @@
     box-sizing: border-box;
     height: 34px;
     padding: 0 13px;
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: var(--radiusPill, 999px);
-    background-color: var(--dangerBg, #FDECEA);
-    color: var(--dangerFg, #C62828);
+    background-color: rgba(69, 10, 10, 0.45);
+    color: #FCA5A5;
     font-family: var(--fontFamily);
     font-size: 0.8rem;
     font-weight: 700;
@@ -59,7 +59,7 @@
 }
 
 .reset:hover {
-    background-color: #FADCDC;
+    background-color: rgba(89, 14, 14, 0.55);
 }
 
 .reset:active {
@@ -67,7 +67,7 @@
 }
 
 .reset:focus-visible {
-    outline: 2px solid var(--dangerFg, #C62828);
+    outline: 2px solid #FCA5A5;
     outline-offset: 2px;
 }
 

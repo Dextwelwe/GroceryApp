@@ -1,0 +1,120 @@
+.menu {
+    display: flex;
+    flex-direction: column;
+    padding: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    background-color: rgba(10, 22, 14, 0.96);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55);
+    z-index: 10000;
+    /* grows out of the trigger corner instead of popping in */
+    transform-origin: top right;
+    animation: menuIn 160ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+.menu[data-placement='top'] {
+    transform-origin: bottom right;
+    animation-name: menuInUp;
+}
+
+@keyframes menuIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes menuInUp {
+    from {
+        opacity: 0;
+        transform: translateY(4px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .menu,
+    .menu[data-placement='top'] {
+        animation: none;
+    }
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 42px;
+    padding: 8px 10px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #E2E8F0;
+    font-family: var(--fontFamily);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: start;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color var(--transitionFast, 150ms ease),
+                color var(--transitionFast, 150ms ease);
+}
+
+.item:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: #F0FDF4;
+}
+
+.item:focus-visible {
+    outline: 2px solid rgba(158, 186, 164, 0.8);
+    outline-offset: -2px;
+}
+
+.danger {
+    color: #F87171;
+}
+
+.danger:hover {
+    color: #FCA5A5;
+}
+
+.icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+.icon img {
+    width: 18px;
+    height: 18px;
+    filter: brightness(0) invert(1);
+    opacity: 0.85;
+}
+
+.label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.customRow {
+    min-height: 42px;
+    padding: 2px;
+}

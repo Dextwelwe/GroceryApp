@@ -14,9 +14,10 @@ import iconBack from '../../assets/images/icons/back.svg'
 import iconMore from '../../assets/images/icons/more.svg'
 import {useTranslation} from 'react-i18next';
 import { getGroceryById, removeOneCustomStore, updateGroceryStatus, clearItemsList, updateCustomStores, subscribeGroceryItems } from '../../api/grocery';
-import { addItems, removeItem , setItemStatus} from '../../api/items';
+import { addItems, removeItem , setItemStatus, applyItemMerge, updateItem } from '../../api/items';
 import { fetchUserRecipes } from '../../api/recipes';
 import ItemCard from '../../components/ItemCard/ItemCard';
+import EditItemPopup from '../../components/editItem/EditItemPopup';
 import Select from '../../components/select/Select';
 import GroceryObj from '../../models/Grocery';
 import useLocalStorage from '../../hooks/useLocalStorage';
@@ -24,8 +25,8 @@ import Popup from '../../components/popup/Popup'
 import AddItems from '../../components/add/addItems';
 import { useAuth } from '../../providers/AuthProvider';
 import Category from '../../components/categories/category';
-import SettingsMenu from '../../components/settings/settingsMenu';
-import ActionRow from '../../components/actionList/ActionList';
+import ActionMenu from '../../components/actionMenu/ActionMenu';
+import SettingsLanguageSelect from '../../components/settings/SettingsLanguageSelect';
 import FilterChips from '../../components/filterChips/FilterChips';
 import FilterToggle from '../../components/filterToggle/FilterToggle';
 import IconToggle from '../../components/iconToggle/IconToggle';
@@ -35,6 +36,7 @@ import iconErase from '../../assets/images/icons/erase.svg'
 import completeGroceryIcon from '../../assets/images/icons/completeGroceryIcon.svg'
 import rc from '../../components/recipeCard/recipeCard.module.css';
 import { useCategorySearch } from '../../hooks/useCategorySearch';
+import { planRecipeMerge } from '../../utils/recipeMerge';
 
 const defaultFilterValues = { categories: 'all', sortBy: 'az' };
 
@@ -42,9 +44,7 @@ function Grocery({goBack, groceryId}) {
   const { t } = useTranslation();
   const {userData} = useAuth();
   const [grocery, setGrocery] = useState(null);
-  const [defaultCategory,setDefaultCategory] = useLocalStorage('gLabel','all');
   const [defaultStore, setDefaulStore] = useLocalStorage('gStore', 'all');
-  const [defaultStatus,setDefaultStatus] = useLocalStorage('gStatus','all');
   const [defaultSortBy,setDefaultSortBy] = useLocalStorage('gSortBy','az');
   const [defaultRecipe,setDefaultRecipe] = useLocalStorage('gRecipe','all');
   const [isAddItemsPopup, setIsAddItemsPopup] = useState(false);
@@ -55,9 +55,8 @@ function Grocery({goBack, groceryId}) {
   const [userRecipes, setUserRecipes] = useState([]);
   const [selectedRecipeIds, setSelectedRecipeIds] = useState(new Set());
   const [storesOptionsList, setStoresOptionsList] = useState([])
-  const [filters, setFilters] = useState({category: defaultCategory,store: defaultStore,status: defaultStatus, sortBy: defaultSortBy, recipe: defaultRecipe});
+  const [filters, setFilters] = useState({store: defaultStore, sortBy: defaultSortBy, recipe: defaultRecipe});
   const [nbFilters, setNbFilters] = useState(0);
-  const optionsStatus = [ { value: "all", label: t('ALL') },{ value: "active", label: t('STATUS.ACTIVE') },{ value: "completed", label: t('STATUS.COMPLETED')}];
   const optionsSortBy = [ { value: "az", label: t("FILTERS.A-Z") }, { value: "za", label: t("FILTERS.Z-A") }];
   const [needRefresh, setNeedRefresh] = useState(false);
   const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
@@ -67,8 +66,10 @@ function Grocery({goBack, groceryId}) {
   const [isBoughtOpen, setIsBoughtOpen] = useState(false);
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [isEditStoresPopup, setIsEditStoresPopup] = useState(false);
+  const [editingItem, setEditingItem] = useState(null);
   const fabMenuRef = useRef(null);
-  const { getAllCategoriesList } = useCategorySearch();
+  const optionsButtonRef = useRef(null);
+  const { getAllCategoriesList, getOneCategory } = useCategorySearch();
 
   async function loadUserRecipes() {
     if (!userData) return;
@@ -105,10 +106,8 @@ function Grocery({goBack, groceryId}) {
 
   useEffect(() => {
     let count = 0;
-    if (filters.category !== defaultFilterValues.categories) count++;
     if (filters.sortBy !== defaultFilterValues.sortBy) count++;
     if (filters.store !== defaultFilterValues.categories) count++;
-    if (filters.status !== 'all') count++;
     if (filters.recipe !== 'all') count++;
     setNbFilters(count);
     // eslint-disable-next-line
@@ -125,10 +124,6 @@ function Grocery({goBack, groceryId}) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isAddMenuOpen]);
 
-  const optionsCategories = useMemo(
-    () => [grocery?.getCategoryOptionAll(), ...(grocery?.getCategoriesFromAddedItems() ?? [])], [grocery]
-  );
-
   const optionsStore = useMemo(
     () => (grocery?.getStores() ?? []), [grocery]
   );
@@ -141,14 +136,10 @@ function Grocery({goBack, groceryId}) {
     const query = norm(searchTerm);
 
     const filtered = (grocery?.items ?? []).filter(g => {
-      const gCategory = norm(g.category);
       const gStore    = norm(g.store);
-      const gStatus   = norm(g.status);
       const gRecipe   = norm(g.recipe);
 
-      const passCategory = filters.category === "all" || gCategory === norm(filters.category);
       const passStore    = filters.store    === "all" || gStore    === norm(filters.store);
-      const passStatus   = filters.status   === "all" || gStatus   === norm(filters.status);
       const passRecipe   = filters.recipe   === "all" || gRecipe   === norm(filters.recipe);
 
       const categoryLabel = g.category
@@ -157,7 +148,7 @@ function Grocery({goBack, groceryId}) {
       const passSearch = !query || [g.name, g.store, g.recipe, g.category, categoryLabel]
         .some(value => norm(value).includes(query));
 
-      return passCategory && passStore && passStatus && passRecipe && passSearch;
+      return passStore && passRecipe && passSearch;
     });
 
     return [...filtered].sort((a, b) => {
@@ -178,13 +169,36 @@ function Grocery({goBack, groceryId}) {
 
   const activeItems = useMemo(() => view.filter(item => item.status !== 'completed'), [view]);
   const boughtItems = useMemo(() => view.filter(item => item.status === 'completed'), [view]);
+
+  // group the to-buy list by category, added items keep their own bucket at the end
+  const groupedActiveItems = useMemo(() => {
+    const groups = new Map();
+    activeItems.forEach((item) => {
+      const key = (item.category || '').toString().trim().toLowerCase();
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(item);
+    });
+
+    return [...groups.entries()]
+      .map(([key, items]) => ({
+        key: key || 'none',
+        label: key ? getOneCategory(key) : t('NO_CATEGORY'),
+        items,
+      }))
+      .sort((a, b) => {
+        if (a.key === 'none') return 1;
+        if (b.key === 'none') return -1;
+        return a.label.localeCompare(b.label);
+      });
+  }, [activeItems, getOneCategory, t]);
+
   const completedCount = useMemo(
     () => (grocery?.items ?? []).filter(item => item.status === 'completed').length,
     [grocery]
   );
   const totalCount = grocery?.items?.length ?? 0;
 
-  const boughtExpanded = isBoughtOpen || filters.status === 'completed' || activeItems.length === 0;
+  const boughtExpanded = isBoughtOpen || activeItems.length === 0;
 
   function toggleSearch() {
     if (isSearchOpen) {
@@ -220,6 +234,7 @@ function Grocery({goBack, groceryId}) {
     const groceryId = grocery.getId();
     let result = await removeItem(groceryId, id);
     if (result.success){
+      setNeedRefresh(true);
       setGrocery(prev => {
         const nextItems = (prev.items ?? []).filter(it => it.id !== id);
         return new GroceryObj(groceryId, { ...prev, items: nextItems});
@@ -238,6 +253,7 @@ function Grocery({goBack, groceryId}) {
   const changeItemStatus = useCallback(async (id, status) => {
     let result = await setItemStatus(grocery.getId(),id, status);
     if (result.success){
+      setNeedRefresh(true);
       setGrocery(prev => {
         if (!prev) return prev;
         const nextItems = prev.items.map(it =>  it.id === id ? { ...it, status: status} : it);
@@ -255,25 +271,50 @@ function Grocery({goBack, groceryId}) {
     }
   }, [grocery, t]);
 
-  const itemActions = useMemo(() => ({ remove : removeItemCall, changeStatus : changeItemStatus}), [removeItemCall, changeItemStatus]);
+  const itemActions = useMemo(
+    () => ({ remove: removeItemCall, changeStatus: changeItemStatus, edit: setEditingItem }),
+    [removeItemCall, changeItemStatus]
+  );
+
+  async function saveItemEdit(fields) {
+    if (!editingItem) return;
+    // recipe ingredients are read-only
+    if (editingItem.recipe) { setEditingItem(null); return; }
+
+    const result = await updateItem(grocery.getId(), editingItem.id, fields);
+    if (result.success) {
+      setGrocery(prev => {
+        if (!prev) return prev;
+        const nextItems = prev.items.map(item =>
+          item.id === editingItem.id ? { ...item, ...result.data } : item
+        );
+        return new GroceryObj(prev.getId(), { ...prev, items: nextItems });
+      });
+      setNeedRefresh(true);
+      setEditingItem(null);
+      return;
+    }
+
+    if (result.error?.code === 'permission-denied') {
+      alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'));
+    } else {
+      alert(t('WARNINGS.SERVER_ERROR'));
+    }
+  }
 
   function handleFilterChange(e) {
     const { name, value } = e.target;
     setFilters(prev => ({ ...prev, [name]: value }));
-    if (name === 'category') setDefaultCategory(value);
     if (name === 'store') setDefaulStore(value);
-    if (name === 'status') setDefaultStatus(value);
     if (name === 'sortBy') setDefaultSortBy(value);
     if (name === 'recipe') setDefaultRecipe(value);
   }
 
   function resetFilters(){
-    setDefaultCategory("all");
-    setDefaultStatus("all");
     setDefaulStore('all');
     setDefaultSortBy("az");
     setDefaultRecipe("all");
-    setFilters({category: 'all', store: 'all', status : "all", sortBy: 'az', recipe: 'all'});
+    setFilters({ store: 'all', sortBy: 'az', recipe: 'all' });
  }
 
  async function saveItems(itemsToSave){
@@ -286,6 +327,7 @@ function Grocery({goBack, groceryId}) {
       );
       if (result.success){
         await getFullGrocery();
+        setNeedRefresh(true);
       } else {
         if ((result.error?.code === "permission-denied")) {
           alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'))
@@ -402,42 +444,74 @@ function toggleRecipeSelection(recipeId) {
 
 function prepareRecipePreview() {
   if (selectedRecipeIds.size === 0) return;
-  const existingNames = new Set((grocery?.items ?? []).map(i => norm(i.name)));
-  const itemsToAdd = [];
-  const seen = new Set();
+
+  // thread the working list through each recipe so quantities aggregate across them
+  let workingItems = (grocery?.items ?? []).map(item => ({ ...item }));
+  const updatesById = new Map();
+  const creates = [];
 
   for (const recipeId of selectedRecipeIds) {
     const recipe = userRecipes.find(r => r.id === recipeId);
     if (!recipe) continue;
-    for (const item of (recipe.items || [])) {
-      const key = norm(item.name);
-      if (existingNames.has(key) || seen.has(key)) continue;
-      seen.add(key);
-      itemsToAdd.push({
-        name: item.name,
-        category: resolveCategoryId(item.category, getAllCategoriesList),
-        store: '',
-        status: 'active',
-        addedBy: userData.firstName,
-        recipe: recipe.name
-      });
-    }
+
+    const plan = planRecipeMerge(workingItems, recipe.items || [], {
+      recipeName: recipe.name,
+      addedBy: userData.firstName,
+    });
+
+    plan.updates.forEach(update => updatesById.set(update.id, update));
+    creates.push(...plan.creates);
+
+    const touched = new Map(plan.updates.map(u => [u.id, u]));
+    workingItems = [
+      ...workingItems.map(item =>
+        touched.has(item.id)
+          ? { ...item, amount: touched.get(item.id).amount, uom: touched.get(item.id).uom }
+          : item
+      ),
+      ...plan.creates.map(item => ({ ...item })),
+    ];
   }
 
-  if (itemsToAdd.length === 0) {
+  const previewItems = [
+    ...[...updatesById.values()].map(update => {
+      const existing = (grocery?.items ?? []).find(item => item.id === update.id) || {};
+      return {
+        name: update.name,
+        category: existing.category || '',
+        store: existing.store || '',
+        amount: update.amount,
+        uom: update.uom,
+        status: 'active',
+        mergeId: update.id,
+      };
+    }),
+    ...creates,
+  ];
+
+  if (previewItems.length === 0) {
     setIsAddRecipePopup(false);
     setSelectedRecipeIds(new Set());
     return;
   }
 
-  setRecipePreviewItems(itemsToAdd);
+  setRecipePreviewItems(previewItems);
   setIsRecipePreviewPopup(true);
 }
 
 async function confirmRecipeItems() {
-  const result = await addItems(recipePreviewItems, grocery.getId());
+  const updates = recipePreviewItems
+    .filter(item => item.mergeId)
+    .map(item => ({ id: item.mergeId, amount: item.amount, uom: item.uom }));
+
+  const creates = recipePreviewItems
+    .filter(item => !item.mergeId)
+    .map(({ mergeId, ...item }) => item); // eslint-disable-line no-unused-vars
+
+  const result = await applyItemMerge(grocery.getId(), { updates, creates });
   if (result.success) {
     await getFullGrocery();
+    setNeedRefresh(true);
   } else {
     if (result.error?.code === 'permission-denied') {
       alert(t('WARNINGS.NOT_PERMITTED_FOR_GUESTS'));
@@ -477,7 +551,14 @@ function editRecipePreviewItemStore(itemName, newStore) {
 
   const headerGroceryTitle = grocery.getTitle();
   const headerGroceryNav = [{src : iconBack , alt : "Back", clickaction : () => { goBack(needRefresh); setNeedRefresh(false); }}]
-  const headerItems = [{src : iconMore, alt : "Options", clickaction : ()=> setIsSettingsPopup(!isSettingsPopup), buttonLabel :t('OPTIONS')} ]
+  const headerItems = [{
+    src: iconMore,
+    alt: 'Options',
+    buttonLabel: t('OPTIONS'),
+    buttonRef: optionsButtonRef,
+    isExpanded: isSettingsPopup,
+    clickaction: () => setIsSettingsPopup(prev => !prev),
+  }]
   const addedRecipeNames = new Set((grocery?.items ?? []).map(i => norm(i.recipe)).filter(Boolean));
 
   return (
@@ -519,17 +600,23 @@ function editRecipePreviewItemStore(itemName, newStore) {
                 clearLabel={t('CLEAR')}
               />
             : <FilterChips open={isFiltersOpen} resetLabel={t('RESET_FILTERS')} count={nbFilters} onReset={resetFilters}>
-                <Select label={t('FILTERS.CATEGORY')} options={optionsCategories} name="category" value={filters.category} onChange={handleFilterChange} isActive={filters.category !== defaultFilterValues.categories} />
                 <Select label={t('STORE')} options={optionsStore} name="store" value={filters.store} onChange={handleFilterChange} isActive={filters.store !== defaultFilterValues.categories} />
                 <Select label={t('RECIPE')} options={optionsRecipe} name="recipe" value={filters.recipe} onChange={handleFilterChange} isActive={filters.recipe !== 'all'} />
-                <Select label={t('STATUS_LBL')} options={optionsStatus} name="status" value={filters.status} onChange={handleFilterChange} isActive={filters.status !== defaultFilterValues.categories} />
                 <Select label={t("SORT_BY")} options={optionsSortBy} name="sortBy" value={filters.sortBy} onChange={handleFilterChange} isActive={filters.sortBy !== defaultFilterValues.sortBy} />
               </FilterChips>
           }
         </div>
         <div className={gr.list}>
-          {activeItems.map(item => (
-            <ItemCard key={item.id} data={item} actions={itemActions} />
+          {groupedActiveItems.map((group) => (
+            <div key={group.key} className={gr.categoryGroup}>
+              <h3 className={gr.categoryHeader}>
+                <span className={gr.categoryLabel}>{group.label}</span>
+                <span className={gr.categoryRule} aria-hidden='true' />
+              </h3>
+              {group.items.map(item => (
+                <ItemCard key={item.id} data={item} actions={itemActions} showCategory={false} />
+              ))}
+            </div>
           ))}
 
           {boughtItems.length > 0 &&
@@ -620,6 +707,15 @@ function editRecipePreviewItemStore(itemName, newStore) {
             </Popup>
           }
 
+          {editingItem &&
+            <EditItemPopup
+              item={editingItem}
+              storesList={storesOptionsList}
+              onClose={() => setEditingItem(null)}
+              onSave={saveItemEdit}
+            />
+          }
+
           { isAddItemsPopup &&
             <Popup title={t('ADD_ITEMS')} close={()=> setIsAddItemsPopup(false)}>
               <div className='uiForm'>
@@ -628,23 +724,29 @@ function editRecipePreviewItemStore(itemName, newStore) {
             </Popup>
           }
 
-          {
-            isSettingsPopup &&
-              <SettingsMenu close={() => setIsSettingsPopup(false)}>
-                <ActionRow
-                  icon={<img src={completeGroceryIcon} alt='' />}
-                  label={grocery?.status === 'completed' ? t('RESTART_GROCERY') : t('COMPLETE_GROCERY')}
-                  onClick={grocery?.status === 'completed' ? restartGrocery : completeGrocery}
-                  tone='sage'
-                />
-                <ActionRow
-                  icon={<img src={iconErase} alt='' />}
-                  label={t('CLEAR_LIST')}
-                  onClick={clearList}
-                  tone='danger'
-                />
-              </SettingsMenu>
-          }
+          <ActionMenu
+            open={isSettingsPopup}
+            onClose={() => setIsSettingsPopup(false)}
+            anchorRef={optionsButtonRef}
+            width={236}
+            label={t('ACTIONS')}
+            items={[
+              {
+                key: 'complete',
+                label: grocery?.status === 'completed' ? t('RESTART_GROCERY') : t('COMPLETE_GROCERY'),
+                icon: <img src={completeGroceryIcon} alt='' />,
+                onSelect: grocery?.status === 'completed' ? restartGrocery : completeGrocery,
+              },
+              {
+                key: 'clear',
+                label: t('CLEAR_LIST'),
+                icon: <img src={iconErase} alt='' />,
+                tone: 'danger',
+                onSelect: clearList,
+              },
+              { key: 'language', node: <SettingsLanguageSelect compact /> },
+            ]}
+          />
 
           <div className={gr.fabWrapper} ref={fabMenuRef}>
             {isAddMenuOpen && (

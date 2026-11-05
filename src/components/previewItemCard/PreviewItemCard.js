@@ -4,6 +4,7 @@ import categoryIcon from '../../assets/images/icons/category.svg';
 import storeIcon from '../../assets/images/icons/store.svg';
 import recipeIcon from '../../assets/images/icons/recipe.svg';
 import pic from './previewItemCard.module.css'
+import { formatQuantity } from '../../utils/quantity';
 import { useCategorySearch } from '../../hooks/useCategorySearch';
 
 export default function PreviewItemCard({data, actions, categoriesList, storesList, showRemove = true, showRecipe = true}) {
@@ -11,6 +12,7 @@ export default function PreviewItemCard({data, actions, categoriesList, storesLi
   const { t } = useTranslation();
   const { getOneCategory } = useCategorySearch();
   const categoryLabel = data.category ? getOneCategory(data.category) : t('NO_CATEGORY');
+  const quantity = formatQuantity(data.amount, data.uom);
 
   function removeCall(){
     actions.remove && actions.remove(data.name);
@@ -27,10 +29,14 @@ export default function PreviewItemCard({data, actions, categoriesList, storesLi
   return (
     <div className={pic.row}>
       <div className={pic.main}>
-        <span className={pic.name}>{data.name}</span>
+        <span className={pic.titleRow}>
+          <span className={pic.name}>{data.name}</span>
+          {quantity && <span className={pic.quantity}>{quantity}</span>}
+        </span>
         <div className={pic.chips}>
           <span className={`${pic.chip} ${data.category === '' ? pic.chipMissing : ''}`}>
             <img alt="" src={categoryIcon} />
+            <span className={pic.chipText}>{categoryLabel}</span>
             <select
               name='category'
               className={pic.select}
@@ -48,6 +54,7 @@ export default function PreviewItemCard({data, actions, categoriesList, storesLi
           {storesList
             ? <span className={pic.chip}>
                 <img alt="" src={storeIcon} />
+                <span className={pic.chipText}>{data.store || t('NO_STORE')}</span>
                 <select
                   name='store'
                   className={pic.select}

@@ -22,6 +22,10 @@
 
   --headerTopGap          : 30px;
 
+  /* Dark scrim painted over the background photo so white text and the glass
+     cards stay legible without hiding the artwork. */
+  --bgScrim               : linear-gradient(180deg, rgba(0, 0, 0, 0.34) 0%, rgba(0, 0, 0, 0.24) 100%);
+
   --primary               : #6E7A69;
   --primaryHover          : #616D5C;
   --primarySoft           : #E8EBE3;
@@ -60,12 +64,7 @@
 .mainContentWrapper{
     height: 100dvh;
     background-color: var(--modalBackGround);
-    background-image: linear-gradient(
-        180deg,
-        rgba(248, 250, 247, 0.72) 0%,
-        rgba(248, 250, 247, 0.80) 45%,
-        rgba(248, 250, 247, 0.88) 100%
-    ), var(--bgMobile);
+    background-image: var(--bgScrim), var(--bgMobile);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -81,12 +80,7 @@
 
 @media (min-width: 900px) {
     .mainContentWrapper {
-        background-image: linear-gradient(
-            180deg,
-            rgba(248, 250, 247, 0.72) 0%,
-            rgba(248, 250, 247, 0.80) 45%,
-            rgba(248, 250, 247, 0.88) 100%
-        ), var(--bgDesktop);
+        background-image: var(--bgScrim), var(--bgDesktop);
     }
 }
 

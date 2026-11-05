@@ -49,7 +49,7 @@ export default function GroceryCard({data,onClick,onMenu}) {
   }
 
   return (
-    <div className={`uiCard ${isCompleted ? gc.rowCompleted : ''}`}>
+    <div className={`uiCard uiCardBotanical ${isCompleted ? gc.rowCompleted : ''}`}>
       <button type='button' className={gc.openButton} onClick={openCard}>
         <span className='uiTile'>
           <PeopleIcon shared={isShared} />
@@ -80,7 +80,8 @@ export default function GroceryCard({data,onClick,onMenu}) {
       <button
         type='button'
         className={gc.menuButton}
-        onClick={() => onMenu && onMenu(data)}
+        onClick={(event) => onMenu && onMenu(data, event.currentTarget.getBoundingClientRect())}
+        aria-haspopup='menu'
         aria-label={t('OPTIONS')}
       >
         <img src={moreIcon} alt='' className={gc.menuIcon} />

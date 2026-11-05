@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import iconLanguage from '../../assets/images/icons/lang.svg';
 import s from './settingsLanguageSelect.module.css';
 
-export default function SettingsLanguageSelect() {
+export default function SettingsLanguageSelect({ compact = false }) {
   const { t, i18n } = useTranslation();
   const currentLanguage = (i18n.language || 'en').split('-')[0];
 
@@ -13,10 +13,11 @@ export default function SettingsLanguageSelect() {
   };
 
   return (
-    <div className={s.row}>
-      <span className={s.tile} aria-hidden='true'>
-        <img src={iconLanguage} alt='' className={s.icon} />
-      </span>
+    <div className={compact ? s.compactRow : s.row}>
+      {compact
+        ? <img src={iconLanguage} alt='' className={s.compactIcon} />
+        : <span className={s.tile} aria-hidden='true'><img src={iconLanguage} alt='' className={s.icon} /></span>
+      }
       <label className={s.label} htmlFor='settingsLanguage'>{t('LANGUAGE')}</label>
       <select
         id='settingsLanguage'

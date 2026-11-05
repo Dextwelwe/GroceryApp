@@ -23,7 +23,8 @@
         "COMPLETE_GROCERY_WARN" : "Êtes-vous sûr de vouloir terminer la liste d'épicerie?",
         "RESTART_GROCERY_WARN" : "Êtes-vous sûr de vouloir relancer la liste d'épicerie?",
         "FILL_ALL_CATEGORIES" : "Certains articles n'ont pas de catégorie.",
-        "REMOVE_RECIPE" : "Êtes-vous sûr de vouloir supprimer la recette?"
+        "REMOVE_RECIPE" : "Êtes-vous sûr de vouloir supprimer la recette?",
+        "QUANTITY_REQUIRED" : "Ajoutez une quantité et une unité à chaque ingrédient."
     },
     "STATUS" : {
         "ACTIVE" : "En Cours",
@@ -67,6 +68,7 @@
     "SAVE" : "Sauvegarder",
     "ADD_NEW_GROCERY" : "Ajouter une nouvelle épicerie",
     "EDIT_GROCERY" : "Modifier la liste",
+    "EDIT_ITEM" : "Modifier l'article",
     "EDIT_RECIPE" : "Modifier la recette",
     "REMOVE_RECIPE" : "Supprimer la recette",
     "REMOVE_GROCERY" : "Supprimer la liste",
@@ -97,6 +99,8 @@
     "RECIPE_NAME" : "Nom de la recette",
     "NO_CATEGORY" : "Sans catégorie",
     "NO_STORE" : "Sans magasin",
+    "AMOUNT" : "Qté",
+    "UNIT" : "Unité",
     "PREVIEW_LIST" : "Aperçu de la liste",
     "CONFIRM" : "Confirmer",
     "BACK" : "Retour",

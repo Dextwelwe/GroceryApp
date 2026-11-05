@@ -25,5 +25,5 @@
 .formSection + .formSection {
     margin-top: 6px;
     padding-top: 12px;
-    border-top: 1px solid var(--hairline, #E6E8E2);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
 }

@@ -23,7 +23,8 @@
         "COMPLETE_GROCERY_WARN" : "Are you sure you want to complete the grocery list?",
         "RESTART_GROCERY_WARN" : "Are you sure you want to restart the grocery list?",
         "FILL_ALL_CATEGORIES" : "Some items are missing categories.",
-        "REMOVE_RECIPE" : "Are you sure you want to remove the recipe?"
+        "REMOVE_RECIPE" : "Are you sure you want to remove the recipe?",
+        "QUANTITY_REQUIRED" : "Add an amount and a unit to every ingredient."
     },
     "STATUS" : {
         "ACTIVE" : "Active",
@@ -67,6 +68,7 @@
     "SAVE" : "Save",
     "ADD_NEW_GROCERY" : "Add new grocery",
     "EDIT_GROCERY" : "Edit grocery",
+    "EDIT_ITEM" : "Edit item",
     "EDIT_RECIPE" : "Edit recipe",
     "REMOVE_RECIPE" : "Delete recipe",
     "REMOVE_GROCERY" : "Delete grocery",
@@ -97,6 +99,8 @@
     "RECIPE_NAME" : "Recipe name",
     "NO_CATEGORY" : "No category",
     "NO_STORE" : "No store",
+    "AMOUNT" : "Qty",
+    "UNIT" : "Unit",
     "PREVIEW_LIST" : "Preview list",
     "CONFIRM" : "Confirm",
     "BACK" : "Back",

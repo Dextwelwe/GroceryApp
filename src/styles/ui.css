@@ -21,6 +21,65 @@
     box-shadow: 0 6px 18px rgba(40, 52, 38, 0.10);
 }
 
+/* ---------------------------------------------------------------------------
+   Dark botanical glass card (photo-backed screens)
+   Deep translucent forest tones + bioluminescent trim so the card reads as a
+   pane of smoked glass floating over the foliage instead of a white sheet.
+   --------------------------------------------------------------------------- */
+.uiCardBotanical {
+    position: relative;
+    /* flat, matte panel: one thin perimeter, no rim light, no elevation */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    background-color: rgba(8, 20, 12, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: background-color var(--transitionFast, 150ms ease);
+}
+
+.uiCardBotanical:hover {
+    /* matte hover only: a touch more density, still zero depth */
+    background-color: rgba(10, 24, 15, 0.5);
+}
+
+/* keep card content above the botanical watermark */
+.uiCardBotanical > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* avatar mark: the glyph sits straight on the panel — no badge, no container */
+.uiCardBotanical .uiTile {
+    box-sizing: border-box;
+    border: none;
+    background-color: transparent;
+    box-shadow: none;
+    color: #9EBAA4;
+}
+
+.uiCardBotanical .uiTile svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 1.6;
+}
+
+/* faint fern watermark — tucked into the corner under the action button */
+.uiCardBotanical::after {
+    content: '';
+    position: absolute;
+    right: 8px;
+    bottom: 4px;
+    width: 56px;
+    height: 56px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2386EFAC' stroke-width='0.8' stroke-linecap='round'%3E%3Cpath d='M20 4C11 4 4 8 4 15c0 3 2 5 5 5 7 0 11-7 11-16Z'/%3E%3Cpath d='M20 4C15 9 11 14 7 20'/%3E%3Cpath d='M16.5 8.5C14 9 12 9.5 10.5 10'/%3E%3Cpath d='M14 12.5c-2 .4-3.7 1-5 2'/%3E%3Cpath d='M11.5 16.5c-1.6.3-2.8.8-3.8 1.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right bottom;
+    background-size: contain;
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 0;
+}
+
 .uiTile {
     display: inline-flex;
     align-items: center;
@@ -214,13 +273,44 @@
 }
 
 .uiField[type='date'] {
+    /* iOS renders a native datetime widget with its own intrinsic sizing: drop the
+       UA chrome and let it flex inside the box, otherwise it spills out of it */
+    -webkit-appearance: none;
+    appearance: none;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
     min-width: 0;
     max-width: 100%;
+    height: auto;
+    min-height: 46px;
+    line-height: 1.25;
+    padding-top: 0;
+    padding-bottom: 0;
     padding-right: 10px;
+    text-align: start;
+    overflow: hidden;
 }
 
-.uiField::-webkit-date-and-time-value {
+.uiField[type='date']::-webkit-date-and-time-value {
+    margin: 0;
     text-align: start;
+}
+
+.uiField[type='date']::-webkit-datetime-edit {
+    display: block;
+    min-width: 0;
+    padding: 0;
+}
+
+.uiField[type='date']::-webkit-datetime-edit-fields-wrapper {
+    min-width: 0;
+    padding: 0;
+}
+
+.uiField[type='date']::-webkit-calendar-picker-indicator {
+    margin-inline-start: auto;
+    padding: 0;
 }
 
 .uiField::placeholder {

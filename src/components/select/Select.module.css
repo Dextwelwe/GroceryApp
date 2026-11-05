@@ -7,43 +7,43 @@
     flex: 0 0 auto;
     height: 34px;
     padding: 0 13px;
-    border: 1px solid rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: var(--radiusPill, 999px);
-    background-color: rgba(255, 255, 255, 0.68);
-    box-shadow: 0 1px 3px rgba(40, 52, 38, 0.06);
-    color: var(--fontColor, #212121);
+    background-color: rgba(8, 20, 12, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #9EBAA4;
     scroll-snap-align: start;
     transition: background-color var(--transitionFast, 150ms ease),
-                border-color var(--transitionFast, 150ms ease),
                 color var(--transitionFast, 150ms ease);
 }
 
 .chip:hover {
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color: rgba(10, 24, 15, 0.55);
+    color: #C9E0D0;
 }
 
+/* flat focus ring (outline, not a glow) so keyboard users keep the cue */
 .chip:focus-within {
-    border-color: var(--accent, #2196F3);
-    box-shadow: var(--ring, 0 0 0 3px rgba(33, 150, 243, 0.18));
+    outline: 2px solid rgba(158, 186, 164, 0.6);
+    outline-offset: 1px;
 }
 
 .chipActive {
-    border-color: rgba(33, 150, 243, 0.24);
-    background-color: var(--accentSoft, #EAF1FB);
-    color: var(--accentHover, #1976D2);
-    box-shadow: none;
+    background-color: rgba(158, 186, 164, 0.16);
+    color: #F0FDF4;
 }
 
 .label {
     font-size: 0.78rem;
     font-weight: 500;
-    color: var(--subTextFontColor, #757575);
+    color: #9EBAA4;
     white-space: nowrap;
 }
 
 .chipActive .label {
-    color: var(--accent, #2196F3);
-    opacity: 0.85;
+    color: #F0FDF4;
+    opacity: 1;
 }
 
 .value {

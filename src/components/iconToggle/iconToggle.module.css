@@ -2,26 +2,28 @@
     position: relative;
     width: 38px;
     height: 38px;
-    border: 1px solid rgba(255, 255, 255, 0.75);
-    background-color: rgba(255, 255, 255, 0.68);
-    backdrop-filter: blur(16px) saturate(150%);
-    -webkit-backdrop-filter: blur(16px) saturate(150%);
-    box-shadow: 0 2px 10px rgba(40, 52, 38, 0.07);
-    color: #4C554A;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background-color: rgba(10, 22, 14, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    /* icon glyphs inherit this via currentColor — no glow */
+    color: #E2E8F0;
+    transition: background-color var(--transitionFast, 150ms ease),
+                color var(--transitionFast, 150ms ease);
 }
 
 .toggle:hover {
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(14, 30, 20, 0.78);
+    color: #F0FDF4;
 }
 
 .toggleActive {
-    border-color: rgba(110, 122, 105, 0.28);
-    background-color: var(--primarySoft, #E8EBE3);
-    color: var(--primaryInk, #58624F);
+    background-color: rgba(158, 186, 164, 0.16);
+    color: #F0FDF4;
 }
 
 .toggleActive:hover {
-    background-color: var(--primarySoft, #E8EBE3);
+    background-color: rgba(158, 186, 164, 0.22);
 }
 
 .badge {
@@ -36,8 +38,8 @@
     height: 16px;
     padding: 0 4px;
     border-radius: var(--radiusPill, 999px);
-    background-color: var(--primary, #6E7A69);
-    color: #FFFFFF;
+    background-color: #9EBAA4;
+    color: #08140C;
     font-size: 0.62rem;
     font-weight: 700;
     line-height: 1;

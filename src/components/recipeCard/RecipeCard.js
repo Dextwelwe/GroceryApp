@@ -26,7 +26,7 @@ export default function RecipeCard({ data, onClick, onMenu }) {
   }
 
   return (
-    <div className='uiCard'>
+    <div className='uiCard uiCardBotanical'>
       <button type='button' className={rc.openButton} onClick={openCard}>
         <span className='uiTile'>
           <RecipeIcon />
@@ -41,7 +41,8 @@ export default function RecipeCard({ data, onClick, onMenu }) {
       <button
         type='button'
         className={rc.menuButton}
-        onClick={() => onMenu && onMenu(data)}
+        onClick={(event) => onMenu && onMenu(data, event.currentTarget.getBoundingClientRect())}
+        aria-haspopup='menu'
         aria-label={t('OPTIONS')}
       >
         <img src={moreIcon} alt='' className={rc.menuIcon} />

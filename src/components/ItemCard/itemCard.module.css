@@ -2,28 +2,45 @@
     position: relative;
     width: 100%;
     margin: 0 0 6px;
-    border-radius: 14px;
+    border-radius: 16px;
 
     overflow: hidden;
 }
 
+/* revealed only by the left swipe: deep muted wine, cream glyph */
 .deleteAction {
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 88px;
+    padding: 0;
     border: none;
-    background-color: var(--dangerFg, #C62828);
-    color: #FFFFFF;
-    font-family: var(--fontFamily);
-    font-size: 0.82rem;
-    font-weight: 700;
+    /* matte well instead of a coloured panel */
+    background-color: rgba(8, 18, 11, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    color: #F0FDF4;
     cursor: pointer;
+    transition: background-color var(--transitionFast, 150ms ease);
+}
+
+.deleteIcon {
+    width: 20px;
+    height: 20px;
+    /* the bundled delete glyph is a filled red asset: keep it matte cream */
+    filter: brightness(0) invert(1);
+}
+
+.deleteAction:hover {
+    background-color: rgba(12, 24, 15, 0.72);
 }
 
 .deleteAction:focus-visible {
-    outline: 2px solid #FFFFFF;
+    outline: 2px solid #F0FDF4;
     outline-offset: -4px;
 }
 
@@ -36,14 +53,15 @@
     width: 100%;
     min-height: 52px;
     padding: 8px 10px 8px 12px;
-    border: 1px solid rgba(255, 255, 255, 0.75);
-    border-radius: 14px;
-    background-color: rgba(255, 255, 255, 0.94);
-    backdrop-filter: blur(16px) saturate(150%);
-    -webkit-backdrop-filter: blur(16px) saturate(150%);
-    box-shadow: 0 1px 6px rgba(40, 52, 38, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    background-color: rgba(10, 22, 14, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: none;
     touch-action: pan-y;
-    transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    /* spring-like settle on release */
+    transition: transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1),
                 background-color var(--transitionFast, 150ms ease);
 }
 
@@ -51,13 +69,33 @@
     transition: background-color var(--transitionFast, 150ms ease);
 }
 
+/* bought rows sit deeper in the surface */
 .rowBought {
-    background-color: rgba(240, 244, 237, 0.94);
+    background-color: rgba(6, 14, 9, 0.45);
+    border-color: rgba(255, 255, 255, 0.03);
+}
+
+.row :global(.uiCheckbox) {
+    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    background-color: transparent;
+    color: transparent;
+}
+
+.row :global(.uiCheckboxChecked) {
+    border: 1px solid #4ADE80;
+    background-color: #1B432C;
+    color: #F0FDF4;
+}
+
+.row :global(.uiCheckbox):focus-visible {
+    outline: 2px solid rgba(158, 186, 164, 0.8);
+    outline-offset: 2px;
 }
 
 .body {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 2px;
     flex: 1 1 auto;
     min-width: 0;
@@ -71,23 +109,49 @@
 }
 
 .body:focus-visible {
-    outline: 2px solid var(--primary, #6E7A69);
+    outline: 2px solid rgba(158, 186, 164, 0.8);
     outline-offset: 2px;
     border-radius: 8px;
 }
 
+.titleRow {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    min-width: 0;
+}
+
 .name {
+    flex: 0 1 auto;
+    min-width: 0;
     font-size: 0.95rem;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 1.25;
-    color: var(--fontColor, #212121);
+    color: #F0FDF4;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
+/* "2 kg" badge, soft sage and flat */
+.quantity {
+    flex-shrink: 0;
+    padding: 1px 7px;
+    border-radius: var(--radiusPill, 999px);
+    background-color: rgba(167, 243, 208, 0.12);
+    color: #A7F3D0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.35;
+    white-space: nowrap;
+}
+
+.quantityBought {
+    opacity: 0.5;
+}
+
 .nameBought {
-    color: #8A9183;
+    color: rgba(167, 179, 169, 0.5);
     font-weight: 500;
     text-decoration: line-through;
 }
@@ -95,50 +159,50 @@
 .meta {
     font-size: 0.75rem;
     line-height: 1.25;
-    color: #8A9183;
+    color: rgba(158, 186, 164, 0.7);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.trash {
-    display: none;
+/* "⋯" trigger — replaces the old pencil + trash pair */
+.menu {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     flex-shrink: 0;
     padding: 0;
     border: none;
     border-radius: 50%;
     background: transparent;
+    color: rgba(158, 186, 164, 0.65);
     cursor: pointer;
-    opacity: 0.45;
-    transition: opacity var(--transitionFast, 150ms ease),
+    transition: color var(--transitionFast, 150ms ease),
                 background-color var(--transitionFast, 150ms ease);
 }
 
-.trash img {
+.menu svg {
     width: 18px;
     height: 18px;
 }
 
-@media (hover: hover) and (pointer: fine) {
-    .trash {
-        display: inline-flex;
-    }
-
-    .row:hover .trash,
-    .trash:focus-visible {
-        opacity: 1;
-    }
-
-    .trash:hover {
-        background-color: var(--dangerBg, #FDECEA);
-    }
+.menu:hover,
+.menuActive {
+    color: #F0FDF4;
+    background-color: rgba(255, 255, 255, 0.06);
 }
 
-.trash:focus-visible {
-    outline: 2px solid var(--dangerFg, #C62828);
+.menu:focus-visible {
+    outline: 2px solid rgba(158, 186, 164, 0.8);
     outline-offset: 1px;
+}
+
+/* small action menu, same material as the FAB menu */
+@media (hover: hover) and (pointer: fine) {
+    /* desktop never swipes: the menu handles deletion there */
+    .deleteAction {
+        display: none;
+    }
 }

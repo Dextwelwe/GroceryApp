@@ -1,12 +1,6 @@
 import { useRef, useState, useEffect, forwardRef} from 'react';
 
-import { usePreloadImages } from '../../hooks/usePreloadImages';
-
-import iconAdd from '../../assets/images/icons/add.png';
-import iconUndo from '../../assets/images/icons/undo.png';
-import iconEdit from '../../assets/images//icons/pencil.png';
-import iconCheck from '../../assets/images//icons/check.png';
-import iconDelete from '../../assets/images//icons/close.png';
+import deleteIcon from '../../assets/images/icons/delete.svg';
 
 import './category.css';
 
@@ -14,7 +8,6 @@ import { useTranslation} from 'react-i18next';
 
 const Category = forwardRef(({list, onUpdate, onDelete},ref) => {
 
-  usePreloadImages([iconAdd, iconUndo, iconEdit, iconCheck, iconDelete]);
   const [isAddNewCategory, setIsAddNewCategory] = useState(false);
   const [isEditCategory, setIsEditCategory] = useState(false);
   const [displayEditCategory, setDisplayEditCategory] = useState(false);
@@ -115,7 +108,11 @@ const handleEditOptionMenu = () => {
   return (
     <div className="headerWrapper categoryWrapper">
      <div className="itemsCategory">
-       {displayEditCategory && isEditCategory && <img src={iconDelete} className="menuIcon" onClick={removeCategory} alt="icon delete" />}
+       {displayEditCategory && isEditCategory &&
+         <button type="button" className="menuButton" onClick={removeCategory} aria-label="Delete store" title="Delete store">
+           <img src={deleteIcon} className="menuIcon" alt="" />
+         </button>
+       }
        {isAddNewCategory && <input type="text" ref={newCategoryRef}   className="newCategoryInput" />}
        {isEditCategory && <input type="text" ref={newCategoryRef}  value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} className="newCategoryInput" />}
        {!isAddNewCategory && !isEditCategory &&
@@ -126,17 +123,55 @@ const handleEditOptionMenu = () => {
       </div>
 
       <div className="menuIconWrapper">
-        {isAddNewCategory && <img src={iconCheck} className="menuIcon" onClick={handleSaveNewOption} alt="icon check" />}
-        {!displayEditCategory && !isAddNewCategory && <img src={iconAdd} className="menuIcon" onClick={() => {setNewCategory();}} alt="icon add" />}
+        {isAddNewCategory &&
+          <button type="button" className="menuButton" onClick={handleSaveNewOption} aria-label="Save store" title="Save store">
+            <svg className="menuIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M5 12.5 9.5 17 19 7.5" />
+            </svg>
+          </button>
+        }
+        {!displayEditCategory && !isAddNewCategory &&
+          <button type="button" className="menuButton" onClick={() => {setNewCategory();}} aria-label="Add store" title="Add store">
+            <svg className="menuIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M12 5v14" />
+              <path d="M5 12h14" />
+            </svg>
+          </button>
+        }
       </div>
        <div className="menuIconWrapper">
-        {isAddNewCategory && <img src={iconUndo} className="menuIcon" onClick={() => {setIsAddNewCategory(false);}} alt="icon back" />}
-         {displayEditCategory && isEditCategory && <img src={iconCheck} className="menuIcon" onClick={handleUpdateOption} alt="icon check" />}
-        {!isAddNewCategory && !displayEditCategory &&  <img src={iconEdit} className="menuIcon" onClick={() => { setIsAddNewCategory(false); handleEditOptionMenu(); toggleEditMode(); }} alt="icon edit" />}
+        {isAddNewCategory &&
+          <button type="button" className="menuButton" onClick={() => {setIsAddNewCategory(false);}} aria-label="Cancel" title="Cancel">
+            <svg className="menuIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M19 12H5" />
+              <path d="M11 6l-6 6 6 6" />
+            </svg>
+          </button>
+        }
+        {displayEditCategory && isEditCategory &&
+          <button type="button" className="menuButton" onClick={handleUpdateOption} aria-label="Save store" title="Save store">
+            <svg className="menuIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M5 12.5 9.5 17 19 7.5" />
+            </svg>
+          </button>
+        }
+        {!isAddNewCategory && !displayEditCategory &&
+          <button type="button" className="menuButton" onClick={() => { setIsAddNewCategory(false); handleEditOptionMenu(); toggleEditMode(); }} aria-label="Edit store" title="Edit store">
+            <svg className="menuIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M4 20h4L19 9a2.12 2.12 0 0 0-3-3L5 17v3Z" />
+              <path d="M14.5 6.5l3 3" />
+            </svg>
+          </button>
+        }
        </div>
         {displayEditCategory &&
         <div className="menuIconWrapper">
-         <img src={iconUndo} className="menuIcon" onClick={exitEditMenu} alt="icon undo" />
+          <button type="button" className="menuButton" onClick={exitEditMenu} aria-label="Close" title="Close">
+            <svg className="menuIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M6 6l12 12" />
+              <path d="M18 6L6 18" />
+            </svg>
+          </button>
         </div>
         }
     </div>

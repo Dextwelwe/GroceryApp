@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useState, useRef, useEffect, useMemo } from 'react';
 import useLocalStorage from '../../hooks/useLocalStorage'
 import { useCategorySearch } from '../../hooks/useCategorySearch';
+import { hasQuantity } from '../../utils/quantity';
 
 import removeGrocery, { fetchAllGroceries } from '../../api/grocery';
 import { fetchUserRecipes, saveNewRecipe as saveNewRecipeApi, updateRecipe as updateRecipeApi, deleteRecipe as deleteRecipeApi } from '../../api/recipes';
@@ -18,16 +19,15 @@ import HeaderMenu from '../../components/header/header';
 import GroceryCard from '../../components/groceryCard/GroceryCard';
 import GroceryForm from '../../components/groceryForm/GroceryForm';
 import RecipeCard from '../../components/recipeCard/RecipeCard';
-import ActionRow, { ActionList } from '../../components/actionList/ActionList';
+import ActionMenu from '../../components/actionMenu/ActionMenu';
+import SettingsLanguageSelect from '../../components/settings/SettingsLanguageSelect';
 import FilterChips from '../../components/filterChips/FilterChips';
 import FilterToggle from '../../components/filterToggle/FilterToggle';
 import SegmentedControl from '../../components/segmentedControl/SegmentedControl';
-import SettingsMenu from '../../components/settings/settingsMenu';
 import AddItems from '../../components/add/addItems';
 import PreviewItemCard from '../../components/previewItemCard/PreviewItemCard';
 import PreviewItemsPopup from '../../components/previewItemsPopup/PreviewItemsPopup';
 
-import iconLogout from '../../assets/images/icons/exit.svg'
 import animLoading from '../../assets/images/animations/loading.gif'
 import listIcon from '../../assets/images/icons/list.svg'
 import iconMore from '../../assets/images/icons/more.svg'
@@ -51,14 +51,15 @@ export default function Groceries({ goToGrocery, refresh }) {
   const [previewRecipeList, setPreviewRecipeList] = useState([]);
   const [isGroceryFormOpen, setIsGroceryFormOpen] = useState(false);
   const [editingGrocery, setEditingGrocery] = useState(null);
-  const [groceryMenu, setGroceryMenu] = useState(null);
+  const [groceryMenu, setGroceryMenu] = useState(null);   // { item, rect }
   const [isAddNewRecipeVisible, setIsAddNewRecipeVisible] = useState(false);
   const [isSettingsPopup, setIsSettingsPopup] = useState(false);
   const [isPreviewListPopup, setIsPreviewListPopup] = useState(false);
   const [isEditRecipePopup, setIsEditRecipePopup] = useState(false);
   const [isAddItemsToRecipePopup, setIsAddItemsToRecipePopup] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
-  const [recipeMenu, setRecipeMenu] = useState(null);
+  const [recipeMenu, setRecipeMenu] = useState(null);     // { item, rect }
+  const optionsButtonRef = useRef(null);
 
   const [defaultLabel, setDefaultLabel] = useLocalStorage('FLabel', 'all');
   const [defaultStatus, setDefaultStatus] = useLocalStorage('FStatus', 'all');
@@ -73,7 +74,14 @@ export default function Groceries({ goToGrocery, refresh }) {
   useEffect(() => () => clearTimeout(slideTimer.current), []);
   const { getAllCategoriesList } = useCategorySearch();
 
-  const headerItems = [{ src: iconMore, alt: 'Icon More', clickaction: () => setIsSettingsPopup(!isSettingsPopup), buttonLabel: t('OPTIONS') }];
+  const headerItems = [{
+    src: iconMore,
+    alt: 'Icon More',
+    buttonLabel: t('OPTIONS'),
+    buttonRef: optionsButtonRef,
+    isExpanded: isSettingsPopup,
+    clickaction: () => setIsSettingsPopup(prev => !prev),
+  }];
 
   const optionsLabel = [
     { value: 'all', label: t('FILTERS.ALL') },
@@ -222,14 +230,14 @@ export default function Groceries({ goToGrocery, refresh }) {
   }
 
   function editRecipeFromMenu() {
-    const target = recipeMenu;
+    const target = recipeMenu?.item;
     if (!target) return;
     setRecipeMenu(null);
     openRecipeEditor(target.id);
   }
 
   async function deleteRecipeFromMenu() {
-    const target = recipeMenu;
+    const target = recipeMenu?.item;
     if (!target) return;
     setRecipeMenu(null);
     await deleteRecipe(target.id);
@@ -270,6 +278,9 @@ export default function Groceries({ goToGrocery, refresh }) {
   }
 
   const saveNewRecipe = async () => {
+    if (previewRecipeList.some(item => !hasQuantity(item))) {
+      return alert(t('WARNINGS.QUANTITY_REQUIRED'));
+    }
     if (previewRecipeList.some(item => !item.category || item.category.trim() === '')) {
       return alert(t('WARNINGS.FILL_ALL_CATEGORIES'));
     }
@@ -282,7 +293,9 @@ export default function Groceries({ goToGrocery, refresh }) {
         category: resolveCategoryId(item.category, getAllCategoriesList),
         store: item.store,
         status: item.status,
-        addedBy: item.addedBy
+        addedBy: item.addedBy,
+        amount: item.amount ?? null,
+        uom: item.uom ?? null,
       }))
     });
 
@@ -303,6 +316,9 @@ export default function Groceries({ goToGrocery, refresh }) {
   const saveEditedRecipe = async () => {
     if (!selectedRecipe?.id) return;
 
+    if (previewRecipeList.some(item => !hasQuantity(item))) {
+      return alert(t('WARNINGS.QUANTITY_REQUIRED'));
+    }
     if (previewRecipeList.some(item => !item.category || item.category.trim() === '')) {
       return alert(t('WARNINGS.FILL_ALL_CATEGORIES'));
     }
@@ -314,7 +330,9 @@ export default function Groceries({ goToGrocery, refresh }) {
         category: resolveCategoryId(item.category, getAllCategoriesList),
         store: item.store || '',
         status: item.status || 'active',
-        addedBy: item.addedBy || userData.firstName
+        addedBy: item.addedBy || userData.firstName,
+        amount: item.amount ?? null,
+        uom: item.uom ?? null,
       }))
     });
 
@@ -357,7 +375,7 @@ export default function Groceries({ goToGrocery, refresh }) {
   }
 
   async function deleteGroceryFromMenu() {
-    const target = groceryMenu;
+    const target = groceryMenu?.item;
     if (!target) return;
     setGroceryMenu(null);
     if (!window.confirm(t('DELETE_GROCERY'))) return;
@@ -490,7 +508,7 @@ export default function Groceries({ goToGrocery, refresh }) {
         }
         {!isLoading && <>
           {view.map((grocery) => (
-            <GroceryCard key={grocery.id} data={grocery} onClick={goToGrocery} onMenu={setGroceryMenu} />
+            <GroceryCard key={grocery.id} data={grocery} onClick={goToGrocery} onMenu={(item, rect) => setGroceryMenu({ item, rect })} />
           ))}
           {view.length === 0 && groceries.length > 0 && <div className={gr.empty}>{t('WARNINGS.NO_GROCERIES')}</div>}
         </>
@@ -500,7 +518,7 @@ export default function Groceries({ goToGrocery, refresh }) {
       {listTab === 'recipes' && <div className={`${gr.list} ${slideClass}`}>
         {recipeView.length > 0 ? (
           recipeView.map((recipe) => (
-            <RecipeCard key={recipe.id} data={recipe} onClick={openRecipeEditor} onMenu={setRecipeMenu} />
+            <RecipeCard key={recipe.id} data={recipe} onClick={openRecipeEditor} onMenu={(item, rect) => setRecipeMenu({ item, rect })} />
           ))
         ) : (
           <div className={gr.empty}>{t('NO_RECIPES_YET')}</div>
@@ -519,57 +537,67 @@ export default function Groceries({ goToGrocery, refresh }) {
       }
 
       {groceryMenu &&
-        <Popup title={groceryMenu.name} close={() => setGroceryMenu(null)}>
-          <ActionList>
-            <ActionRow
-              tone='sage'
-              icon={
-                <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='1.8' strokeLinecap='round' strokeLinejoin='round'>
+        <ActionMenu
+          open={Boolean(groceryMenu)}
+          onClose={() => setGroceryMenu(null)}
+          anchorRect={groceryMenu.rect}
+          label={t('OPTIONS')}
+          items={[
+            {
+              key: 'edit',
+              label: t('EDIT_GROCERY'),
+              icon: (
+                <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='1.8' strokeLinecap='round' strokeLinejoin='round' aria-hidden='true'>
                   <path d='M4 20h4L19 9a2.83 2.83 0 0 0-4-4L4 16v4z' />
                 </svg>
-              }
-              label={t('EDIT_GROCERY')}
-              onClick={() => openEditGrocery(groceryMenu)}
-            />
-            <ActionRow
-              tone='danger'
-              icon={
-                <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='1.8' strokeLinecap='round' strokeLinejoin='round'>
+              ),
+              onSelect: () => openEditGrocery(groceryMenu.item),
+            },
+            {
+              key: 'delete',
+              label: t('REMOVE_GROCERY'),
+              tone: 'danger',
+              icon: (
+                <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='1.8' strokeLinecap='round' strokeLinejoin='round' aria-hidden='true'>
                   <path d='M4 7h16M10 4h4M9 7v13M15 7v13M6 7l1 13h10l1-13' />
                 </svg>
-              }
-              label={t('REMOVE_GROCERY')}
-              onClick={deleteGroceryFromMenu}
-            />
-          </ActionList>
-        </Popup>
+              ),
+              onSelect: deleteGroceryFromMenu,
+            },
+          ]}
+        />
       }
 
       {recipeMenu &&
-        <Popup title={recipeMenu.name} close={() => setRecipeMenu(null)}>
-          <ActionList>
-            <ActionRow
-              tone='sage'
-              icon={
-                <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='1.8' strokeLinecap='round' strokeLinejoin='round'>
+        <ActionMenu
+          open={Boolean(recipeMenu)}
+          onClose={() => setRecipeMenu(null)}
+          anchorRect={recipeMenu.rect}
+          label={t('OPTIONS')}
+          items={[
+            {
+              key: 'edit',
+              label: t('EDIT_RECIPE'),
+              icon: (
+                <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='1.8' strokeLinecap='round' strokeLinejoin='round' aria-hidden='true'>
                   <path d='M4 20h4L19 9a2.83 2.83 0 0 0-4-4L4 16v4z' />
                 </svg>
-              }
-              label={t('EDIT_RECIPE')}
-              onClick={editRecipeFromMenu}
-            />
-            <ActionRow
-              tone='danger'
-              icon={
-                <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='1.8' strokeLinecap='round' strokeLinejoin='round'>
+              ),
+              onSelect: editRecipeFromMenu,
+            },
+            {
+              key: 'delete',
+              label: t('REMOVE_RECIPE'),
+              tone: 'danger',
+              icon: (
+                <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='1.8' strokeLinecap='round' strokeLinejoin='round' aria-hidden='true'>
                   <path d='M4 7h16M10 4h4M9 7v13M15 7v13M6 7l1 13h10l1-13' />
                 </svg>
-              }
-              label={t('REMOVE_RECIPE')}
-              onClick={deleteRecipeFromMenu}
-            />
-          </ActionList>
-        </Popup>
+              ),
+              onSelect: deleteRecipeFromMenu,
+            },
+          ]}
+        />
       }
 
       {isAddNewRecipeVisible &&
@@ -585,7 +613,7 @@ export default function Groceries({ goToGrocery, refresh }) {
               autoCapitalize='none'
             />
             <span className='uiSectionTitle'>{t('ITEMS')}</span>
-            <AddItems onSave={handleRecipeItemsReady} storesList={[]} userName={userData.firstName} />
+            <AddItems onSave={handleRecipeItemsReady} storesList={[]} userName={userData.firstName} requireQuantity />
           </form>
         </Popup>
       }
@@ -633,21 +661,35 @@ export default function Groceries({ goToGrocery, refresh }) {
       {isAddItemsToRecipePopup &&
         <Popup title={t('ADD_ITEMS')} close={() => setIsAddItemsToRecipePopup(false)}>
           <div className='uiForm'>
-            <AddItems onSave={addItemsToEditedRecipe} storesList={[]} userName={userData.firstName} />
+            <AddItems onSave={addItemsToEditedRecipe} storesList={[]} userName={userData.firstName} requireQuantity />
           </div>
         </Popup>
       }
 
-      {
-        isSettingsPopup &&
-        <SettingsMenu close={() => setIsSettingsPopup(false)}>
-          <ActionRow
-            icon={<img src={iconLogout} alt='' />}
-            label={t('LOGOUT')}
-            onClick={logout}
-            tone='neutral'
-          />
-        </SettingsMenu>
+      {isSettingsPopup &&
+        <ActionMenu
+          open={isSettingsPopup}
+          onClose={() => setIsSettingsPopup(false)}
+          anchorRef={optionsButtonRef}
+          width={236}
+          label={t('ACTIONS')}
+          items={[
+            {
+              key: 'logout',
+              label: t('LOGOUT'),
+              tone: 'danger',
+              icon: (
+                <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' aria-hidden='true'>
+                  <path d='M21 12L13 12' />
+                  <path d='M18 15l3-3-3-3' />
+                  <path d='M16 5v-.5A2.5 2.5 0 0 0 13.5 2H5a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8.5A2.5 2.5 0 0 0 16 19.5V19' />
+                </svg>
+              ),
+              onSelect: logout,
+            },
+            { key: 'language', node: <SettingsLanguageSelect compact /> },
+          ]}
+        />
       }
 
       <button

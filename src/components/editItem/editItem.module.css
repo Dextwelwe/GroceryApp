@@ -1,0 +1,58 @@
+.itemName {
+    margin: 2px 0 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #F0FDF4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* native selects themed like the sheet inputs */
+.select {
+    box-sizing: border-box;
+    width: 100%;
+    height: 46px;
+    padding: 0 12px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.04);
+    color: #F0FDF4;
+    font-family: var(--fontFamily);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.select:focus-visible {
+    outline: none;
+    border-color: rgba(134, 239, 172, 0.45);
+}
+
+.qtyRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.amount {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-align: end;
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+.amount::-webkit-outer-spin-button,
+.amount::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.uom {
+    flex: 0 0 auto;
+    width: 96px;
+    text-align: center;
+}

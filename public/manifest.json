@@ -1,10 +1,16 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "My Groceries",
+  "name": "My Groceries",
   "icons": [
+    {
+      "src": "groceries.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#F8FAF7",
-  "background_color": "#F8FAF7"
+  "theme_color": "#0A160E",
+  "background_color": "#0A160E"
 }

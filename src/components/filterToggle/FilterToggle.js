@@ -1,10 +1,20 @@
 import IconToggle from '../iconToggle/IconToggle'
-import filterIcon from '../../assets/images/icons/filter.svg'
 
 export default function FilterToggle({ open, count = 0, onClick, label }) {
   return (
     <IconToggle active={open} badge={count} onClick={onClick} label={label}>
-      <img src={filterIcon} alt='' />
+      <svg
+        viewBox='0 0 24 24'
+        fill='none'
+        stroke='currentColor'
+        strokeWidth='2'
+        strokeLinecap='round'
+        aria-hidden='true'
+      >
+        <path d='M3 7h18' />
+        <path d='M6 12h12' />
+        <path d='M9 17h6' />
+      </svg>
     </IconToggle>
   )
 }

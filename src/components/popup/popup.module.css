@@ -20,15 +20,170 @@
     width: 100%;
     max-width: 520px;
     max-height: 100%;
-    padding: 8px 12px 12px;
+    padding: 6px 12px 12px;
     border-radius: 26px;
-    background-color: var(--modalBackGround, #F8FAF7);
-    box-shadow: 0 -4px 40px rgba(24, 34, 22, 0.22);
+    /* deep matte forest sheet (#0A160E fallback when backdrop-filter is missing) */
+    background-color: #0A160E;
+    background-color: rgba(10, 22, 14, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.7);
 
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior: contain;
     animation: sheetIn var(--transitionBase, 250ms cubic-bezier(0.32, 0.72, 0, 1)) both;
+}
+
+@supports not ((backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px))) {
+    .contentWrapper {
+        background-color: #0A160E;
+    }
+}
+
+/* drag indicator */
+.handle {
+    align-self: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 4px;
+    margin: 2px 0 8px;
+    border-radius: 9999px;
+    background-color: rgba(255, 255, 255, 0.2);
+    pointer-events: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Everything inside the sheet is dark: re-theme the shared ui* primitives here
+   so light/dark surfaces never mix (the login page keeps its own look).
+   --------------------------------------------------------------------------- */
+
+.contentWrapper :global(.uiFieldLabel) {
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    color: #9EBAA4;
+}
+
+.contentWrapper :global(.uiField) {
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.04);
+    color: #F0FDF4;
+}
+
+.contentWrapper :global(.uiField)::placeholder {
+    color: rgba(240, 253, 244, 0.42);
+}
+
+.contentWrapper :global(.uiField):focus {
+    border-color: rgba(134, 239, 172, 0.45);
+    background-color: rgba(255, 255, 255, 0.06);
+    box-shadow: none;
+}
+
+/* the native date picker glyph is black by default */
+.contentWrapper :global(.uiField)::-webkit-calendar-picker-indicator {
+    filter: brightness(0) invert(1);
+    opacity: 0.7;
+}
+
+.contentWrapper :global(.uiFieldError) {
+    border-color: rgba(248, 113, 113, 0.6);
+}
+
+.contentWrapper :global(.uiBtnPrimary) {
+    border: 1px solid rgba(134, 239, 172, 0.2);
+    background-color: #1B432C;
+    color: #F0FDF4;
+    font-weight: 600;
+    box-shadow: none;
+}
+
+.contentWrapper :global(.uiBtnPrimary):hover:not(:disabled) {
+    background-color: #235438;
+}
+
+.contentWrapper :global(.uiBtnPrimary):disabled {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: rgba(240, 253, 244, 0.4);
+}
+
+.contentWrapper :global(.uiBtnGhost) {
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #E2E8F0;
+}
+
+.contentWrapper :global(.uiBtnGhost):hover:not(:disabled) {
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.contentWrapper :global(.uiBtnAdd) {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: rgba(240, 253, 244, 0.7);
+}
+
+.contentWrapper :global(.uiBtnAdd):hover {
+    background-color: rgba(255, 255, 255, 0.14);
+}
+
+.contentWrapper :global(.uiSectionTitle) {
+    border-top-color: rgba(255, 255, 255, 0.06);
+    color: rgba(134, 239, 172, 0.6);
+}
+
+.contentWrapper :global(.uiFormError) {
+    background-color: rgba(239, 68, 68, 0.12);
+    color: #F87171;
+}
+
+.contentWrapper :global(.uiChip) {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: #E2E8F0;
+}
+
+.contentWrapper :global(.uiChipRemove) {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #E2E8F0;
+}
+
+/* list cards inside sheets (recipe picker) */
+.contentWrapper :global(.uiCard) {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    background-color: rgba(255, 255, 255, 0.04);
+    background-image: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+}
+
+.contentWrapper :global(.uiCard):hover {
+    background-color: rgba(255, 255, 255, 0.07);
+    box-shadow: none;
+}
+
+/* header / close button inside sheets */
+.contentWrapper :global(.uiIconBtn) {
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background-color: rgba(255, 255, 255, 0.06);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+}
+
+.contentWrapper :global(.uiIconBtn):hover {
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+.contentWrapper :global(.uiIconBtn) img,
+.contentWrapper :global(.uiIconBtn) svg {
+    filter: brightness(0) invert(1);
+    opacity: 0.65;
+}
+
+.contentWrapper :global(.uiIconBtn):hover img,
+.contentWrapper :global(.uiIconBtn):hover svg {
+    opacity: 1;
 }
 
 @keyframes sheetIn {

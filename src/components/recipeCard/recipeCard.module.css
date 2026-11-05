@@ -20,7 +20,7 @@
 }
 
 .openButton:focus-visible {
-    outline: 2px solid var(--primary, #6E7A69);
+    outline: 2px solid #86EFAC;
     outline-offset: -2px;
 }
 
@@ -36,8 +36,8 @@
     font-size: var(--textHeadline, 1.0625rem);
     font-weight: 600;
     line-height: 1.25;
-    color: var(--fontColor, #212121);
-    text-transform: capitalize;
+    color: #F0FDF4;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -54,7 +54,8 @@
     flex-shrink: 0;
     font-size: var(--textFootnote, 0.8125rem);
     font-weight: 600;
-    color: #4C554A;
+    color: #9EBAA4;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
     white-space: nowrap;
 }
 
@@ -70,23 +71,24 @@
     border-radius: 50%;
     background: transparent;
     cursor: pointer;
-    opacity: 0.5;
+    opacity: 0.55;
     transition: opacity var(--transitionFast, 150ms ease),
                 background-color var(--transitionFast, 150ms ease);
 }
 
 .menuButton:hover {
     opacity: 1;
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: rgba(134, 239, 172, 0.12);
 }
 
 .menuButton:focus-visible {
     opacity: 1;
-    outline: 2px solid var(--primary, #6E7A69);
+    outline: 2px solid #86EFAC;
     outline-offset: 1px;
 }
 
 .menuIcon {
     width: 18px;
     height: 18px;
+    filter: brightness(0) invert(1);
 }

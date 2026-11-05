@@ -24,7 +24,7 @@ export default function SegmentedControl({ items, value, onChange }) {
             onClick={() => onChange(item.key)}
           >
             {item.icon && <img src={item.icon} alt='' className={sc.icon} />}
-            {item.label}
+            <span className={sc.label}>{item.label}</span>
           </button>
         );
       })}

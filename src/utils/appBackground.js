@@ -1,5 +1,5 @@
-import mobile from '../assets/images/grocery.webp'
-import desktop from '../assets/images/grocery_deskop.webp'
+import mobile from '../assets/images/grocery.jpg'
+import desktop from '../assets/images/grocery_desktop.webp'
 
 export const appBackgroundVars = {
   '--bgMobile': `url(${mobile})`,

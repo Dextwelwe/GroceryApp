@@ -48,7 +48,11 @@ export default function Popup({children, title, close, hideCloseButton, closeOnO
     const handleClickOutside = (event) => {
 
       if (openPopups[openPopups.length - 1] !== popupId.current) return;
-      if (contentRef.current && !contentRef.current.contains(event.target)) {
+      // Elements portaled outside the popup (e.g. the item suggestions list) can
+      // opt out of the "click outside closes" behaviour.
+      const target = event.target;
+      if (target instanceof Element && target.closest('[data-popup-keep-open]')) return;
+      if (contentRef.current && !contentRef.current.contains(target)) {
         requestClose();
       }
     };
@@ -65,7 +69,8 @@ export default function Popup({children, title, close, hideCloseButton, closeOnO
   return (
     <div className={`${p.rootWrapper} ${isClosing ? p.rootClosing : ''}`} role='dialog' aria-modal='true' aria-label={title}>
         <div className={`${p.contentWrapper} ${isClosing ? p.contentClosing : ''}`} ref={contentRef}>
-           <Header title={title} isPopup={true} headerItems={!hideCloseButton ? closeButton : ""}></Header>
+            <span className={p.handle} aria-hidden='true' />
+            <Header title={title} isPopup={true} headerItems={!hideCloseButton ? closeButton : ""}></Header>
             {children}
         </div>
     </div>
