@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/GroceryApp/static/css/main.205e3f2f.css",
+    "main.css": "/GroceryApp/static/css/main.7d775f07.css",
     "main.js": "/GroceryApp/static/js/main.09f2dbfd.js",
     "static/media/grocery_desktop.webp": "/GroceryApp/static/media/grocery_desktop.12e42a6eaa3f935cc8a8.webp",
     "static/media/grocery.jpg": "/GroceryApp/static/media/grocery.2deff1c18bbce3a26101.jpg",
@@ -23,11 +23,11 @@
     "static/media/recipe.svg": "/GroceryApp/static/media/recipe.4c0c93b255628792e907ada997cde595.svg",
     "static/media/shopping-cart.svg": "/GroceryApp/static/media/shopping-cart.8865b98e38286190fff334cbe2669331.svg",
     "static/media/list.svg": "/GroceryApp/static/media/list.ff6aa5a7dfb98ad9d1e40f69d5021650.svg",
-    "main.205e3f2f.css.map": "/GroceryApp/static/css/main.205e3f2f.css.map",
+    "main.7d775f07.css.map": "/GroceryApp/static/css/main.7d775f07.css.map",
     "main.09f2dbfd.js.map": "/GroceryApp/static/js/main.09f2dbfd.js.map"
   },
   "entrypoints": [
-    "static/css/main.205e3f2f.css",
+    "static/css/main.7d775f07.css",
     "static/js/main.09f2dbfd.js"
   ]
 }
