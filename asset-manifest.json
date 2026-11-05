@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/GroceryApp/static/css/main.d018adce.css",
-    "main.js": "/GroceryApp/static/js/main.3903ec12.js",
+    "main.css": "/GroceryApp/static/css/main.205e3f2f.css",
+    "main.js": "/GroceryApp/static/js/main.09f2dbfd.js",
     "static/media/grocery_desktop.webp": "/GroceryApp/static/media/grocery_desktop.12e42a6eaa3f935cc8a8.webp",
     "static/media/grocery.jpg": "/GroceryApp/static/media/grocery.2deff1c18bbce3a26101.jpg",
     "static/media/Nunito-latin.woff2": "/GroceryApp/static/media/Nunito-latin.bc532ddabdb476d77e6f.woff2",
@@ -12,22 +12,22 @@
     "static/media/lang.svg": "/GroceryApp/static/media/lang.92402888085c3b222dfc5603fc426ec9.svg",
     "static/media/store.svg": "/GroceryApp/static/media/store.29386fce46051e9b0ef50c00afda2d75.svg",
     "static/media/name.svg": "/GroceryApp/static/media/name.25a475b104c12f8b40953a632ae932cf.svg",
+    "index.html": "/GroceryApp/index.html",
     "static/media/delete.svg": "/GroceryApp/static/media/delete.ad1d2b0d55aff5aecbfc9afc040cdddd.svg",
     "static/media/close.svg": "/GroceryApp/static/media/close.cb83076bb08897f8e5e318b5a6f85b60.svg",
     "static/media/exit.svg": "/GroceryApp/static/media/exit.308e6ad1b5b74adb827a4b32ff1fb3c8.svg",
     "static/media/erase.svg": "/GroceryApp/static/media/erase.4b4a7e90ceebfc549403f13bb21ad303.svg",
-    "index.html": "/GroceryApp/index.html",
     "static/media/more.svg": "/GroceryApp/static/media/more.5f5cea9b0bd2c1ce7f289690921ce0f8.svg",
     "static/media/back.svg": "/GroceryApp/static/media/back.226eee5a9020fad216ccb78ab6e98139.svg",
     "static/media/groceries.svg": "/GroceryApp/static/media/groceries.15594c279d36df68fb58f02f307b28c2.svg",
     "static/media/recipe.svg": "/GroceryApp/static/media/recipe.4c0c93b255628792e907ada997cde595.svg",
     "static/media/shopping-cart.svg": "/GroceryApp/static/media/shopping-cart.8865b98e38286190fff334cbe2669331.svg",
     "static/media/list.svg": "/GroceryApp/static/media/list.ff6aa5a7dfb98ad9d1e40f69d5021650.svg",
-    "main.d018adce.css.map": "/GroceryApp/static/css/main.d018adce.css.map",
-    "main.3903ec12.js.map": "/GroceryApp/static/js/main.3903ec12.js.map"
+    "main.205e3f2f.css.map": "/GroceryApp/static/css/main.205e3f2f.css.map",
+    "main.09f2dbfd.js.map": "/GroceryApp/static/js/main.09f2dbfd.js.map"
   },
   "entrypoints": [
-    "static/css/main.d018adce.css",
-    "static/js/main.3903ec12.js"
+    "static/css/main.205e3f2f.css",
+    "static/js/main.09f2dbfd.js"
   ]
 }
